@@ -13,8 +13,8 @@ export function HeroSection() {
         <div className="mb-8 flex justify-center">
           <div className="relative h-24 w-24 md:h-32 md:w-32">
             <Image
-              src="/images/bayer-italia-logo.png"
-              alt="Bayer Italia Logo"
+              src="/images/buyer-italia-logo.jpg"
+              alt="Buyer Italia Logo"
               fill
               className="object-contain"
               priority
