@@ -82,9 +82,9 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: 'https://buyeritalia.com',
+    canonical: 'https://buyer-italia.shop',
     languages: {
-      'uk-UA': 'https://buyeritalia.com',
+      'uk-UA': 'https://buyer-italia.shop',
     },
   },
   category: 'shopping',
@@ -97,8 +97,8 @@ const organizationJsonLd = {
   "@type": "Organization",
   "name": "Buyer Italia",
   "description": "Баєр-сервіс з прямими закупками оригінальних речей з Італії",
-  "url": "https://buyeritalia.com",
-  "logo": "https://buyeritalia.com/images/buyer-italia-logo.jpg",
+  "url": "https://buyer-italia.shop",
+  "logo": "https://buyer-italia.shop/images/buyer-italia-logo.jpg",
   "contactPoint": {
     "@type": "ContactPoint",
     "contactType": "customer service",
