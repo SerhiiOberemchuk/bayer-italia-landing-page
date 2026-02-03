@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { Send, MessageCircle } from "lucide-react"
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
 
@@ -34,6 +35,30 @@ export function Footer() {
               <MessageCircle className="size-4" />
               @raisa_orb
             </a>
+          </div>
+
+          {/* Policy Links */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs">
+            <Link 
+              href="/privacy" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Політика конфіденційності
+            </Link>
+            <span className="text-muted-foreground/50">|</span>
+            <Link 
+              href="/cookies" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Політика cookies
+            </Link>
+            <span className="text-muted-foreground/50">|</span>
+            <Link 
+              href="/terms" 
+              className="text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Умови використання
+            </Link>
           </div>
 
           {/* Disclaimer */}
