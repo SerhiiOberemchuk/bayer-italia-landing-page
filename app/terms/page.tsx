@@ -76,8 +76,7 @@ export default function TermsPage() {
             <p className="mb-3">Ми працюємо за системою 100% передоплати. Доступні способи оплати:</p>
             <ul className="list-disc pl-6 space-y-2">
               <li>Банківська картка (Україна)</li>
-              <li>PayPal</li>
-              <li>Криптовалюта</li>
+             
             </ul>
           </section>
 
