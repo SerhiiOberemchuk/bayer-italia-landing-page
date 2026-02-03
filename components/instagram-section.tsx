@@ -56,7 +56,7 @@ export function InstagramSection() {
             className="gap-2 rounded-xl px-6 h-11 border-2 bg-transparent"
             asChild
           >
-            <a href="#" target="_blank" rel="noopener noreferrer">
+            <a href="https://instagram.com/buyer_italia" target="_blank" rel="noopener noreferrer">
               <Instagram className="size-5" />
               Перейти в Instagram
             </a>

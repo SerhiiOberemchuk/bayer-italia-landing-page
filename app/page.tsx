@@ -6,6 +6,7 @@ import { ZaraSection } from "@/components/zara-section"
 import { DeliveryPayment } from "@/components/delivery-payment"
 import { TrustSection } from "@/components/trust-section"
 import { Reviews } from "@/components/reviews"
+import { InstagramSection } from "@/components/instagram-section"
 import { FAQ } from "@/components/faq"
 import { FinalCTA } from "@/components/final-cta"
 import { Footer } from "@/components/footer"
@@ -22,6 +23,7 @@ export default function Home() {
       <DeliveryPayment />
       <TrustSection />
       <Reviews />
+      <InstagramSection />
       <FAQ />
       <FinalCTA />
       <Footer />
