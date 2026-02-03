@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Accordion,
   AccordionContent,
@@ -14,7 +12,7 @@ const faqs = [
   },
   {
     question: "Як зробити замовлення?",
-    answer: "Напишіть нам в Telegram @raisa_orb або в канал @bayer_italia_shop. Вкажіть бажаний товар (можна скинути посилання), розмір та колір. Ми уточнимо наявність та назвемо фінальну ціну."
+    answer: "Напишіть нам в Telegram @raisa_orb або в канал @buyer_italia_shop. Вкажіть бажаний товар (можна скинути посилання), розмір та колір. Ми уточнимо наявність та назвемо фінальну ціну."
   },
   {
     question: "Чи можна замовити річ під замовлення?",
@@ -42,9 +40,29 @@ const faqs = [
   }
 ]
 
+// JSON-LD structured data for FAQ SEO
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((faq) => ({
+    "@type": "Question",
+    "name": faq.question,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.answer
+    }
+  }))
+}
+
 export function FAQ() {
   return (
     <section className="px-4 py-16 md:px-8 md:py-24 bg-secondary/30">
+      {/* JSON-LD for SEO */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      
       <div className="mx-auto max-w-3xl">
         <h2 className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
           Часті питання
