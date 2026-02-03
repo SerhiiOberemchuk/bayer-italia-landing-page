@@ -1,5 +1,3 @@
-"use client"
-
 const brands = [
   { name: "ZARA", style: "font-bold tracking-[0.3em]" },
   { name: "MANGO", style: "font-bold tracking-[0.2em]" },
