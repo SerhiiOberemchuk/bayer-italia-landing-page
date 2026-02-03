@@ -9,7 +9,6 @@ import { FAQ } from "@/components/faq"
 import { FinalCTA } from "@/components/final-cta"
 import { Footer } from "@/components/footer"
 import { StickyBottomBar } from "@/components/sticky-bottom-bar"
-import { InstagramSection } from "@/components/instagram-section"
 
 export default function Home() {
   return (
@@ -21,7 +20,6 @@ export default function Home() {
       <DeliveryPayment />
       <TrustSection />
       <Reviews />
-      <InstagramSection />
       <FAQ />
       <FinalCTA />
       <Footer />
