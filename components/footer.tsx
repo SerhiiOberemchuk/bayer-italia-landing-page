@@ -1,5 +1,5 @@
-import Image from "next/image"
 import { Send, MessageCircle } from "lucide-react"
+import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
 
 export function Footer() {
   return (
@@ -7,16 +7,9 @@ export function Footer() {
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-col items-center text-center">
           {/* Logo */}
-          <div className="relative h-16 w-16 mb-4">
-            <Image
-              src="/images/bayer-italia-logo.png"
-              alt="Bayer Italia Logo"
-              fill
-              className="object-contain"
-            />
-          </div>
+          <BuyerItaliaLogo size="sm" className="mb-4" />
           
-          <h3 className="font-serif text-xl font-semibold text-foreground">Bayer Italia</h3>
+          <h3 className="font-serif text-xl font-semibold text-foreground">Buyer Italia</h3>
           <p className="mt-2 text-sm text-muted-foreground max-w-md">
             Ваш персональний баєр з Італії. Оригінальні речі напряму з італійських магазинів.
           </p>
@@ -49,7 +42,7 @@ export function Footer() {
               Ми не є офіційним магазином. Працюємо як персональний баєр-сервіс — закуповуємо оригінальні товари в Італії на замовлення клієнтів.
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              © {new Date().getFullYear()} Bayer Italia. Всі права захищено.
+              © {new Date().getFullYear()} Buyer Italia. Всі права захищено.
             </p>
           </div>
         </div>

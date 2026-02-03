@@ -1,9 +1,9 @@
 "use client"
 
-import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Send, MessageCircle, CheckCircle, ShoppingBag, Truck, Shield } from "lucide-react"
+import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
 
 export function HeroSection() {
   return (
@@ -11,15 +11,7 @@ export function HeroSection() {
       <div className="mx-auto max-w-4xl">
         {/* Logo */}
         <div className="mb-8 flex justify-center">
-          <div className="relative h-24 w-24 md:h-32 md:w-32">
-            <Image
-              src="/images/buyer-italia-logo.jpg"
-              alt="Buyer Italia Logo"
-              fill
-              className="object-contain"
-              priority
-            />
-          </div>
+          <BuyerItaliaLogo size="md" />
         </div>
 
         {/* Hero Content */}

@@ -15,11 +15,11 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Bayer Italia - Баєр з Італії | ZARA та інші бренди',
+  title: 'Buyer Italia - Баєр з Італії | ZARA та інші бренди',
   description: 'Прямі закупки оригінальних речей з Італії. ZARA, Massimo Dutti та інші бренди. Доставка в Україну та Європу. Реальні фото, оригінал гарантовано.',
-  keywords: ['баєр італія', 'zara італія', 'одяг з італії', 'шопінг італія', 'доставка з італії'],
+  keywords: ['баєр італія', 'zara італія', 'одяг з італії', 'шопінг італія', 'доставка з італії', 'buyer italia'],
   openGraph: {
-    title: 'Bayer Italia - Баєр з Італії',
+    title: 'Buyer Italia - Баєр з Італії',
     description: 'Прямі закупки оригінальних речей з Італії. ZARA та інші бренди.',
     type: 'website',
   },
