@@ -1,4 +1,5 @@
 import { HeroSection } from "@/components/hero-section"
+import { BrandsMarquee } from "@/components/brands-marquee"
 import { HowItWorks } from "@/components/how-it-works"
 import { Categories } from "@/components/categories"
 import { ZaraSection } from "@/components/zara-section"
@@ -14,6 +15,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background pb-24 md:pb-0">
       <HeroSection />
+      <BrandsMarquee />
       <HowItWorks />
       <Categories />
       <ZaraSection />
