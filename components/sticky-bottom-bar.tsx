@@ -9,7 +9,7 @@ export function StickyBottomBar() {
           className="flex-1 gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white rounded-xl h-12"
           asChild
         >
-          <a href="https://t.me/bayer_italia_shop" target="_blank" rel="noopener noreferrer">
+          <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
             <Send className="size-5" />
             Telegram
           </a>
