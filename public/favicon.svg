@@ -1,0 +1,27 @@
+<svg width="180" height="180" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="italyGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#009246"/>
+      <stop offset="33%" style="stop-color:#009246"/>
+      <stop offset="33%" style="stop-color:#ffffff"/>
+      <stop offset="66%" style="stop-color:#ffffff"/>
+      <stop offset="66%" style="stop-color:#CE2B37"/>
+      <stop offset="100%" style="stop-color:#CE2B37"/>
+    </linearGradient>
+  </defs>
+  <!-- Outer circle with Italian flag colors -->
+  <circle cx="90" cy="90" r="85" fill="url(#italyGradient)"/>
+  <!-- Inner cream circle -->
+  <circle cx="90" cy="90" r="70" fill="#FAF8F5"/>
+  <!-- Shopping bag -->
+  <g transform="translate(55, 45)">
+    <!-- Bag body with Italian colors -->
+    <rect x="0" y="25" width="70" height="60" rx="5" fill="#009246"/>
+    <rect x="23" y="25" width="24" height="60" fill="#ffffff"/>
+    <rect x="47" y="25" width="23" height="60" rx="0 5 5 0" fill="#CE2B37"/>
+    <!-- Bag handle -->
+    <path d="M20 25 Q20 5, 35 5 Q50 5, 50 25" stroke="#C9A227" stroke-width="5" fill="none" stroke-linecap="round"/>
+  </g>
+  <!-- Text: B -->
+  <text x="90" y="140" font-family="Georgia, serif" font-size="28" font-weight="bold" fill="#1a1a2e" text-anchor="middle">B</text>
+</svg>

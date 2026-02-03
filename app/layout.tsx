@@ -15,20 +15,60 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: 'Buyer Italia - Баєр з Італії | ZARA та інші бренди',
-  description: 'Прямі закупки оригінальних речей з Італії. ZARA, Massimo Dutti та інші бренди. Доставка в Україну та Європу. Реальні фото, оригінал гарантовано.',
-  keywords: ['баєр італія', 'zara італія', 'одяг з італії', 'шопінг італія', 'доставка з італії', 'buyer italia', 'buyer service italy', 'zara italy shopping'],
+  title: {
+    default: 'Buyer Italia - Баєр з Італії | Оригінальний одяг ZARA, Mango, COS',
+    template: '%s | Buyer Italia'
+  },
+  description: 'Професійний баєр-сервіс з Італії. Закуповуємо оригінальні речі ZARA, Mango, Massimo Dutti, COS, Puma прямо з італійських магазинів. Доставка в Україну 7-10 днів, в Європу 10-14 днів. Фото з магазину, чеки, 100% гарантія оригінальності. Знижки до 70% на розпродажах.',
+  keywords: [
+    'баєр італія', 
+    'buyer italia', 
+    'zara італія', 
+    'одяг з італії', 
+    'шопінг італія', 
+    'доставка з італії',
+    'оригінальний одяг італія',
+    'mango італія',
+    'massimo dutti італія',
+    'cos італія',
+    'puma італія',
+    'розпродаж zara італія',
+    'баєр сервіс',
+    'купити одяг з італії',
+    'доставка в україну з італії',
+    'брендовий одяг італія',
+    'zara sale italy',
+    'italian fashion buyer',
+    'personal shopper italy'
+  ],
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon-light-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
+    shortcut: '/favicon.svg',
+  },
   openGraph: {
-    title: 'Buyer Italia - Баєр з Італії',
-    description: 'Прямі закупки оригінальних речей з Італії. ZARA та інші бренди.',
+    title: 'Buyer Italia - Баєр з Італії | Оригінальний одяг з Італії',
+    description: 'Професійний баєр-сервіс: ZARA, Mango, Massimo Dutti, COS прямо з Італії. Доставка в Україну та Європу. 100% оригінал, фото з магазину.',
     type: 'website',
     locale: 'uk_UA',
     siteName: 'Buyer Italia',
+    images: [
+      {
+        url: '/images/buyer-italia-logo.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Buyer Italia - Баєр сервіс з Італії',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Buyer Italia - Баєр з Італії',
-    description: 'Прямі закупки оригінальних речей з Італії. ZARA та інші бренди.',
+    description: 'Професійний баєр-сервіс: ZARA, Mango, Massimo Dutti прямо з Італії. Доставка в Україну та Європу.',
+    images: ['/images/buyer-italia-logo.jpg'],
   },
   robots: {
     index: true,
@@ -36,12 +76,19 @@ export const metadata: Metadata = {
     googleBot: {
       index: true,
       follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
     },
   },
   alternates: {
-    canonical: '/',
+    canonical: 'https://buyeritalia.com',
+    languages: {
+      'uk-UA': 'https://buyeritalia.com',
+    },
   },
-    generator: 'v0.app'
+  category: 'shopping',
+  generator: 'v0.app'
 }
 
 // JSON-LD structured data for Organization
