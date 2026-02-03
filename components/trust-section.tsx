@@ -42,7 +42,7 @@ export function TrustSection() {
           Чому нам довіряють
         </h2>
         <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
-          6 причин обрати Bayer Italia
+          6 причин обрати Buyer Italia
         </p>
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
