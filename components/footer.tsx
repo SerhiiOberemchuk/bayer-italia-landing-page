@@ -17,13 +17,13 @@ export function Footer() {
           {/* Contact Links */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
             <a 
-              href="https://t.me/bayer_italia_shop" 
+              href="https://t.me/buyer_italia_shop" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <Send className="size-4" />
-              @bayer_italia_shop
+              @buyer_italia_shop
             </a>
             <a 
               href="https://t.me/raisa_orb" 

@@ -4,31 +4,31 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.985 0.002 90);
-  --foreground: oklch(0.18 0.02 260);
+  --background: oklch(0.98 0.005 75);
+  --foreground: oklch(0.15 0.01 260);
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 260);
+  --card-foreground: oklch(0.15 0.01 260);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 260);
-  --primary: oklch(0.18 0.02 260);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0.005 90);
-  --secondary-foreground: oklch(0.18 0.02 260);
-  --muted: oklch(0.96 0.005 90);
-  --muted-foreground: oklch(0.5 0.01 260);
-  --accent: oklch(0.55 0.18 145);
+  --popover-foreground: oklch(0.15 0.01 260);
+  --primary: oklch(0.15 0.01 260);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.96 0.008 75);
+  --secondary-foreground: oklch(0.15 0.01 260);
+  --muted: oklch(0.94 0.008 75);
+  --muted-foreground: oklch(0.45 0.01 260);
+  --accent: oklch(0.45 0.16 145);
   --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.55 0.2 25);
+  --destructive: oklch(0.50 0.18 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.92 0.005 90);
-  --input: oklch(0.92 0.005 90);
-  --ring: oklch(0.55 0.18 145);
+  --border: oklch(0.90 0.008 75);
+  --input: oklch(0.90 0.008 75);
+  --ring: oklch(0.45 0.16 145);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 1rem;
+  --radius: 0.75rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.145 0 0);
   --sidebar-primary: oklch(0.205 0 0);
@@ -37,8 +37,8 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-  --italy-green: oklch(0.55 0.18 145);
-  --italy-red: oklch(0.55 0.2 25);
+  --italy-green: oklch(0.45 0.16 145);
+  --italy-red: oklch(0.50 0.18 25);
 }
 
 .dark {
@@ -127,4 +127,17 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 20s linear infinite;
 }
