@@ -22,7 +22,7 @@ export default function Home() {
       <DeliveryPayment />
       <TrustSection />
       <Reviews />
-      <FAQ />
+           <FAQ />
       <FinalCTA />
       <Footer />
       <StickyBottomBar />
