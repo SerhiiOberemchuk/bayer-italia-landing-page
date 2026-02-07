@@ -9,6 +9,12 @@ const brands = [
   { name: "MASSIMO DUTTI", style: "font-medium tracking-[0.15em]" },
   { name: "PUMA", style: "font-bold tracking-[0.2em]" },
   { name: "& OTHER STORIES", style: "font-light tracking-[0.1em]" },
+  { name: "NIKE", style: "font-bold tracking-[0.3em]" },
+  { name: "ADIDAS", style: "font-bold tracking-[0.2em]" },
+  { name: "CALVIN KLEIN", style: "font-light tracking-[0.15em]" },
+  { name: "TOMMY HILFIGER", style: "font-medium tracking-[0.1em]" },
+  { name: "PINKO", style: "font-bold tracking-[0.3em]" },
+  { name: "FURLA", style: "font-medium tracking-[0.25em]" },
 ]
 
 export function BrandsMarquee() {

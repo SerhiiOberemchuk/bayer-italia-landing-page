@@ -10,6 +10,7 @@ import { DeliveryPayment } from "@/components/delivery-payment"
 import { TrustSection } from "@/components/trust-section"
 import { Reviews } from "@/components/reviews"
 import { FAQ } from "@/components/faq"
+import { PopularBrands } from "@/components/popular-brands"
 import { FinalCTA } from "@/components/final-cta"
 import { Footer } from "@/components/footer"
 import { StickyBottomBar } from "@/components/sticky-bottom-bar"
@@ -34,6 +35,7 @@ export default async function Home({
       <DeliveryPayment dict={dict.delivery} />
       <TrustSection dict={dict.trust} />
       <Reviews dict={dict.reviews} />
+      <PopularBrands dict={dict.popularBrands} />
       <FAQ dict={dict.faq} />
       <FinalCTA dict={dict.finalCta} />
       <Footer dict={dict.footer} locale={locale} />
