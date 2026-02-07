@@ -1,9 +1,12 @@
+"use client"
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
+import { AnimateIn } from "@/components/animate-in"
 import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
 
 interface FAQProps {
@@ -34,27 +37,33 @@ export function FAQ({ dict }: FAQProps) {
       />
 
       <div className="mx-auto max-w-3xl">
-        <h2 className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
-          {dict.title}
-        </h2>
-        <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
-          {dict.subtitle}
-        </p>
+        <AnimateIn variant="fade-up">
+          <h2 className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
+            {dict.title}
+          </h2>
+        </AnimateIn>
+        <AnimateIn variant="fade-up" delay={100}>
+          <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
+            {dict.subtitle}
+          </p>
+        </AnimateIn>
 
-        <div className="mt-12 rounded-2xl bg-card p-6 shadow-sm border">
-          <Accordion type="single" collapsible className="w-full">
-            {dict.items.map((faq, index) => (
-              <AccordionItem key={index} value={`item-${index}`}>
-                <AccordionTrigger className="text-left font-medium hover:no-underline">
-                  {faq.question}
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground leading-relaxed">
-                  {faq.answer}
-                </AccordionContent>
-              </AccordionItem>
-            ))}
-          </Accordion>
-        </div>
+        <AnimateIn variant="fade-up" delay={200}>
+          <div className="mt-12 rounded-2xl bg-card p-6 shadow-sm border">
+            <Accordion type="single" collapsible className="w-full">
+              {dict.items.map((faq, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="text-left font-medium hover:no-underline">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground leading-relaxed">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </AnimateIn>
       </div>
     </section>
   )

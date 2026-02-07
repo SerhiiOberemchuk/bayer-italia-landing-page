@@ -1,3 +1,7 @@
+"use client"
+
+import { AnimateIn } from "@/components/animate-in"
+
 const brands = [
   { name: "ZARA", style: "font-bold tracking-[0.3em]" },
   { name: "MANGO", style: "font-bold tracking-[0.2em]" },
@@ -9,19 +13,21 @@ const brands = [
 
 export function BrandsMarquee() {
   return (
-    <section className="border-y border-border/50 bg-card py-6 overflow-hidden">
-      <div className="relative">
-        <div className="flex animate-marquee whitespace-nowrap">
-          {[...brands, ...brands, ...brands].map((brand, index) => (
-            <span
-              key={index}
-              className={`mx-8 md:mx-16 text-lg md:text-2xl text-foreground/80 ${brand.style}`}
-            >
-              {brand.name}
-            </span>
-          ))}
+    <AnimateIn variant="fade" duration={800}>
+      <section className="group border-y border-border/50 bg-card py-6 overflow-hidden">
+        <div className="relative">
+          <div className="flex animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap">
+            {[...brands, ...brands, ...brands].map((brand, index) => (
+              <span
+                key={index}
+                className={`mx-8 md:mx-16 text-lg md:text-2xl text-foreground/80 hover:text-foreground transition-colors duration-300 ${brand.style}`}
+              >
+                {brand.name}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </AnimateIn>
   )
 }
