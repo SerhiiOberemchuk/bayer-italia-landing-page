@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Send, MessageCircle } from "lucide-react"
+import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
 
-export function StickyBottomBar() {
+interface StickyBottomBarProps {
+  dict: Dictionary["stickyBar"]
+}
+
+export function StickyBottomBar({ dict }: StickyBottomBarProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 border-t bg-card/95 backdrop-blur-sm p-4 md:hidden">
       <div className="flex gap-3">
@@ -11,7 +16,7 @@ export function StickyBottomBar() {
         >
           <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
             <Send className="size-5" />
-            Telegram
+            {dict.telegram}
           </a>
         </Button>
         <Button 
@@ -21,7 +26,7 @@ export function StickyBottomBar() {
         >
           <a href="https://t.me/raisa_orb" target="_blank" rel="noopener noreferrer">
             <MessageCircle className="size-5" />
-            Написати
+            {dict.write}
           </a>
         </Button>
       </div>

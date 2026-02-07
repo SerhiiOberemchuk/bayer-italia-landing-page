@@ -1,8 +1,15 @@
 import Link from "next/link"
 import { Send, MessageCircle } from "lucide-react"
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
+import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Locale } from "@/lib/i18n/config"
 
-export function Footer() {
+interface FooterProps {
+  dict: Dictionary["footer"]
+  locale: Locale
+}
+
+export function Footer({ dict, locale }: FooterProps) {
   return (
     <footer className="border-t bg-card px-4 py-12 md:px-8">
       <div className="mx-auto max-w-5xl">
@@ -12,7 +19,7 @@ export function Footer() {
           
           <h3 className="font-serif text-xl font-semibold text-foreground">Buyer Italia</h3>
           <p className="mt-2 text-sm text-muted-foreground max-w-md">
-            Ваш персональний баєр з Італії. Оригінальні речі напряму з італійських магазинів.
+            {dict.description}
           </p>
 
           {/* Contact Links */}
@@ -40,34 +47,34 @@ export function Footer() {
           {/* Policy Links */}
           <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs">
             <Link 
-              href="/privacy" 
+              href={`/${locale}/privacy`}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
-              Політика конфіденційності
+              {dict.privacy}
             </Link>
             <span className="text-muted-foreground/50">|</span>
             <Link 
-              href="/cookies" 
+              href={`/${locale}/cookies`}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
-              Політика cookies
+              {dict.cookies}
             </Link>
             <span className="text-muted-foreground/50">|</span>
             <Link 
-              href="/terms" 
+              href={`/${locale}/terms`}
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
-              Умови використання
+              {dict.terms}
             </Link>
           </div>
 
           {/* Disclaimer */}
           <div className="mt-8 pt-8 border-t w-full">
             <p className="text-xs text-muted-foreground">
-              Ми не є офіційним магазином. Працюємо як персональний баєр-сервіс — закуповуємо оригінальні товари в Італії на замовлення клієнтів.
+              {dict.disclaimer}
             </p>
             <p className="mt-2 text-xs text-muted-foreground">
-              © {new Date().getFullYear()} Buyer Italia. Всі права захищено.
+              &copy; {new Date().getFullYear()} {dict.copyright}
             </p>
           </div>
         </div>

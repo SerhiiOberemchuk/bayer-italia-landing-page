@@ -2,8 +2,16 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Send, MessageCircle, ArrowRight } from "lucide-react"
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
+import { LanguageSwitcher } from "@/components/language-switcher"
+import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Locale } from "@/lib/i18n/config"
 
-export function HeroSection() {
+interface HeroSectionProps {
+  dict: Dictionary["hero"]
+  locale: Locale
+}
+
+export function HeroSection({ dict, locale }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden">
       {/* Top Bar with Logo */}
@@ -11,22 +19,25 @@ export function HeroSection() {
         <div className="mx-auto max-w-6xl flex items-center justify-between">
           <BuyerItaliaLogo size="sm" />
           <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <span>Прямі закупки з Італії</span>
+            <span>{dict.topBar.directPurchases}</span>
             <span className="w-1 h-1 rounded-full bg-italy-green" />
-            <span>100% Оригінал</span>
+            <span>{dict.topBar.original}</span>
             <span className="w-1 h-1 rounded-full bg-italy-red" />
-            <span>Доставка в Україну та Європу</span>
+            <span>{dict.topBar.delivery}</span>
           </div>
-          <Button 
-            size="sm" 
-            className="bg-[#0088cc] hover:bg-[#0077b5] text-white gap-1.5"
-            asChild
-          >
-            <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
-              <Send className="size-4" />
-              <span className="hidden sm:inline">Telegram</span>
-            </a>
-          </Button>
+          <div className="flex items-center gap-2">
+            <LanguageSwitcher locale={locale} />
+            <Button 
+              size="sm" 
+              className="bg-[#0088cc] hover:bg-[#0077b5] text-white gap-1.5"
+              asChild
+            >
+              <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
+                <Send className="size-4" />
+                <span className="hidden sm:inline">Telegram</span>
+              </a>
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -37,32 +48,32 @@ export function HeroSection() {
             {/* Text Content */}
             <div className="text-center lg:text-left">
               <p className="text-sm font-medium tracking-widest text-italy-green uppercase mb-4">
-                Мультибрендовий баєр-сервіс
+                {dict.badge}
               </p>
               
               <h1 className="font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl lg:text-6xl xl:text-7xl text-balance leading-[1.1]">
-                Оригінальний одяг з Італії
+                {dict.title}
               </h1>
               
               <p className="mt-6 text-lg text-muted-foreground md:text-xl leading-relaxed max-w-xl mx-auto lg:mx-0">
-                ZARA, Mango, COS, Massimo Dutti, Puma та інші бренди прямо з італійських магазинів. Знижки до 70% на розпродажах.
+                {dict.subtitle}
               </p>
 
               {/* Stats */}
               <div className="mt-8 flex flex-wrap items-center justify-center lg:justify-start gap-8">
                 <div>
                   <p className="text-3xl font-serif font-semibold text-foreground">500+</p>
-                  <p className="text-sm text-muted-foreground">задоволених клієнтів</p>
+                  <p className="text-sm text-muted-foreground">{dict.stats.clients}</p>
                 </div>
                 <div className="w-px h-12 bg-border" />
                 <div>
                   <p className="text-3xl font-serif font-semibold text-foreground">7-10</p>
-                  <p className="text-sm text-muted-foreground">днів доставка</p>
+                  <p className="text-sm text-muted-foreground">{dict.stats.deliveryDays}</p>
                 </div>
                 <div className="w-px h-12 bg-border hidden sm:block" />
                 <div className="hidden sm:block">
                   <p className="text-3xl font-serif font-semibold text-foreground">100%</p>
-                  <p className="text-sm text-muted-foreground">оригінал</p>
+                  <p className="text-sm text-muted-foreground">{dict.stats.originalLabel}</p>
                 </div>
               </div>
 
@@ -75,7 +86,7 @@ export function HeroSection() {
                 >
                   <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
                     <Send className="size-5" />
-                    Перейти в Telegram
+                    {dict.ctaTelegram}
                     <ArrowRight className="size-4 ml-1" />
                   </a>
                 </Button>
@@ -87,7 +98,7 @@ export function HeroSection() {
                 >
                   <a href="https://t.me/raisa_orb" target="_blank" rel="noopener noreferrer">
                     <MessageCircle className="size-5" />
-                    Написати особисто
+                    {dict.ctaPersonal}
                   </a>
                 </Button>
               </div>
@@ -98,7 +109,7 @@ export function HeroSection() {
               <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
                 <Image
                   src="/images/hero-banner.jpg"
-                  alt="Люксові шопінг сумки з Італії - ZARA, Mango, COS та інші бренди"
+                  alt={dict.heroImageAlt}
                   fill
                   className="object-cover"
                   priority
@@ -114,8 +125,8 @@ export function HeroSection() {
                     <span className="text-2xl">🇮🇹</span>
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Прямо з Італії</p>
-                    <p className="text-sm text-muted-foreground">Оригінальні речі</p>
+                    <p className="font-medium text-foreground">{dict.floatingDirect}</p>
+                    <p className="text-sm text-muted-foreground">{dict.floatingOriginal}</p>
                   </div>
                 </div>
               </div>
@@ -126,8 +137,8 @@ export function HeroSection() {
                     <span className="text-xl font-bold text-italy-red">-70%</span>
                   </div>
                   <div>
-                    <p className="font-medium text-foreground">Знижки SALE</p>
-                    <p className="text-sm text-muted-foreground">На розпродажах</p>
+                    <p className="font-medium text-foreground">{dict.floatingDiscount}</p>
+                    <p className="text-sm text-muted-foreground">{dict.floatingDiscountSub}</p>
                   </div>
                 </div>
               </div>

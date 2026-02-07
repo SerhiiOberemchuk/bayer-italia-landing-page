@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { Send, MessageCircle, Bell } from "lucide-react"
+import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
 
-export function FinalCTA() {
+interface FinalCTAProps {
+  dict: Dictionary["finalCta"]
+}
+
+export function FinalCTA({ dict }: FinalCTAProps) {
   return (
     <section className="px-4 py-16 md:px-8 md:py-24">
       <div className="mx-auto max-w-4xl">
@@ -16,10 +21,10 @@ export function FinalCTA() {
             </div>
             
             <h2 className="font-serif text-2xl font-semibold text-white md:text-3xl lg:text-4xl text-balance">
-              Підписуйтесь на Telegram — новинки щодня
+              {dict.title}
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-white/80 leading-relaxed">
-              Першими дізнавайтесь про нові надходження, знижки та ексклюзивні пропозиції. Приєднуйтесь до нашої спільноти!
+              {dict.subtitle}
             </p>
 
             <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -30,7 +35,7 @@ export function FinalCTA() {
               >
                 <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
                   <Send className="size-5" />
-                  Перейти в Telegram
+                  {dict.ctaTelegram}
                 </a>
               </Button>
               <Button 
@@ -41,7 +46,7 @@ export function FinalCTA() {
               >
                 <a href="https://t.me/raisa_orb" target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="size-5" />
-                  Написати @raisa_orb
+                  {dict.ctaPersonal}
                 </a>
               </Button>
             </div>
