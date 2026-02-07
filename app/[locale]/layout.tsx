@@ -84,9 +84,10 @@ export async function generateMetadata({
     icons: {
       icon: [
         { url: "/favicon.svg", type: "image/svg+xml" },
-        { url: "/icon-light-32x32.png", sizes: "32x32", type: "image/png" },
+        { url: "/icon-light-32x32.jpg", sizes: "32x32", type: "image/jpeg" },
+        { url: "/icon-dark-32x32.jpg", sizes: "32x32", type: "image/jpeg", media: "(prefers-color-scheme: dark)" },
       ],
-      apple: "/apple-icon.png",
+      apple: "/apple-icon.jpg",
       shortcut: "/favicon.svg",
     },
     openGraph: {
@@ -97,10 +98,10 @@ export async function generateMetadata({
       siteName: "Buyer Italia",
       images: [
         {
-          url: "/images/buyer-italia-logo.jpg",
+          url: "/images/og-image.jpg",
           width: 1200,
           height: 630,
-          alt: "Buyer Italia",
+          alt: "Buyer Italia - Personal Shopping from Italy",
         },
       ],
     },
@@ -108,7 +109,7 @@ export async function generateMetadata({
       card: "summary_large_image",
       title: dict.meta.ogTitle,
       description: dict.meta.ogDescription,
-      images: ["/images/buyer-italia-logo.jpg"],
+      images: ["/images/og-image.jpg"],
     },
     robots: {
       index: true,
@@ -144,7 +145,7 @@ function getOrganizationJsonLd(locale: Locale) {
         ? "Баєр-сервіс з прямими закупками оригінальних речей з Італії"
         : "Buyer service with direct purchases of original items from Italy",
     url: "https://buyer-italia.shop",
-    logo: "https://buyer-italia.shop/images/buyer-italia-logo.jpg",
+    logo: "https://buyer-italia.shop/images/og-image.jpg",
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
