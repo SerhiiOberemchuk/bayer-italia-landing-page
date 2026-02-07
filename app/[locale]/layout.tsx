@@ -57,6 +57,29 @@ export async function generateMetadata({
       "zara sale italy",
       "italian fashion buyer",
       "personal shopper italy",
+      "bershka італія",
+      "pull and bear італія",
+      "stradivarius італія",
+      "h&m італія",
+      "nike італія",
+      "adidas італія",
+      "new balance італія",
+      "calvin klein італія",
+      "tommy hilfiger італія",
+      "guess італія",
+      "pinko італія",
+      "liu jo італія",
+      "furla італія",
+      "geox італія",
+      "other stories італія",
+      "max&co італія",
+      "parfois італія",
+      "брендовий одяг з європи",
+      "оригінальні бренди італія",
+      "розпродаж брендів італія",
+      "купити nike з італії",
+      "купити adidas з італії",
+      "купити calvin klein з італії",
     ],
     icons: {
       icon: [
@@ -144,8 +167,8 @@ function getServiceJsonLd(locale: Locale) {
         : "Buyer Italia - Shopping from Italy",
     description:
       locale === "uk"
-        ? "Професійний баєр-сервіс для закупки оригінальних речей з Італії. ZARA, Massimo Dutti, Mango та інші бренди."
-        : "Professional buyer service for purchasing original items from Italy. ZARA, Massimo Dutti, Mango and other brands.",
+        ? "Професійний баєр-сервіс для закупки оригінальних речей з Італії. ZARA, Massimo Dutti, Mango, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Liu Jo, Furla та інші бренди."
+        : "Professional buyer service for purchasing original items from Italy. ZARA, Massimo Dutti, Mango, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Liu Jo, Furla and other brands.",
     provider: {
       "@type": "Organization",
       name: "Buyer Italia",

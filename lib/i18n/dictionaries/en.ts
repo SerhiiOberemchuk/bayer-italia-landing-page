@@ -2,12 +2,12 @@ import type { Dictionary } from "./uk"
 
 const en: Dictionary = {
   meta: {
-    title: "Buyer Italia - Personal Shopper from Italy | Original ZARA, Mango, COS",
+    title: "Buyer Italia - Personal Shopper from Italy | ZARA, Mango, Nike, COS, Calvin Klein & More",
     description:
-      "Professional buyer service from Italy. We purchase original items from ZARA, Mango, Massimo Dutti, COS, Puma directly from Italian stores. Delivery to Ukraine in 7-10 days, to Europe in 10-14 days.",
+      "Professional buyer service from Italy. We purchase original items from ZARA, Mango, Massimo Dutti, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Furla directly from Italian stores. Delivery to Ukraine in 7-10 days, to Europe in 10-14 days.",
     ogTitle: "Buyer Italia - Personal Shopper from Italy | Original Clothing",
     ogDescription:
-      "Professional buyer service: ZARA, Mango, Massimo Dutti, COS directly from Italy. Delivery to Ukraine and Europe. 100% authentic, photos from store.",
+      "Professional buyer service: ZARA, Mango, Massimo Dutti, COS, Nike, Calvin Klein directly from Italy. Delivery to Ukraine and Europe. 100% authentic, photos from store.",
   },
   hero: {
     topBar: {
@@ -216,9 +216,44 @@ const en: Dictionary = {
       {
         question: "Which brands do you carry?",
         answer:
-          "Our main focus is ZARA, Puma, Mango, COS and other popular brands. We can also purchase items from other Italian stores on request.",
+          "We work with a wide range of brands: ZARA, Mango, Massimo Dutti, COS, & Other Stories, Bershka, Pull & Bear, Stradivarius, H&M, Puma, Nike, Adidas, New Balance, Calvin Klein, Tommy Hilfiger, Guess, Pinko, Liu Jo, MAX&Co, Furla, Geox, Parfois and many more. We can also purchase items from other Italian stores on request.",
       },
     ],
+  },
+  popularBrands: {
+    title: "Popular Brands",
+    subtitle: "We source original items from the most popular brands in Italy",
+    categories: {
+      fashion: "Fashion",
+      sport: "Sport",
+      premium: "Premium",
+      accessories: "Accessories",
+    },
+    brands: [
+      { name: "ZARA", category: "fashion" },
+      { name: "Mango", category: "fashion" },
+      { name: "Massimo Dutti", category: "fashion" },
+      { name: "COS", category: "fashion" },
+      { name: "& Other Stories", category: "fashion" },
+      { name: "Bershka", category: "fashion" },
+      { name: "Pull & Bear", category: "fashion" },
+      { name: "Stradivarius", category: "fashion" },
+      { name: "H&M", category: "fashion" },
+      { name: "PUMA", category: "sport" },
+      { name: "Nike", category: "sport" },
+      { name: "Adidas", category: "sport" },
+      { name: "New Balance", category: "sport" },
+      { name: "Calvin Klein", category: "premium" },
+      { name: "Tommy Hilfiger", category: "premium" },
+      { name: "Guess", category: "premium" },
+      { name: "Pinko", category: "premium" },
+      { name: "Liu Jo", category: "premium" },
+      { name: "MAX&Co", category: "premium" },
+      { name: "Furla", category: "accessories" },
+      { name: "Geox", category: "accessories" },
+      { name: "Parfois", category: "accessories" },
+    ],
+    cta: "Can't find your brand? Write to us!",
   },
   finalCta: {
     title: "Subscribe to Telegram — new arrivals daily",

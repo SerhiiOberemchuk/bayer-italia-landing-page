@@ -1,11 +1,11 @@
 const uk = {
   meta: {
-    title: "Buyer Italia - Баєр з Італії | Оригінальний одяг ZARA, Mango, COS",
+    title: "Buyer Italia - Баєр з Італії | ZARA, Mango, Nike, COS, Calvin Klein та інші бренди",
     description:
-      "Професійний баєр-сервіс з Італії. Закуповуємо оригінальні речі ZARA, Mango, Massimo Dutti, COS, Puma прямо з італійських магазинів. Доставка в Україну 7-10 днів, в Європу 10-14 днів.",
+      "Професійний баєр-сервіс з Італії. Закуповуємо оригінальні речі ZARA, Mango, Massimo Dutti, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Furla прямо з італійських магазинів. Доставка в Україну 7-10 днів, в Європу 10-14 днів.",
     ogTitle: "Buyer Italia - Баєр з Італії | Оригінальний одяг з Італії",
     ogDescription:
-      "Професійний баєр-сервіс: ZARA, Mango, Massimo Dutti, COS прямо з Італії. Доставка в Україну та Європу. 100% оригінал, фото з магазину.",
+      "Професійний баєр-сервіс: ZARA, Mango, Massimo Dutti, COS, Nike, Calvin Klein прямо з Італії. Доставка в Україну та Європу. 100% оригінал, фото з магазину.",
   },
   hero: {
     topBar: {
@@ -214,9 +214,44 @@ const uk = {
       {
         question: "Які бренди ви привозите?",
         answer:
-          "Основний фокус — ZARA, Puma, Mango, COS та інші популярні бренди. Також можемо закупити товари з інших італійських магазинів за запитом.",
+          "Ми працюємо з широким переліком брендів: ZARA, Mango, Massimo Dutti, COS, & Other Stories, Bershka, Pull & Bear, Stradivarius, H&M, Puma, Nike, Adidas, New Balance, Calvin Klein, Tommy Hilfiger, Guess, Pinko, Liu Jo, MAX&Co, Furla, Geox, Parfois та багато інших. Також можемо закупити товари з інших італійських магазинів за запитом.",
       },
     ],
+  },
+  popularBrands: {
+    title: "Популярні бренди",
+    subtitle: "Закуповуємо оригінальні речі з найпопулярніших брендів Італії",
+    categories: {
+      fashion: "Мода",
+      sport: "Спорт",
+      premium: "Преміум",
+      accessories: "Аксесуари",
+    },
+    brands: [
+      { name: "ZARA", category: "fashion" },
+      { name: "Mango", category: "fashion" },
+      { name: "Massimo Dutti", category: "fashion" },
+      { name: "COS", category: "fashion" },
+      { name: "& Other Stories", category: "fashion" },
+      { name: "Bershka", category: "fashion" },
+      { name: "Pull & Bear", category: "fashion" },
+      { name: "Stradivarius", category: "fashion" },
+      { name: "H&M", category: "fashion" },
+      { name: "PUMA", category: "sport" },
+      { name: "Nike", category: "sport" },
+      { name: "Adidas", category: "sport" },
+      { name: "New Balance", category: "sport" },
+      { name: "Calvin Klein", category: "premium" },
+      { name: "Tommy Hilfiger", category: "premium" },
+      { name: "Guess", category: "premium" },
+      { name: "Pinko", category: "premium" },
+      { name: "Liu Jo", category: "premium" },
+      { name: "MAX&Co", category: "premium" },
+      { name: "Furla", category: "accessories" },
+      { name: "Geox", category: "accessories" },
+      { name: "Parfois", category: "accessories" },
+    ],
+    cta: "Не знайшли свій бренд? Напишіть нам!",
   },
   finalCta: {
     title: "Підписуйтесь на Telegram — новинки щодня",
