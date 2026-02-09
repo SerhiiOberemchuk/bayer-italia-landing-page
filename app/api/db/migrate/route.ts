@@ -1,16 +1,16 @@
 /**
  * POST /api/db/migrate
  *
- * Creates the `products` table if it doesn't exist.
- * Protected by a secret header: x-admin-secret
+ * Створює таблицю `products`, якщо вона ще не існує.
+ * Захищено заголовком: x-admin-secret
  *
- * Usage:
+ * Використання:
  *   curl -X POST https://your-domain.com/api/db/migrate \
  *     -H "x-admin-secret: YOUR_ADMIN_SECRET"
  */
 
 import { NextResponse } from "next/server"
-import { getDb } from "@/lib/db"
+import { neon } from "@neondatabase/serverless"
 
 export async function POST(request: Request) {
   const secret = request.headers.get("x-admin-secret")
@@ -27,17 +27,19 @@ export async function POST(request: Request) {
   }
 
   try {
-    const sql = getDb()
+    const sql = neon(process.env.DATABASE_URL!)
 
+    // Створюємо таблицю products (якщо не існує)
+    // Структура відповідає Drizzle-схемі в lib/db/schema.ts
     await sql`
       CREATE TABLE IF NOT EXISTS products (
         id              uuid            PRIMARY KEY DEFAULT gen_random_uuid(),
         title           text            NOT NULL,
         price           integer         NOT NULL,
-        brand           text            NOT NULL,
-        size            text            NOT NULL,
-        condition       text            NOT NULL,
-        category        text            NOT NULL,
+        brand           text            NOT NULL DEFAULT '',
+        size            text            NOT NULL DEFAULT '',
+        condition       text            NOT NULL DEFAULT '',
+        category        text            NOT NULL DEFAULT '',
         note            text,
         images          jsonb           NOT NULL DEFAULT '[]'::jsonb,
         tg_chat_id      bigint,
@@ -47,15 +49,11 @@ export async function POST(request: Request) {
       )
     `
 
-    await sql`
-      CREATE INDEX IF NOT EXISTS idx_products_brand    ON products (brand)
-    `
-    await sql`
-      CREATE INDEX IF NOT EXISTS idx_products_category ON products (category)
-    `
-    await sql`
-      CREATE INDEX IF NOT EXISTS idx_products_created  ON products (created_at DESC)
-    `
+    // Індекси для швидкого пошуку та фільтрації
+    await sql`CREATE INDEX IF NOT EXISTS idx_products_brand    ON products (brand)`
+    await sql`CREATE INDEX IF NOT EXISTS idx_products_category ON products (category)`
+    await sql`CREATE INDEX IF NOT EXISTS idx_products_created  ON products (created_at DESC)`
+    await sql`CREATE UNIQUE INDEX IF NOT EXISTS idx_products_tg_msg ON products (tg_message_id)`
 
     return NextResponse.json({
       success: true,
