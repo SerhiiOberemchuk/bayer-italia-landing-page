@@ -1,8 +1,15 @@
 /**
- * Drizzle ORM schema — єдине джерело правди для структури бази даних.
+ * Drizzle ORM schema -- єдине джерело правди для структури бази даних.
  *
  * Таблиця `products` зберігає товари, які надходять
  * через Telegram-канал (webhook парсить #item-пости).
+ *
+ * Двомовні поля (title, category, condition, note) зберігаються
+ * окремо для UK і EN: title_uk / title_en тощо.
+ * AI-нормалізатор автоматично перекладає при збереженні.
+ *
+ * Поле `images` зберігає масив публічних Blob-URL
+ * (раніше -- Telegram file_id, тепер завантажуються у Vercel Blob).
  */
 
 import {
@@ -23,10 +30,16 @@ export const products = pgTable(
     /** Унікальний ідентифікатор товару (UUID v4) */
     id: uuid("id").primaryKey().defaultRandom(),
 
-    /** Назва товару (парситься з поля name / назва) */
-    title: text("title").notNull(),
+    /* ---- Двомовні поля ------------------------------------------ */
 
-    /** Ціна в центах або цілих одиницях (парситься як integer) */
+    /** Назва товару (оригінал із повідомлення, як fallback) */
+    title: text("title").notNull(),
+    /** Назва -- українська */
+    titleUk: text("title_uk").notNull().default(""),
+    /** Назва -- англійська */
+    titleEn: text("title_en").notNull().default(""),
+
+    /** Ціна в цілих одиницях EUR */
     price: integer("price").notNull(),
 
     /** Бренд: ZARA, Nike, Mango тощо */
@@ -35,22 +48,37 @@ export const products = pgTable(
     /** Розмір: S / M / L / 42 / One Size тощо */
     size: text("size").notNull().default(""),
 
-    /** Стан товару: новий, як новий, б/у тощо */
+    /** Стан товару (оригінал) */
     condition: text("condition").notNull().default(""),
+    /** Стан -- українська */
+    conditionUk: text("condition_uk").notNull().default(""),
+    /** Стан -- англійська */
+    conditionEn: text("condition_en").notNull().default(""),
 
-    /** Категорія: одяг, взуття, аксесуари тощо */
+    /** Категорія (оригінал) */
     category: text("category").notNull().default(""),
+    /** Категорія -- українська */
+    categoryUk: text("category_uk").notNull().default(""),
+    /** Категорія -- англійська */
+    categoryEn: text("category_en").notNull().default(""),
 
-    /** Додаткова примітка (необов'язково) */
+    /** Примітка (оригінал) */
     note: text("note"),
+    /** Примітка -- українська */
+    noteUk: text("note_uk"),
+    /** Примітка -- англійська */
+    noteEn: text("note_en"),
 
-    /** Масив Telegram file_id для фото (JSON) */
+    /**
+     * Масив публічних URL зображень (Vercel Blob).
+     * Формат: ["https://....public.blob.vercel-storage.com/...jpg", ...]
+     */
     images: jsonb("images").notNull().default([]),
 
     /** ID Telegram-чату (каналу), звідки прийшов пост */
     tgChatId: bigint("tg_chat_id", { mode: "number" }),
 
-    /** ID повідомлення в Telegram — використовується для upsert */
+    /** ID повідомлення в Telegram -- використовується для upsert */
     tgMessageId: bigint("tg_message_id", { mode: "number" }).unique(),
 
     /** Дата створення запису */
@@ -64,16 +92,9 @@ export const products = pgTable(
       .defaultNow(),
   },
   (table) => [
-    /** Індекс для фільтрації за брендом */
     index("idx_products_brand").on(table.brand),
-
-    /** Індекс для фільтрації за категорією */
     index("idx_products_category").on(table.category),
-
-    /** Індекс для сортування за датою (нові спочатку) */
     index("idx_products_created").on(table.createdAt),
-
-    /** Унікальний індекс для upsert по tg_message_id */
     uniqueIndex("idx_products_tg_msg").on(table.tgMessageId),
   ]
 )
