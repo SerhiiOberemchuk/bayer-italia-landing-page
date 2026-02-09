@@ -1,7 +1,18 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import Image from "next/image"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Send, ShoppingBag, Tag, Ruler, Sparkles, StickyNote } from "lucide-react"
+import {
+  ArrowLeft,
+  Send,
+  ShoppingBag,
+  Tag,
+  Ruler,
+  Sparkles,
+  StickyNote,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react"
 import { db } from "@/lib/db"
 import { products } from "@/lib/db/schema"
 import { eq } from "drizzle-orm"
@@ -13,13 +24,23 @@ import { AnimateIn } from "@/components/animate-in"
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
 import { LanguageSwitcher } from "@/components/language-switcher"
 
+/** Повертає локалізоване значення поля */
+function localized(
+  locale: string,
+  uk: string | null | undefined,
+  en: string | null | undefined,
+  fallback: string | null | undefined
+): string {
+  const value = locale === "uk" ? uk : en
+  return value || fallback || ""
+}
+
 async function getProduct(id: string) {
   const result = await db
     .select()
     .from(products)
     .where(eq(products.id, id))
     .limit(1)
-
   return result[0] ?? null
 }
 
@@ -35,9 +56,15 @@ export async function generateMetadata({
   if (!product) return {}
 
   const dict = await getDictionary(locale)
+  const title = localized(locale, product.titleUk, product.titleEn, product.title)
+  const images = (product.images ?? []) as string[]
+
   return {
-    title: `${product.title} | ${dict.catalog.title}`,
-    description: `${product.brand} ${product.title} - ${product.price} ${dict.catalog.currency}`,
+    title: `${title} | ${dict.catalog.title}`,
+    description: `${product.brand} ${title} - ${product.price} ${dict.catalog.currency}`,
+    openGraph: images.length > 0
+      ? { images: [{ url: images[0], width: 800, height: 1000 }] }
+      : undefined,
   }
 }
 
@@ -57,7 +84,6 @@ export default async function ProductDetailPage({
   if (!product) {
     return (
       <div className="min-h-screen bg-background">
-        {/* Header */}
         <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm px-4 py-4 md:px-8 sticky top-0 z-50">
           <div className="mx-auto max-w-6xl flex items-center justify-between">
             <Link href={`/${locale}`}>
@@ -90,15 +116,22 @@ export default async function ProductDetailPage({
     )
   }
 
-  // Build Telegram prefilled message
+  // Localized fields
+  const title = localized(locale, product.titleUk, product.titleEn, product.title)
+  const category = localized(locale, product.categoryUk, product.categoryEn, product.category)
+  const condition = localized(locale, product.conditionUk, product.conditionEn, product.condition)
+  const note = localized(locale, product.noteUk, product.noteEn, product.note)
+
+  // Telegram prefilled message
   const telegramText = encodeURIComponent(
     locale === "uk"
-      ? `Привіт! Цікавить товар: ${product.title} (ID: ${product.id}). Чи є він в наявності?`
-      : `Hi! I'm interested in: ${product.title} (ID: ${product.id}). Is it available?`
+      ? `Привіт! Цікавить товар: ${title} (ID: ${product.id}). Чи є він в наявності?`
+      : `Hi! I'm interested in: ${title} (ID: ${product.id}). Is it available?`
   )
   const telegramLink = `https://t.me/buyer_italia_shop?text=${telegramText}`
 
   const images = (product.images ?? []) as string[]
+  const hasImages = images.length > 0
 
   return (
     <div className="min-h-screen bg-background">
@@ -138,27 +171,72 @@ export default async function ProductDetailPage({
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
             {/* Image area */}
             <AnimateIn variant="fade-right" delay={100}>
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-secondary border border-border/40 flex items-center justify-center">
-                <div className="flex flex-col items-center gap-4 text-muted-foreground/30">
-                  <ShoppingBag className="size-16" strokeWidth={1} />
-                  <span className="text-sm font-medium tracking-wider uppercase">
-                    {product.brand || "Buyer Italia"}
-                  </span>
-                  {images.length > 0 && (
+              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-secondary border border-border/40">
+                {hasImages ? (
+                  <>
+                    <Image
+                      src={images[0]}
+                      alt={title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                      priority
+                    />
+                    {/* Image counter */}
+                    {images.length > 1 && (
+                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-foreground/70 px-3 py-1.5 backdrop-blur-sm">
+                        <ChevronLeft className="size-3.5 text-background/70" />
+                        <span className="text-xs font-medium text-background">
+                          1 / {images.length}
+                        </span>
+                        <ChevronRight className="size-3.5 text-background/70" />
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-muted-foreground/30">
+                    <ShoppingBag className="size-16" strokeWidth={1} />
+                    <span className="text-sm font-medium tracking-wider uppercase">
+                      {product.brand || "Buyer Italia"}
+                    </span>
                     <p className="mt-2 text-xs text-muted-foreground/50 max-w-[200px] text-center">
-                      {images.length} file_id ({dict.catalog.noImages})
+                      {dict.catalog.noImages}
                     </p>
-                  )}
-                </div>
+                  </div>
+                )}
                 {/* Condition badge */}
-                {product.condition && (
+                {condition && (
                   <div className="absolute top-4 left-4">
                     <Badge className="bg-card/90 text-foreground backdrop-blur-sm border-border/60 text-sm">
-                      {product.condition}
+                      {condition}
                     </Badge>
                   </div>
                 )}
               </div>
+
+              {/* Thumbnail row for multiple images */}
+              {images.length > 1 && (
+                <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
+                  {images.map((img, i) => (
+                    <div
+                      key={i}
+                      className={`relative size-16 shrink-0 rounded-xl overflow-hidden border-2 ${
+                        i === 0
+                          ? "border-italy-green"
+                          : "border-border/40 opacity-60"
+                      }`}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${title} ${i + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="64px"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </AnimateIn>
 
             {/* Product details */}
@@ -170,7 +248,7 @@ export default async function ProductDetailPage({
                   </p>
                 )}
                 <h1 className="font-serif text-3xl font-semibold text-foreground md:text-4xl text-balance leading-tight">
-                  {product.title}
+                  {title}
                 </h1>
               </AnimateIn>
 
@@ -186,7 +264,7 @@ export default async function ProductDetailPage({
               {/* Attributes */}
               <AnimateIn variant="fade-up" delay={350}>
                 <div className="mt-8 flex flex-col gap-4">
-                  {product.category && (
+                  {category && (
                     <div className="flex items-center gap-3">
                       <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
                         <Tag className="size-4 text-muted-foreground" />
@@ -196,7 +274,7 @@ export default async function ProductDetailPage({
                           {dict.catalog.filters.category}
                         </p>
                         <p className="text-sm font-medium text-foreground">
-                          {product.category}
+                          {category}
                         </p>
                       </div>
                     </div>
@@ -218,7 +296,7 @@ export default async function ProductDetailPage({
                     </div>
                   )}
 
-                  {product.condition && (
+                  {condition && (
                     <div className="flex items-center gap-3">
                       <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
                         <Sparkles className="size-4 text-muted-foreground" />
@@ -228,13 +306,13 @@ export default async function ProductDetailPage({
                           {dict.catalog.condition}
                         </p>
                         <p className="text-sm font-medium text-foreground">
-                          {product.condition}
+                          {condition}
                         </p>
                       </div>
                     </div>
                   )}
 
-                  {product.note && (
+                  {note && (
                     <div className="flex items-start gap-3">
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary">
                         <StickyNote className="size-4 text-muted-foreground" />
@@ -244,7 +322,7 @@ export default async function ProductDetailPage({
                           {dict.catalog.note}
                         </p>
                         <p className="text-sm text-foreground leading-relaxed">
-                          {product.note}
+                          {note}
                         </p>
                       </div>
                     </div>

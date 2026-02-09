@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import { products } from "@/lib/db/schema"
+import { uploadTelegramPhotosToBlob } from "@/lib/telegram/photos"
+import { normalizeProduct, type RawProductData } from "@/lib/telegram/normalize"
 
 /* ------------------------------------------------------------------ */
-/*  Telegram Bot Webhook – обробка channel_post & edited_channel_post */
+/*  Telegram Bot Webhook                                              */
+/*  Обробляє channel_post & edited_channel_post з тегом #item.       */
+/*                                                                    */
+/*  Потік даних:                                                      */
+/*    1. Валідація секретного токена                                   */
+/*    2. Парсинг повідомлення (key: value рядки)                      */
+/*    3. Завантаження фото з Telegram → Vercel Blob                   */
+/*    4. Нормалізація + переклад через AI (Vercel AI Gateway)         */
+/*    5. UPSERT у Postgres через Drizzle ORM                          */
 /* ------------------------------------------------------------------ */
 
 const TAG = "#item"
@@ -19,7 +29,6 @@ function normaliseKey(raw: string): string {
 function parseFields(text: string): Record<string, string> {
   const fields: Record<string, string> = {}
   for (const line of text.split("\n")) {
-    // пропускаємо рядок із хештегом
     if (line.trim().startsWith("#")) continue
     const colonIdx = line.indexOf(":")
     if (colonIdx === -1) continue
@@ -33,12 +42,11 @@ function parseFields(text: string): Record<string, string> {
 }
 
 /**
- * Маппінг розпарсених ключів → поля таблиці products.
- * Підтримуються українські та англійські ключі (без регістру).
+ * Маппінг ключів → поля таблиці products.
+ * Підтримуються українські та англійські ключі.
  */
 function mapToProduct(fields: Record<string, string>) {
   const keyMap: Record<string, string> = {
-    // English
     name: "title",
     title: "title",
     price: "price",
@@ -47,7 +55,6 @@ function mapToProduct(fields: Record<string, string>) {
     condition: "condition",
     category: "category",
     note: "note",
-    // Ukrainian
     "назва": "title",
     "ціна": "price",
     "бренд": "brand",
@@ -64,21 +71,19 @@ function mapToProduct(fields: Record<string, string>) {
     if (mapped) {
       product[mapped] = value
     }
-    // невідомі ключі мовчки ігноруються
   }
   return product
 }
 
-/** Витягує найбільший file_id фото з повідомлення Telegram. */
-function extractPhotoIds(
-  message: Record<string, unknown>
-): string[] {
+/**
+ * Витягує найбільший file_id фото з повідомлення Telegram.
+ * Telegram надсилає кілька розмірів -- беремо останній (найбільший).
+ */
+function extractPhotoIds(message: Record<string, unknown>): string[] {
   const photos = message.photo as
     | Array<{ file_id: string; file_size?: number }>
     | undefined
   if (!photos || photos.length === 0) return []
-
-  // Telegram надсилає кілька розмірів — беремо останній (найбільший)
   const largest = photos[photos.length - 1]
   return [largest.file_id]
 }
@@ -98,18 +103,17 @@ export async function POST(req: NextRequest) {
   try {
     const update = await req.json()
 
-    // 2. Визначаємо тип поста (новий або відредагований)
+    // 2. Визначаємо тип поста
     const message =
       (update.channel_post as Record<string, unknown>) ??
       (update.edited_channel_post as Record<string, unknown>) ??
       null
 
     if (!message) {
-      // Не канальний пост — підтверджуємо отримання
       return NextResponse.json({ ok: true, skipped: "not_channel_post" })
     }
 
-    // 3. Перевіряємо наявність #item у тексті або підписі
+    // 3. Перевіряємо наявність #item
     const text = (message.text as string) ?? (message.caption as string) ?? ""
     if (!text.toLowerCase().includes(TAG)) {
       return NextResponse.json({ ok: true, skipped: "no_item_tag" })
@@ -119,7 +123,6 @@ export async function POST(req: NextRequest) {
     const raw = parseFields(text)
     const product = mapToProduct(raw)
 
-    // Вимагаємо щонайменше назву і ціну
     if (!product.title) {
       return NextResponse.json({ ok: true, skipped: "missing_title" })
     }
@@ -129,27 +132,52 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: true, skipped: "invalid_price" })
     }
 
-    // 5. Збираємо Telegram file_id фотографій
-    const images = extractPhotoIds(message)
-
-    // 6. Отримуємо Telegram-ідентифікатори
+    // 5. Telegram-ідентифікатори
     const tgChatId = (message.chat as Record<string, unknown>)?.id as number
     const tgMessageId = message.message_id as number
 
+    // 6. Паралельно: завантажуємо фото в Blob + нормалізуємо через AI
+    const fileIds = extractPhotoIds(message)
+
+    const rawData: RawProductData = {
+      title: product.title,
+      price,
+      brand: product.brand ?? "",
+      size: product.size ?? "",
+      condition: product.condition ?? "",
+      category: product.category ?? "",
+      note: product.note ?? null,
+    }
+
+    const [blobUrls, normalized] = await Promise.all([
+      // Фото: Telegram file_id → Vercel Blob URL
+      fileIds.length > 0
+        ? uploadTelegramPhotosToBlob(fileIds, `products/${tgMessageId}`)
+        : Promise.resolve([]),
+      // AI: нормалізація + переклад UK/EN
+      normalizeProduct(rawData),
+    ])
+
     // 7. UPSERT через Drizzle ORM
-    //    Якщо пост із таким tg_message_id вже є — оновлюємо поля,
-    //    якщо ні — створюємо новий запис.
     await db
       .insert(products)
       .values({
         title: product.title,
+        titleUk: normalized.titleUk,
+        titleEn: normalized.titleEn,
         price,
-        brand: product.brand ?? "",
-        size: product.size ?? "",
+        brand: normalized.brand,
+        size: normalized.size,
         condition: product.condition ?? "",
+        conditionUk: normalized.conditionUk,
+        conditionEn: normalized.conditionEn,
         category: product.category ?? "",
+        categoryUk: normalized.categoryUk,
+        categoryEn: normalized.categoryEn,
         note: product.note ?? null,
-        images,
+        noteUk: normalized.noteUk,
+        noteEn: normalized.noteEn,
+        images: blobUrls,
         tgChatId,
         tgMessageId,
       })
@@ -157,13 +185,21 @@ export async function POST(req: NextRequest) {
         target: products.tgMessageId,
         set: {
           title: product.title,
+          titleUk: normalized.titleUk,
+          titleEn: normalized.titleEn,
           price,
-          brand: product.brand ?? "",
-          size: product.size ?? "",
+          brand: normalized.brand,
+          size: normalized.size,
           condition: product.condition ?? "",
+          conditionUk: normalized.conditionUk,
+          conditionEn: normalized.conditionEn,
           category: product.category ?? "",
+          categoryUk: normalized.categoryUk,
+          categoryEn: normalized.categoryEn,
           note: product.note ?? null,
-          images,
+          noteUk: normalized.noteUk,
+          noteEn: normalized.noteEn,
+          images: blobUrls,
           tgChatId,
           updatedAt: new Date(),
         },
@@ -172,7 +208,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true, tg_message_id: tgMessageId })
   } catch (err) {
     console.error("[telegram-webhook] Помилка обробки update:", err)
-    // Завжди повертаємо 200, щоб Telegram не повторював запит
+    // Завжди 200, щоб Telegram не повторював запит нескінченно
     return NextResponse.json(
       { ok: false, error: err instanceof Error ? err.message : "unknown" },
       { status: 200 }
