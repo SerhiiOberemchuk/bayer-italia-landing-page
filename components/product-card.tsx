@@ -2,11 +2,13 @@ import Link from "next/link"
 import Image from "next/image"
 import { ShoppingBag, Tag } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
-import type { Product } from "@/lib/db/schema"
+import type { ProductType } from "@/lib/db/schema"
+import type { Locale } from "@/lib/i18n/config"
+import { withLocalePath } from "@/lib/i18n/routing"
 
 interface ProductCardProps {
-  product: Product
-  locale: string
+  product: ProductType
+  locale: Locale
   currencyLabel: string
 }
 
@@ -33,7 +35,7 @@ export function ProductCard({ product, locale, currencyLabel }: ProductCardProps
 
   return (
     <Link
-      href={`/${locale}/catalog/${product.id}`}
+      href={withLocalePath(locale, `/catalog/${product.id}`)}
       className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all duration-300 hover:border-border hover:shadow-lg"
     >
       {/* Image / placeholder */}

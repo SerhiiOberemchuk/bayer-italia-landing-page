@@ -300,5 +300,16 @@ const uk = {
   },
 } as const
 
-export type Dictionary = typeof uk
+type DeepWiden<T> =
+  T extends string ? string
+  : T extends number ? number
+  : T extends boolean ? boolean
+  : T extends bigint ? bigint
+  : T extends symbol ? symbol
+  : T extends null | undefined ? T
+  : T extends readonly (infer U)[] ? ReadonlyArray<DeepWiden<U>>
+  : T extends object ? { [K in keyof T]: DeepWiden<T[K]> }
+  : T
+
+export type Dictionary = DeepWiden<typeof uk>
 export default uk

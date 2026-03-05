@@ -1,15 +1,15 @@
-"use client"
-
-import Link from "next/link"
-import { Send, MessageCircle } from "lucide-react"
-import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
-import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
-import type { Locale } from "@/lib/i18n/config"
+import Link from "next/link";
+import { Send, MessageCircle } from "lucide-react";
+import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
+import { AnimateIn } from "@/components/animate-in";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+import type { Locale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
+import { Suspense } from "react";
 
 interface FooterProps {
-  dict: Dictionary["footer"]
-  locale: Locale
+  dict: Dictionary["footer"];
+  locale: Locale;
 }
 
 export function Footer({ dict, locale }: FooterProps) {
@@ -20,26 +20,28 @@ export function Footer({ dict, locale }: FooterProps) {
           <div className="flex flex-col items-center text-center">
             {/* Logo */}
             <BuyerItaliaLogo size="sm" className="mb-4" />
-            
-            <h3 className="font-serif text-xl font-semibold text-foreground">Buyer Italia</h3>
+
+            <h3 className="font-serif text-xl font-semibold text-foreground">
+              Buyer Italia
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground max-w-md">
               {dict.description}
             </p>
 
             {/* Contact Links */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
-              <a 
-                href="https://t.me/buyer_italia_shop" 
-                target="_blank" 
+              <a
+                href="https://t.me/buyer_italia_shop"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
                 <Send className="size-4" />
                 @buyer_italia_shop
               </a>
-              <a 
-                href="https://t.me/raisa_orb" 
-                target="_blank" 
+              <a
+                href="https://t.me/raisa_orb"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
@@ -50,22 +52,36 @@ export function Footer({ dict, locale }: FooterProps) {
 
             {/* Policy Links */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs">
-              <Link 
-                href={`/${locale}/privacy`}
+              <Link
+                href={withLocalePath(locale, "/delivery-from-italy")}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+              >
+                {locale === "uk" ? "Доставка з Італії" : "Delivery from Italy"}
+              </Link>
+              <span className="text-muted-foreground/50">|</span>
+              <Link
+                href={withLocalePath(locale, "/brands-from-italy")}
+                className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+              >
+                {locale === "uk" ? "Бренди з Італії" : "Brands from Italy"}
+              </Link>
+              <span className="text-muted-foreground/50">|</span>
+              <Link
+                href={withLocalePath(locale, "/privacy")}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
                 {dict.privacy}
               </Link>
               <span className="text-muted-foreground/50">|</span>
-              <Link 
-                href={`/${locale}/cookies`}
+              <Link
+                href={withLocalePath(locale, "/cookies")}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
                 {dict.cookies}
               </Link>
               <span className="text-muted-foreground/50">|</span>
-              <Link 
-                href={`/${locale}/terms`}
+              <Link
+                href={withLocalePath(locale, "/terms")}
                 className="text-muted-foreground hover:text-foreground transition-colors duration-300"
               >
                 {dict.terms}
@@ -74,16 +90,28 @@ export function Footer({ dict, locale }: FooterProps) {
 
             {/* Disclaimer */}
             <div className="mt-8 pt-8 border-t w-full">
-              <p className="text-xs text-muted-foreground">
-                {dict.disclaimer}
-              </p>
-              <p className="mt-2 text-xs text-muted-foreground">
-                &copy; {new Date().getFullYear()} {dict.copyright}
-              </p>
+              <p className="text-xs text-muted-foreground">{dict.disclaimer}</p>
+              <Suspense
+                fallback={
+                  <p className="text-xs text-muted-foreground">Loading...</p>
+                }
+              >
+                <DateString data={dict.copyright} />
+              </Suspense>
             </div>
           </div>
         </AnimateIn>
       </div>
     </footer>
-  )
+  );
+}
+
+async function DateString({ data }: { data: string }) {
+  "use cache";
+
+  return (
+    <p className="mt-2 text-xs text-muted-foreground">
+      &copy; {new Date().getFullYear()} {data}
+    </p>
+  );
 }

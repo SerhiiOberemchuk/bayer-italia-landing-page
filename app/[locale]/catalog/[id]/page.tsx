@@ -1,7 +1,9 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import Image from "next/image"
-import { notFound } from "next/navigation"
+import type { Metadata } from "next";
+import Link from "next/link";
+import Image from "next/image";
+import { Suspense } from "react";
+import { notFound } from "next/navigation";
+import { getProduct } from "@/actions/catalog";
 import {
   ArrowLeft,
   Send,
@@ -12,155 +14,186 @@ import {
   StickyNote,
   ChevronLeft,
   ChevronRight,
-} from "lucide-react"
-import { db } from "@/lib/db"
-import { products } from "@/lib/db/schema"
-import { eq } from "drizzle-orm"
-import { getDictionary } from "@/lib/i18n/get-dictionary"
-import { isValidLocale } from "@/lib/i18n/config"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { AnimateIn } from "@/components/animate-in"
-import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
-import { LanguageSwitcher } from "@/components/language-switcher"
+} from "lucide-react";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { isValidLocale, siteUrl } from "@/lib/i18n/config";
+import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { ensureLocale } from "@/lib/i18n/server";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { AnimateIn } from "@/components/animate-in";
 
 /** Повертає локалізоване значення поля */
 function localized(
   locale: string,
   uk: string | null | undefined,
   en: string | null | undefined,
-  fallback: string | null | undefined
+  fallback: string | null | undefined,
 ): string {
-  const value = locale === "uk" ? uk : en
-  return value || fallback || ""
-}
-
-async function getProduct(id: string) {
-  const result = await db
-    .select()
-    .from(products)
-    .where(eq(products.id, id))
-    .limit(1)
-  return result[0] ?? null
+  const value = locale === "uk" ? uk : en;
+  return value || fallback || "";
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>
+  params: Promise<{ locale: string; id: string }>;
 }): Promise<Metadata> {
-  const { locale, id } = await params
-  if (!isValidLocale(locale)) return {}
+  const { locale, id } = await params;
+  if (!isValidLocale(locale)) return {};
 
-  const product = await getProduct(id)
-  if (!product) return {}
+  const product = await getProduct(id);
+  if (!product) return {};
 
-  const dict = await getDictionary(locale)
-  const title = localized(locale, product.titleUk, product.titleEn, product.title)
-  const images = (product.images ?? []) as string[]
+  const dict = await getDictionary(locale);
+  const title = localized(
+    locale,
+    product.titleUk,
+    product.titleEn,
+    product.title,
+  );
+  const pathname = `/catalog/${id}`;
+  const images = (product.images ?? []) as string[];
 
   return {
     title: `${title} | ${dict.catalog.title}`,
     description: `${product.brand} ${title} - ${product.price} ${dict.catalog.currency}`,
-    openGraph: images.length > 0
-      ? { images: [{ url: images[0], width: 800, height: 1000 }] }
-      : undefined,
-  }
+    alternates: {
+      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
+      languages: buildLocalizedAlternates(pathname, siteUrl),
+    },
+    openGraph:
+      images.length > 0
+        ? { images: [{ url: images[0], width: 800, height: 1000 }] }
+        : undefined,
+  };
 }
 
-export default async function ProductDetailPage({
+export default function ProductDetailPage({
   params,
 }: {
-  params: Promise<{ locale: string; id: string }>
+  params: Promise<{ locale: string; id: string }>;
 }) {
-  const { locale, id } = await params
-  if (!isValidLocale(locale)) notFound()
+  return (
+    <Suspense fallback={null}>
+      <ProductDetailPageContent params={params} />
+    </Suspense>
+  );
+}
+
+async function ProductDetailPageContent({
+  params,
+}: {
+  params: Promise<{ locale: string; id: string }>;
+}) {
+  const { locale: rawLocale, id } = await params;
+  const locale = ensureLocale(rawLocale);
 
   const [dict, product] = await Promise.all([
     getDictionary(locale),
     getProduct(id),
-  ])
+  ]);
 
   if (!product) {
-    return (
-      <div className="min-h-screen bg-background">
-        <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm px-4 py-4 md:px-8 sticky top-0 z-50">
-          <div className="mx-auto max-w-6xl flex items-center justify-between">
-            <Link href={`/${locale}`}>
-              <BuyerItaliaLogo size="sm" />
-            </Link>
-            <LanguageSwitcher locale={locale} />
-          </div>
-        </header>
-
-        <main className="px-4 py-24 md:px-8">
-          <div className="mx-auto max-w-2xl flex flex-col items-center text-center gap-6">
-            <div className="flex size-20 items-center justify-center rounded-full bg-secondary">
-              <ShoppingBag className="size-9 text-muted-foreground" />
-            </div>
-            <h1 className="font-serif text-2xl font-semibold text-foreground">
-              {dict.catalog.productNotFound}
-            </h1>
-            <p className="text-muted-foreground">
-              {dict.catalog.productNotFoundDesc}
-            </p>
-            <Button variant="outline" className="gap-2 rounded-full" asChild>
-              <Link href={`/${locale}/catalog`}>
-                <ArrowLeft className="size-4" />
-                {dict.catalog.backToCatalog}
-              </Link>
-            </Button>
-          </div>
-        </main>
-      </div>
-    )
+    notFound();
   }
 
   // Localized fields
-  const title = localized(locale, product.titleUk, product.titleEn, product.title)
-  const category = localized(locale, product.categoryUk, product.categoryEn, product.category)
-  const condition = localized(locale, product.conditionUk, product.conditionEn, product.condition)
-  const note = localized(locale, product.noteUk, product.noteEn, product.note)
+  const title = localized(
+    locale,
+    product.titleUk,
+    product.titleEn,
+    product.title,
+  );
+  const category = localized(
+    locale,
+    product.categoryUk,
+    product.categoryEn,
+    product.category,
+  );
+  const condition = localized(
+    locale,
+    product.conditionUk,
+    product.conditionEn,
+    product.condition,
+  );
+  const note = localized(locale, product.noteUk, product.noteEn, product.note);
 
   // Telegram prefilled message
   const telegramText = encodeURIComponent(
     locale === "uk"
       ? `Привіт! Цікавить товар: ${title} (ID: ${product.id}). Чи є він в наявності?`
-      : `Hi! I'm interested in: ${title} (ID: ${product.id}). Is it available?`
-  )
-  const telegramLink = `https://t.me/buyer_italia_shop?text=${telegramText}`
+      : `Hi! I'm interested in: ${title} (ID: ${product.id}). Is it available?`,
+  );
+  const telegramLink = `https://t.me/buyer_italia_shop?text=${telegramText}`;
 
-  const images = (product.images ?? []) as string[]
-  const hasImages = images.length > 0
+  const images = (product.images ?? []) as string[];
+  const hasImages = images.length > 0;
+  const productPath = `/catalog/${product.id}`;
+  const productUrl = `${siteUrl}${withLocalePath(locale, productPath)}`;
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: title,
+    description: `${product.brand} ${title}`,
+    image: images,
+    sku: product.id,
+    brand: product.brand
+      ? {
+          "@type": "Brand",
+          name: product.brand,
+        }
+      : undefined,
+    offers: {
+      "@type": "Offer",
+      priceCurrency: "EUR",
+      price: product.price,
+      availability: "https://schema.org/InStock",
+      url: productUrl,
+    },
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: locale === "uk" ? "Головна" : "Home",
+        item: `${siteUrl}${withLocalePath(locale)}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: dict.catalog.title,
+        item: `${siteUrl}${withLocalePath(locale, "/catalog")}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: title,
+        item: productUrl,
+      },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-sm px-4 py-4 md:px-8 sticky top-0 z-50">
-        <div className="mx-auto max-w-6xl flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link href={`/${locale}`}>
-              <BuyerItaliaLogo size="sm" />
-            </Link>
-            <div className="hidden sm:block h-6 w-px bg-border" />
-            <Link
-              href={`/${locale}/catalog`}
-              className="hidden sm:flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
-              <ArrowLeft className="size-3.5" />
-              {dict.catalog.backToCatalog}
-            </Link>
-          </div>
-          <LanguageSwitcher locale={locale} />
-        </div>
-      </header>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <main className="px-4 py-12 md:px-8 md:py-16">
         <div className="mx-auto max-w-5xl">
           {/* Back link (mobile) */}
           <AnimateIn variant="fade-right">
             <Link
-              href={`/${locale}/catalog`}
+              href={withLocalePath(locale, "/catalog")}
               className="sm:hidden inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
             >
               <ArrowLeft className="size-3.5" />
@@ -171,7 +204,7 @@ export default async function ProductDetailPage({
           <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
             {/* Image area */}
             <AnimateIn variant="fade-right" delay={100}>
-              <div className="relative aspect-[4/5] rounded-3xl overflow-hidden bg-secondary border border-border/40">
+              <div className="relative aspect-4/5 rounded-3xl overflow-hidden bg-secondary border border-border/40">
                 {hasImages ? (
                   <>
                     <Image
@@ -199,7 +232,7 @@ export default async function ProductDetailPage({
                     <span className="text-sm font-medium tracking-wider uppercase">
                       {product.brand || "Buyer Italia"}
                     </span>
-                    <p className="mt-2 text-xs text-muted-foreground/50 max-w-[200px] text-center">
+                    <p className="mt-2 text-xs text-muted-foreground/50 max-w-50 text-center">
                       {dict.catalog.noImages}
                     </p>
                   </div>
@@ -357,5 +390,5 @@ export default async function ProductDetailPage({
         </div>
       </main>
     </div>
-  )
+  );
 }

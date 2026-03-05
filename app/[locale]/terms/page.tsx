@@ -2,8 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { isValidLocale } from "@/lib/i18n/config"
-import { notFound } from "next/navigation"
+import { isValidLocale, siteUrl } from "@/lib/i18n/config"
+import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
+import { ensureLocale } from "@/lib/i18n/server"
 
 export async function generateMetadata({
   params,
@@ -13,12 +14,20 @@ export async function generateMetadata({
   const { locale } = await params
   if (!isValidLocale(locale)) return {}
 
+  const pathname = "/terms"
+  const title = locale === "uk" ? "Умови використання" : "Terms of Use"
+  const description =
+    locale === "uk"
+      ? "Умови використання сервісу Buyer Italia."
+      : "Terms of use of Buyer Italia service."
+
   return {
-    title: locale === "uk" ? "Умови використання" : "Terms of Use",
-    description:
-      locale === "uk"
-        ? "Умови використання сервісу Buyer Italia - правила замовлення, оплати та доставки товарів з Італії."
-        : "Terms of use of Buyer Italia service - rules for ordering, payment and delivery of goods from Italy.",
+    title,
+    description,
+    alternates: {
+      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
+      languages: buildLocalizedAlternates(pathname, siteUrl),
+    },
   }
 }
 
@@ -27,15 +36,15 @@ export default async function TermsPage({
 }: {
   params: Promise<{ locale: string }>
 }) {
-  const { locale } = await params
-  if (!isValidLocale(locale)) notFound()
+  const locale = ensureLocale((await params).locale)
 
   const isUk = locale === "uk"
+  const lastUpdated = isUk ? "05.03.2026" : "March 5, 2026"
 
   return (
-    <main className="min-h-screen bg-background px-4 py-12 md:px-8">
+    <main className="px-4 py-12 md:px-8">
       <div className="mx-auto max-w-3xl">
-        <Link href={`/${locale}`}>
+        <Link href={withLocalePath(locale)}>
           <Button variant="ghost" className="mb-8">
             <ArrowLeft className="mr-2 size-4" />
             {isUk ? "На головну" : "Back to home"}
@@ -47,7 +56,7 @@ export default async function TermsPage({
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           {isUk ? "Останнє оновлення:" : "Last updated:"}{" "}
-          {new Date().toLocaleDateString(isUk ? "uk-UA" : "en-US")}
+          {lastUpdated}
         </p>
 
         {isUk ? (
@@ -249,3 +258,4 @@ export default async function TermsPage({
     </main>
   )
 }
+

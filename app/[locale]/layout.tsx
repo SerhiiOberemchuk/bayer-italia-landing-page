@@ -1,37 +1,40 @@
-import React from "react"
-import type { Metadata, Viewport } from "next"
-import { DM_Sans, Playfair_Display } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
-import { locales, defaultLocale, isValidLocale } from "@/lib/i18n/config"
-import type { Locale } from "@/lib/i18n/config"
-import { getDictionary } from "@/lib/i18n/get-dictionary"
-import { notFound } from "next/navigation"
-
+import React from "react";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans, Playfair_Display } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { locales, isValidLocale, siteUrl } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
+import { getDictionary } from "@/lib/i18n/dictionary";
+import { ensureLocale } from "@/lib/i18n/server";
+import { SiteHeader } from "@/components/site-header";
+import { Footer } from "@/components/footer";
+import "../globals.css";
 const dmSans = DM_Sans({
   subsets: ["latin", "latin-ext"],
   variable: "--font-dm-sans",
-})
+});
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin", "latin-ext", "cyrillic"],
   variable: "--font-playfair",
-})
+});
 
 export async function generateStaticParams() {
-  return locales.map((locale) => ({ locale }))
+  return locales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params
-  if (!isValidLocale(locale)) return {}
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
 
-  const dict = await getDictionary(locale)
+  const dict = await getDictionary(locale);
 
   return {
+    metadataBase: new URL(siteUrl),
     title: {
       default: dict.meta.title,
       template: "%s | Buyer Italia",
@@ -85,7 +88,12 @@ export async function generateMetadata({
       icon: [
         { url: "/favicon.svg", type: "image/svg+xml" },
         { url: "/icon-light-32x32.jpg", sizes: "32x32", type: "image/jpeg" },
-        { url: "/icon-dark-32x32.jpg", sizes: "32x32", type: "image/jpeg", media: "(prefers-color-scheme: dark)" },
+        {
+          url: "/icon-dark-32x32.jpg",
+          sizes: "32x32",
+          type: "image/jpeg",
+          media: "(prefers-color-scheme: dark)",
+        },
       ],
       apple: "/apple-icon.jpg",
       shortcut: "/favicon.svg",
@@ -122,16 +130,9 @@ export async function generateMetadata({
         "max-snippet": -1,
       },
     },
-    alternates: {
-      canonical: `https://buyer-italia.shop/${locale}`,
-      languages: {
-        "uk-UA": "https://buyer-italia.shop/uk",
-        "en-US": "https://buyer-italia.shop/en",
-      },
-    },
     category: "shopping",
     generator: "v0.app",
-  }
+  };
 }
 
 // JSON-LD structured data for Organization
@@ -155,7 +156,7 @@ function getOrganizationJsonLd(locale: Locale) {
       "https://t.me/buyer_italia_shop",
       "https://instagram.com/buyer_italia",
     ],
-  }
+  };
 }
 
 function getServiceJsonLd(locale: Locale) {
@@ -176,7 +177,7 @@ function getServiceJsonLd(locale: Locale) {
     },
     areaServed: ["UA", "PL", "DE", "CZ", "IT"],
     serviceType: "Personal Shopping Service",
-  }
+  };
 }
 
 export const viewport: Viewport = {
@@ -184,20 +185,20 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   themeColor: "#1a1a2e",
-}
+};
 
 export default async function LocaleLayout({
   children,
   params,
 }: {
-  children: React.ReactNode
-  params: Promise<{ locale: string }>
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = await params
-  if (!isValidLocale(locale)) notFound()
+  const locale = ensureLocale((await params).locale);
+  const dict = await getDictionary(locale);
 
-  const organizationJsonLd = getOrganizationJsonLd(locale)
-  const serviceJsonLd = getServiceJsonLd(locale)
+  const organizationJsonLd = getOrganizationJsonLd(locale);
+  const serviceJsonLd = getServiceJsonLd(locale);
 
   return (
     <html lang={locale}>
@@ -216,9 +217,13 @@ export default async function LocaleLayout({
       <body
         className={`${dmSans.variable} ${playfairDisplay.variable} font-sans antialiased`}
       >
-        {children}
+        <div className="min-h-screen bg-background">
+          <SiteHeader locale={locale} topBar={dict.hero.topBar} />
+          {children}
+          <Footer dict={dict.footer} locale={locale} />
+        </div>
         <Analytics />
       </body>
     </html>
-  )
+  );
 }

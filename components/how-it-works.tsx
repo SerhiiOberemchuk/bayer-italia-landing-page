@@ -1,9 +1,7 @@
-"use client"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { Search, MessageSquare, CreditCard, Package } from "lucide-react"
 import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 const stepIcons = [Search, MessageSquare, CreditCard, Package]
 

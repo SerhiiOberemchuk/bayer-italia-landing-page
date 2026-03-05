@@ -1,5 +1,3 @@
-"use client"
-
 import {
   Accordion,
   AccordionContent,
@@ -7,7 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion"
 import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 interface FAQProps {
   dict: Dictionary["faq"]
