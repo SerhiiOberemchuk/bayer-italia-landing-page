@@ -25,10 +25,16 @@ type TrustSectionProps = {
 
 export function TrustSection({ dict }: TrustSectionProps) {
   return (
-    <section className="px-4 py-16 md:px-8 md:py-24 bg-secondary/30">
+    <section
+      className="px-4 py-16 md:px-8 md:py-24 bg-secondary/30"
+      aria-labelledby="trust-section-title"
+    >
       <div className="mx-auto max-w-5xl">
         <AnimateIn variant="fade-up">
-          <h2 className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
+          <h2
+            id="trust-section-title"
+            className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl"
+          >
             {dict.title}
           </h2>
         </AnimateIn>
@@ -38,7 +44,7 @@ export function TrustSection({ dict }: TrustSectionProps) {
           </p>
         </AnimateIn>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {dict.items.map((point, index) => {
             const Icon = trustIcons[index];
             return (
@@ -47,23 +53,25 @@ export function TrustSection({ dict }: TrustSectionProps) {
                 variant="fade-left"
                 delay={150 + index * 100}
               >
-                <Card className="border-0 bg-card shadow-md rounded-2xl hover-lift h-full">
-                  <CardContent className="p-6">
-                    <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-italy-green/10">
-                      <Icon className="size-6 text-italy-green" />
-                    </div>
-                    <h3 className="font-semibold text-foreground">
-                      {point.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                      {point.description}
-                    </p>
-                  </CardContent>
-                </Card>
+                <li className="list-none">
+                  <Card className="border-0 bg-card shadow-md rounded-2xl hover-lift h-full">
+                    <CardContent className="p-6">
+                      <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-italy-green/10">
+                        <Icon className="size-6 text-italy-green" aria-hidden="true" />
+                      </div>
+                      <h3 className="font-semibold text-foreground">
+                        {point.title}
+                      </h3>
+                      <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                        {point.description}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </li>
               </AnimateIn>
             );
           })}
-        </div>
+        </ul>
       </div>
     </section>
   );

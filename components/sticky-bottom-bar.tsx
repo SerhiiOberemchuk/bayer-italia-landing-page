@@ -1,6 +1,3 @@
-"use client"
-
-import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Send, MessageCircle } from "lucide-react"
 import type { Dictionary } from "@/lib/i18n/dictionary"
@@ -10,43 +7,42 @@ interface StickyBottomBarProps {
 }
 
 export function StickyBottomBar({ dict }: StickyBottomBarProps) {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsVisible(window.scrollY > 400)
-    }
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
-
   return (
-    <div
-      className={`fixed bottom-0 left-0 right-0 z-50 border-t bg-card/95 backdrop-blur-sm p-4 md:hidden transition-transform duration-500 ease-out ${
-        isVisible ? "translate-y-0" : "translate-y-full"
-      }`}
+    <nav
+      className="fixed inset-x-0 bottom-0 z-50 border-t bg-card/95 p-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] backdrop-blur-sm md:hidden"
+      aria-label="Mobile quick actions"
     >
       <div className="flex gap-3">
-        <Button 
-          className="flex-1 gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white rounded-xl h-12 transition-transform active:scale-[0.97]"
+        <Button
+          className="flex-1 gap-2 rounded-xl bg-[#005e8a] text-white h-12 transition-transform active:scale-[0.97] hover:bg-[#004a6b]"
           asChild
         >
-          <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
-            <Send className="size-5" />
+          <a
+            href="https://t.me/buyer_italia_shop"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buyer Italia Telegram channel"
+          >
+            <Send className="size-5" aria-hidden="true" />
             {dict.telegram}
           </a>
         </Button>
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="flex-1 gap-2 rounded-xl h-12 border-2 bg-transparent transition-transform active:scale-[0.97]"
           asChild
         >
-          <a href="https://t.me/raisa_orb" target="_blank" rel="noopener noreferrer">
-            <MessageCircle className="size-5" />
+          <a
+            href="https://t.me/raisa_orb"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Write to Raisa on Telegram"
+          >
+            <MessageCircle className="size-5" aria-hidden="true" />
             {dict.write}
           </a>
         </Button>
       </div>
-    </div>
+    </nav>
   )
 }

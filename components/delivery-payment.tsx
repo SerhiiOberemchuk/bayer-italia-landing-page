@@ -11,10 +11,16 @@ interface DeliveryPaymentProps {
 
 export function DeliveryPayment({ dict }: DeliveryPaymentProps) {
   return (
-    <section className="px-4 py-16 md:px-8 md:py-24">
+    <section
+      className="px-4 py-16 md:px-8 md:py-24"
+      aria-labelledby="delivery-payment-title"
+    >
       <div className="mx-auto max-w-5xl">
         <AnimateIn variant="fade-up">
-          <h2 className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
+          <h2
+            id="delivery-payment-title"
+            className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl"
+          >
             {dict.title}
           </h2>
         </AnimateIn>
@@ -24,28 +30,30 @@ export function DeliveryPayment({ dict }: DeliveryPaymentProps) {
           </p>
         </AnimateIn>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {dict.items.map((info, index) => {
             const Icon = deliveryIcons[index]
             return (
               <AnimateIn key={index} variant="fade-up" delay={200 + index * 100}>
-                <Card className="border bg-card rounded-2xl hover-lift h-full">
-                  <CardContent className="p-6">
-                    <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-secondary">
-                      <Icon className="size-6 text-italy-green" />
-                    </div>
-                    <h3 className="font-semibold text-foreground">{info.title}</h3>
-                    <ul className="mt-3 space-y-2">
-                      {info.items.map((item, i) => (
-                        <li key={i} className="text-sm text-muted-foreground">{item}</li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                <li className="list-none">
+                  <Card className="border bg-card rounded-2xl hover-lift h-full">
+                    <CardContent className="p-6">
+                      <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-secondary">
+                        <Icon className="size-6 text-italy-green" aria-hidden="true" />
+                      </div>
+                      <h3 className="font-semibold text-foreground">{info.title}</h3>
+                      <ul className="mt-3 space-y-2">
+                        {info.items.map((item, i) => (
+                          <li key={i} className="text-sm text-muted-foreground">{item}</li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </Card>
+                </li>
               </AnimateIn>
             )
           })}
-        </div>
+        </ul>
       </div>
     </section>
   )

@@ -132,6 +132,118 @@
   }
 }
 
+@keyframes animate-in-fade-up {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes animate-in-fade-down {
+  from {
+    opacity: 0;
+    transform: translate3d(0, -24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes animate-in-fade-left {
+  from {
+    opacity: 0;
+    transform: translate3d(24px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes animate-in-fade-right {
+  from {
+    opacity: 0;
+    transform: translate3d(-24px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes animate-in-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes animate-in-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes animate-in-blur {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+.animate-in {
+  opacity: 0;
+  animation-duration: var(--animate-in-duration, 600ms);
+  animation-delay: var(--animate-in-delay, 0ms);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity, filter;
+}
+
+.animate-in[data-animate-variant="fade-up"] {
+  animation-name: animate-in-fade-up;
+}
+
+.animate-in[data-animate-variant="fade-down"] {
+  animation-name: animate-in-fade-down;
+}
+
+.animate-in[data-animate-variant="fade-left"] {
+  animation-name: animate-in-fade-left;
+}
+
+.animate-in[data-animate-variant="fade-right"] {
+  animation-name: animate-in-fade-right;
+}
+
+.animate-in[data-animate-variant="fade"] {
+  animation-name: animate-in-fade;
+}
+
+.animate-in[data-animate-variant="scale"] {
+  animation-name: animate-in-scale;
+}
+
+.animate-in[data-animate-variant="blur"] {
+  animation-name: animate-in-blur;
+}
+
 @keyframes marquee {
   0% {
     transform: translateX(0);
@@ -212,4 +324,93 @@ section {
 .hover-lift:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
+}
+
+.faq-item > summary {
+  border-radius: 0.5rem;
+  transition: background-color 260ms ease, color 220ms ease;
+}
+
+.faq-item > summary::marker {
+  content: "";
+}
+
+.faq-item > summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item:hover > summary {
+  background-color: color-mix(in oklch, var(--secondary) 70%, transparent);
+}
+
+.faq-item[open] > summary {
+  color: color-mix(in oklch, var(--foreground) 88%, var(--italy-green));
+}
+
+.faq-item > summary:focus-visible {
+  outline: 2px solid color-mix(in oklch, var(--ring) 65%, transparent);
+  outline-offset: 2px;
+}
+
+.faq-item > .faq-answer {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  overflow: hidden;
+  clip-path: inset(0 0 100% 0 round 0.25rem);
+  transition:
+    grid-template-rows 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 220ms ease,
+    clip-path 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.faq-item[open] > .faq-answer {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  clip-path: inset(0 0 0 0 round 0.25rem);
+}
+
+.faq-item > .faq-answer > .faq-answer-inner {
+  overflow: hidden;
+  padding-bottom: 0;
+  transform: translateY(-4px);
+  transition:
+    transform 260ms ease,
+    padding-bottom 260ms ease;
+}
+
+.faq-item[open] > .faq-answer > .faq-answer-inner {
+  padding-bottom: 1rem;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .animate-in,
+  .animate-marquee,
+  .animate-float,
+  .animate-float-delayed,
+  .animate-shimmer,
+  .animate-gentle-pulse {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .hover-lift,
+  .hover-lift:hover {
+    transition: none;
+    transform: none;
+    box-shadow: none;
+  }
+
+  .faq-item > .faq-answer,
+  .faq-item > .faq-answer > .faq-answer-inner {
+    transition: none;
+    transform: none;
+  }
 }

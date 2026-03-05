@@ -12,7 +12,14 @@ export function BuyerItaliaLogo({ className = "", size = "md" }: LogoProps) {
 
   return (
     <div className={`${sizes[size].wrapper} ${className}`}>
-      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-full w-full">
+      <svg
+        viewBox="0 0 100 100"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-full w-full"
+        aria-hidden="true"
+        focusable="false"
+      >
         {/* Outer Ring with Italian Colors */}
         <circle cx="50" cy="50" r="48" stroke="#E8E4DE" strokeWidth="4" />
         

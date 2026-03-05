@@ -32,10 +32,12 @@ export function ProductCard({ product, locale, currencyLabel }: ProductCardProps
   const condition = localized(locale, product.conditionUk, product.conditionEn, product.condition)
   const images = (product.images ?? []) as string[]
   const hasImage = images.length > 0
+  const cardLabel = `${title}. ${product.price} ${currencyLabel}`
 
   return (
     <Link
       href={withLocalePath(locale, `/catalog/${product.id}`)}
+      aria-label={cardLabel}
       className="group flex flex-col overflow-hidden rounded-2xl border border-border/60 bg-card transition-all duration-300 hover:border-border hover:shadow-lg"
     >
       {/* Image / placeholder */}
@@ -50,7 +52,7 @@ export function ProductCard({ product, locale, currencyLabel }: ProductCardProps
           />
         ) : (
           <div className="flex flex-col items-center gap-3 text-muted-foreground/40">
-            <ShoppingBag className="size-10" strokeWidth={1.2} />
+            <ShoppingBag className="size-10" strokeWidth={1.2} aria-hidden="true" />
             <span className="text-xs font-medium tracking-wide uppercase">
               {product.brand || "Buyer Italia"}
             </span>
@@ -95,7 +97,7 @@ export function ProductCard({ product, locale, currencyLabel }: ProductCardProps
               variant="outline"
               className="rounded-md border-border/60 text-xs font-normal text-muted-foreground"
             >
-              <Tag className="size-3 mr-0.5" />
+              <Tag className="size-3 mr-0.5" aria-hidden="true" />
               {category}
             </Badge>
           )}

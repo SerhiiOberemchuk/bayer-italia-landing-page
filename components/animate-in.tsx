@@ -1,47 +1,21 @@
-"use client"
-
-import { useInView } from "@/hooks/use-in-view"
+import { Children, type CSSProperties, type ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
-type AnimationVariant = "fade-up" | "fade-down" | "fade-left" | "fade-right" | "fade" | "scale" | "blur"
+type AnimationVariant =
+  | "fade-up"
+  | "fade-down"
+  | "fade-left"
+  | "fade-right"
+  | "fade"
+  | "scale"
+  | "blur"
 
 interface AnimateInProps {
-  children: React.ReactNode
+  children: ReactNode
   variant?: AnimationVariant
   delay?: number
   duration?: number
   className?: string
-}
-
-const variantStyles: Record<AnimationVariant, { from: string; to: string }> = {
-  "fade-up": {
-    from: "opacity-0 translate-y-8",
-    to: "opacity-100 translate-y-0",
-  },
-  "fade-down": {
-    from: "opacity-0 -translate-y-8",
-    to: "opacity-100 translate-y-0",
-  },
-  "fade-left": {
-    from: "opacity-0 translate-x-8",
-    to: "opacity-100 translate-x-0",
-  },
-  "fade-right": {
-    from: "opacity-0 -translate-x-8",
-    to: "opacity-100 translate-x-0",
-  },
-  fade: {
-    from: "opacity-0",
-    to: "opacity-100",
-  },
-  scale: {
-    from: "opacity-0 scale-95",
-    to: "opacity-100 scale-100",
-  },
-  blur: {
-    from: "opacity-0 blur-sm",
-    to: "opacity-100 blur-0",
-  },
 }
 
 export function AnimateIn({
@@ -51,21 +25,16 @@ export function AnimateIn({
   duration = 600,
   className,
 }: AnimateInProps) {
-  const { ref, isInView } = useInView<HTMLDivElement>()
-  const styles = variantStyles[variant]
+  const style = {
+    "--animate-in-delay": `${delay}ms`,
+    "--animate-in-duration": `${duration}ms`,
+  } as CSSProperties
 
   return (
     <div
-      ref={ref}
-      className={cn(
-        "transition-all ease-out will-change-transform",
-        isInView ? styles.to : styles.from,
-        className
-      )}
-      style={{
-        transitionDuration: `${duration}ms`,
-        transitionDelay: `${delay}ms`,
-      }}
+      className={cn("animate-in", className)}
+      data-animate-variant={variant}
+      style={style}
     >
       {children}
     </div>
@@ -73,7 +42,7 @@ export function AnimateIn({
 }
 
 interface StaggerChildrenProps {
-  children: React.ReactNode
+  children: ReactNode
   staggerDelay?: number
   baseDelay?: number
   variant?: AnimationVariant
@@ -91,7 +60,7 @@ export function StaggerChildren({
   className,
   childClassName,
 }: StaggerChildrenProps) {
-  const childArray = Array.isArray(children) ? children : [children]
+  const childArray = Children.toArray(children)
 
   return (
     <div className={className}>

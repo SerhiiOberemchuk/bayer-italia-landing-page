@@ -16,11 +16,20 @@ const brands = [
 ]
 
 export function BrandsMarquee() {
+  const brandNames = brands.map((brand) => brand.name).join(", ")
+
   return (
     <AnimateIn variant="fade" duration={800}>
-      <section className="group border-y border-border/50 bg-card py-6 overflow-hidden">
+      <section
+        className="group border-y border-border/50 bg-card py-6 overflow-hidden"
+        aria-label="Supported brands"
+      >
+        <p className="sr-only">{brandNames}</p>
         <div className="relative">
-          <div className="flex animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap">
+          <div
+            aria-hidden="true"
+            className="flex animate-marquee group-hover:[animation-play-state:paused] whitespace-nowrap"
+          >
             {[...brands, ...brands, ...brands].map((brand, index) => (
               <span
                 key={index}

@@ -12,11 +12,13 @@ import "../globals.css";
 const dmSans = DM_Sans({
   subsets: ["latin", "latin-ext"],
   variable: "--font-dm-sans",
+  display: "swap",
 });
 
 const playfairDisplay = Playfair_Display({
   subsets: ["latin", "latin-ext", "cyrillic"],
   variable: "--font-playfair",
+  display: "swap",
 });
 
 export async function generateStaticParams() {
@@ -183,7 +185,6 @@ function getServiceJsonLd(locale: Locale) {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
   themeColor: "#1a1a2e",
 };
 
@@ -217,6 +218,12 @@ export default async function LocaleLayout({
       <body
         className={`${dmSans.variable} ${playfairDisplay.variable} font-sans antialiased`}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
+        >
+          Skip to main content
+        </a>
         <div className="min-h-screen bg-background">
           <SiteHeader locale={locale} topBar={dict.hero.topBar} />
           {children}

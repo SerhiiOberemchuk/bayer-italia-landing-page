@@ -48,7 +48,7 @@ export default async function Home({
   const dict = await getDictionary(locale)
 
   return (
-    <main className="min-h-screen bg-background pb-24 md:pb-0">
+    <main id="main-content" className="min-h-screen bg-background pb-24 md:pb-0">
       <HeroSection dict={dict.hero} />
       <SeoLinks locale={locale} />
       <BrandsMarquee />

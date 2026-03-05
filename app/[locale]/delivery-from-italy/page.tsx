@@ -43,14 +43,14 @@ export default async function DeliveryFromItalyPage({
   const isUk = locale === "uk"
 
   return (
-    <main className="px-4 py-12 md:px-8 md:py-16">
+    <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
       <div className="mx-auto max-w-4xl">
-        <Link href={withLocalePath(locale)}>
-          <Button variant="ghost" className="mb-8">
-            <ArrowLeft className="mr-2 size-4" />
+        <Button variant="ghost" className="mb-8" asChild>
+          <Link href={withLocalePath(locale)}>
+            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
             {isUk ? "На головну" : "Back to home"}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
         <h1 className="font-serif text-3xl font-semibold text-foreground md:text-4xl">
           {isUk
@@ -65,7 +65,7 @@ export default async function DeliveryFromItalyPage({
 
         <section className="mt-10 grid gap-4 sm:grid-cols-3">
           <article className="rounded-2xl border bg-card p-5">
-            <Package className="size-5 text-italy-green" />
+            <Package className="size-5 text-italy-green" aria-hidden="true" />
             <h2 className="mt-3 font-medium text-foreground">
               {isUk ? "Фото перед відправкою" : "Photo before shipping"}
             </h2>
@@ -76,7 +76,7 @@ export default async function DeliveryFromItalyPage({
             </p>
           </article>
           <article className="rounded-2xl border bg-card p-5">
-            <Truck className="size-5 text-italy-green" />
+            <Truck className="size-5 text-italy-green" aria-hidden="true" />
             <h2 className="mt-3 font-medium text-foreground">
               {isUk ? "Прозорі терміни" : "Clear timelines"}
             </h2>
@@ -87,7 +87,7 @@ export default async function DeliveryFromItalyPage({
             </p>
           </article>
           <article className="rounded-2xl border bg-card p-5">
-            <ShieldCheck className="size-5 text-italy-green" />
+            <ShieldCheck className="size-5 text-italy-green" aria-hidden="true" />
             <h2 className="mt-3 font-medium text-foreground">
               {isUk ? "Оригінальність" : "Authenticity"}
             </h2>

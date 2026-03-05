@@ -188,7 +188,7 @@ async function ProductDetailPageContent({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <main className="px-4 py-12 md:px-8 md:py-16">
+      <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
         <div className="mx-auto max-w-5xl">
           {/* Back link (mobile) */}
           <AnimateIn variant="fade-right">
@@ -196,7 +196,7 @@ async function ProductDetailPageContent({
               href={withLocalePath(locale, "/catalog")}
               className="sm:hidden inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
             >
-              <ArrowLeft className="size-3.5" />
+              <ArrowLeft className="size-3.5" aria-hidden="true" />
               {dict.catalog.backToCatalog}
             </Link>
           </AnimateIn>
@@ -218,17 +218,17 @@ async function ProductDetailPageContent({
                     {/* Image counter */}
                     {images.length > 1 && (
                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-foreground/70 px-3 py-1.5 backdrop-blur-sm">
-                        <ChevronLeft className="size-3.5 text-background/70" />
+                        <ChevronLeft className="size-3.5 text-background/70" aria-hidden="true" />
                         <span className="text-xs font-medium text-background">
                           1 / {images.length}
                         </span>
-                        <ChevronRight className="size-3.5 text-background/70" />
+                        <ChevronRight className="size-3.5 text-background/70" aria-hidden="true" />
                       </div>
                     )}
                   </>
                 ) : (
                   <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-muted-foreground/30">
-                    <ShoppingBag className="size-16" strokeWidth={1} />
+                    <ShoppingBag className="size-16" strokeWidth={1} aria-hidden="true" />
                     <span className="text-sm font-medium tracking-wider uppercase">
                       {product.brand || "Buyer Italia"}
                     </span>
@@ -249,9 +249,9 @@ async function ProductDetailPageContent({
 
               {/* Thumbnail row for multiple images */}
               {images.length > 1 && (
-                <div className="mt-3 flex gap-2 overflow-x-auto pb-2">
+                <ul className="mt-3 flex gap-2 overflow-x-auto pb-2" aria-label={dict.catalog.images}>
                   {images.map((img, i) => (
-                    <div
+                    <li
                       key={i}
                       className={`relative size-16 shrink-0 rounded-xl overflow-hidden border-2 ${
                         i === 0
@@ -266,9 +266,9 @@ async function ProductDetailPageContent({
                         className="object-cover"
                         sizes="64px"
                       />
-                    </div>
+                    </li>
                   ))}
-                </div>
+                </ul>
               )}
             </AnimateIn>
 
@@ -300,7 +300,7 @@ async function ProductDetailPageContent({
                   {category && (
                     <div className="flex items-center gap-3">
                       <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
-                        <Tag className="size-4 text-muted-foreground" />
+                        <Tag className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">
@@ -316,7 +316,7 @@ async function ProductDetailPageContent({
                   {product.size && (
                     <div className="flex items-center gap-3">
                       <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
-                        <Ruler className="size-4 text-muted-foreground" />
+                        <Ruler className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">
@@ -332,7 +332,7 @@ async function ProductDetailPageContent({
                   {condition && (
                     <div className="flex items-center gap-3">
                       <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
-                        <Sparkles className="size-4 text-muted-foreground" />
+                        <Sparkles className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">
@@ -348,7 +348,7 @@ async function ProductDetailPageContent({
                   {note && (
                     <div className="flex items-start gap-3">
                       <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary">
-                        <StickyNote className="size-4 text-muted-foreground" />
+                        <StickyNote className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
                         <p className="text-xs text-muted-foreground">
@@ -375,8 +375,9 @@ async function ProductDetailPageContent({
                       href={telegramLink}
                       target="_blank"
                       rel="noopener noreferrer"
+                      aria-label={`${dict.catalog.writeToTelegram}: ${title}`}
                     >
-                      <Send className="size-5" />
+                      <Send className="size-5" aria-hidden="true" />
                       {dict.catalog.writeToTelegram}
                     </a>
                   </Button>

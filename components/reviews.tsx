@@ -9,10 +9,16 @@ interface ReviewsProps {
 
 export function Reviews({ dict }: ReviewsProps) {
   return (
-    <section className="px-4 py-16 md:px-8 md:py-24">
+    <section
+      className="px-4 py-16 md:px-8 md:py-24"
+      aria-labelledby="reviews-title"
+    >
       <div className="mx-auto max-w-5xl">
         <AnimateIn variant="fade-up">
-          <h2 className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl">
+          <h2
+            id="reviews-title"
+            className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl"
+          >
             {dict.title}
           </h2>
         </AnimateIn>
@@ -22,26 +28,28 @@ export function Reviews({ dict }: ReviewsProps) {
           </p>
         </AnimateIn>
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {dict.items.map((review, index) => (
             <AnimateIn key={index} variant="fade-up" delay={200 + index * 120}>
-              <Card className="border bg-card rounded-2xl hover-lift h-full">
-                <CardContent className="p-6">
-                  <div className="flex gap-1 mb-4">
-                    {Array.from({ length: review.rating }).map((_, i) => (
-                      <Star key={i} className="size-4 fill-yellow-400 text-yellow-400" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-foreground leading-relaxed">&ldquo;{review.text}&rdquo;</p>
-                  <div className="mt-4 pt-4 border-t">
-                    <p className="font-semibold text-foreground">{review.name}</p>
-                    <p className="text-sm text-muted-foreground">{review.location}</p>
-                  </div>
-                </CardContent>
-              </Card>
+              <li className="list-none">
+                <Card className="border bg-card rounded-2xl hover-lift h-full">
+                  <CardContent className="p-6">
+                    <div className="flex gap-1 mb-4" aria-label={`${review.rating} out of 5 stars`}>
+                      {Array.from({ length: review.rating }).map((_, i) => (
+                        <Star key={i} className="size-4 fill-yellow-400 text-yellow-400" aria-hidden="true" />
+                      ))}
+                    </div>
+                    <p className="text-sm text-foreground leading-relaxed">&ldquo;{review.text}&rdquo;</p>
+                    <div className="mt-4 pt-4 border-t">
+                      <p className="font-semibold text-foreground">{review.name}</p>
+                      <p className="text-sm text-muted-foreground">{review.location}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </li>
             </AnimateIn>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   )
