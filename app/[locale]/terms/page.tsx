@@ -42,14 +42,14 @@ export default async function TermsPage({
   const lastUpdated = isUk ? "05.03.2026" : "March 5, 2026"
 
   return (
-    <main className="px-4 py-12 md:px-8">
+    <main id="main-content" className="px-4 py-12 md:px-8">
       <div className="mx-auto max-w-3xl">
-        <Link href={withLocalePath(locale)}>
-          <Button variant="ghost" className="mb-8">
-            <ArrowLeft className="mr-2 size-4" />
+        <Button variant="ghost" className="mb-8" asChild>
+          <Link href={withLocalePath(locale)}>
+            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
             {isUk ? "На головну" : "Back to home"}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
         <h1 className="font-serif text-3xl font-bold text-foreground md:text-4xl">
           {isUk ? "Умови використання" : "Terms of Use"}

@@ -56,14 +56,14 @@ export default async function BrandsFromItalyPage({
   const isUk = locale === "uk"
 
   return (
-    <main className="px-4 py-12 md:px-8 md:py-16">
+    <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
       <div className="mx-auto max-w-4xl">
-        <Link href={withLocalePath(locale)}>
-          <Button variant="ghost" className="mb-8">
-            <ArrowLeft className="mr-2 size-4" />
+        <Button variant="ghost" className="mb-8" asChild>
+          <Link href={withLocalePath(locale)}>
+            <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
             {isUk ? "На головну" : "Back to home"}
-          </Button>
-        </Link>
+          </Link>
+        </Button>
 
         <h1 className="font-serif text-3xl font-semibold text-foreground md:text-4xl">
           {isUk
@@ -86,7 +86,7 @@ export default async function BrandsFromItalyPage({
                 key={brand}
                 className="inline-flex items-center rounded-full border px-3 py-1.5 text-sm"
               >
-                <Tag className="mr-1.5 size-3.5" />
+                <Tag className="mr-1.5 size-3.5" aria-hidden="true" />
                 {brand}
               </span>
             ))}
@@ -99,7 +99,7 @@ export default async function BrandsFromItalyPage({
           </h2>
           <ul className="mt-4 space-y-2 text-foreground/90">
             <li className="flex gap-2">
-              <CheckCircle2 className="mt-0.5 size-4 text-italy-green" />
+              <CheckCircle2 className="mt-0.5 size-4 text-italy-green" aria-hidden="true" />
               <span>
                 {isUk
                   ? "Закуповуємо тільки в офіційних магазинах Італії."
@@ -107,7 +107,7 @@ export default async function BrandsFromItalyPage({
               </span>
             </li>
             <li className="flex gap-2">
-              <CheckCircle2 className="mt-0.5 size-4 text-italy-green" />
+              <CheckCircle2 className="mt-0.5 size-4 text-italy-green" aria-hidden="true" />
               <span>
                 {isUk
                   ? "Надсилаємо фото та деталі товару перед відправкою."
@@ -115,7 +115,7 @@ export default async function BrandsFromItalyPage({
               </span>
             </li>
             <li className="flex gap-2">
-              <CheckCircle2 className="mt-0.5 size-4 text-italy-green" />
+              <CheckCircle2 className="mt-0.5 size-4 text-italy-green" aria-hidden="true" />
               <span>
                 {isUk
                   ? "Підтверджуємо фінальну ціну до оплати."

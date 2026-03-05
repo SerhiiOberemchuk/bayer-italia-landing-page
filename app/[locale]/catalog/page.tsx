@@ -47,7 +47,7 @@ export default async function CatalogPage({
   const filterOptions = await getFilterOptions();
 
   return (
-    <main className="px-4 py-12 md:px-8 md:py-16">
+    <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
       <div className="mx-auto max-w-6xl">
         {/* Title */}
         <AnimateIn variant="fade-up">
@@ -111,17 +111,19 @@ async function CatalogResults({
 
   if (productList.length > 0) {
     return (
-      <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-label={dict.title}>
         {productList.map((product, i) => (
           <AnimateIn key={product.id} variant="fade-up" delay={100 + i * 60}>
-            <ProductCard
-              product={product}
-              locale={locale}
-              currencyLabel={dict.currency}
-            />
+            <li className="list-none">
+              <ProductCard
+                product={product}
+                locale={locale}
+                currencyLabel={dict.currency}
+              />
+            </li>
           </AnimateIn>
         ))}
-      </div>
+      </ul>
     );
   }
 
@@ -129,7 +131,7 @@ async function CatalogResults({
     <AnimateIn variant="fade-up" delay={300}>
       <div className="mt-16 flex flex-col items-center gap-4 text-center">
         <div className="flex size-16 items-center justify-center rounded-full bg-secondary">
-          <ShoppingBag className="size-7 text-muted-foreground" />
+          <ShoppingBag className="size-7 text-muted-foreground" aria-hidden="true" />
         </div>
         <p className="text-lg font-medium text-foreground">
           {hasFilters ? dict.emptyFiltered : dict.empty}

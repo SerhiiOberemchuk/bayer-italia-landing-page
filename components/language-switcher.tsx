@@ -1,53 +1,50 @@
-"use client";
+"use client"
 
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { Locale } from "@/lib/i18n/config";
-import {
-  LOCALE_COOKIE_NAME,
-  replaceLocaleInPathname,
-} from "@/lib/i18n/routing";
+import Link from "next/link"
+import { usePathname } from "next/navigation"
+import type { Locale } from "@/lib/i18n/config"
+import { replaceLocaleInPathname } from "@/lib/i18n/routing"
 
 interface LanguageSwitcherProps {
-  locale: Locale;
+  locale: Locale
 }
 
 export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  const switchLocale = (newLocale: Locale) => {
-    const newPath = replaceLocaleInPathname(pathname, newLocale);
-    const query = searchParams.toString();
-
-    document.cookie = `${LOCALE_COOKIE_NAME}=${newLocale};path=/;max-age=31536000;samesite=lax`;
-    router.push(query ? `${newPath}?${query}` : newPath);
-  };
+  const pathname = usePathname()
+  const currentPath = pathname || "/"
 
   return (
-    <div className="flex items-center rounded-lg border bg-card overflow-hidden">
-      <button
-        onClick={() => switchLocale("uk")}
-        className={`px-2.5 py-1.5 text-xs font-medium  transition-colors ${
+    <div
+      className="flex items-center overflow-hidden rounded-lg border bg-card"
+      role="group"
+      aria-label="Language switcher"
+    >
+      <Link
+        href={replaceLocaleInPathname(currentPath, "uk")}
+        prefetch={false}
+        className={`px-2.5 py-1.5 text-xs font-medium transition-colors ${
           locale === "uk"
             ? "bg-foreground text-background"
-            : "text-muted-foreground hover:text-foreground hover:cursor-pointer"
+            : "text-muted-foreground hover:text-foreground"
         }`}
-        aria-label="Українська"
+        aria-label="Switch language to Ukrainian"
+        aria-current={locale === "uk" ? "page" : undefined}
       >
         UA
-      </button>
-      <button
-        onClick={() => switchLocale("en")}
-        className={`px-2.5 py-1.5 text-xs  font-medium transition-colors ${
+      </Link>
+      <Link
+        href={replaceLocaleInPathname(currentPath, "en")}
+        prefetch={false}
+        className={`px-2.5 py-1.5 text-xs font-medium transition-colors ${
           locale === "en"
             ? "bg-foreground text-background"
-            : "text-muted-foreground hover:text-foreground hover:cursor-pointer"
+            : "text-muted-foreground hover:text-foreground"
         }`}
-        aria-label="English"
+        aria-label="Switch language to English"
+        aria-current={locale === "en" ? "page" : undefined}
       >
         EN
-      </button>
+      </Link>
     </div>
-  );
+  )
 }

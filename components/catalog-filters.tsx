@@ -50,13 +50,15 @@ export function CatalogFilters({
     <div className="flex flex-col gap-6">
       {/* Brand filter */}
       {brands.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-medium text-muted-foreground">
+        <section aria-labelledby="brand-filter-title">
+          <h2 id="brand-filter-title" className="mb-2 text-sm font-medium text-muted-foreground">
             {dict.brand}
-          </p>
-          <div className="flex flex-wrap gap-2">
+          </h2>
+          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.brand}>
             <button
+              type="button"
               onClick={() => setFilter("brand", "")}
+              aria-pressed={!activeBrand}
               className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                 !activeBrand
                   ? "bg-foreground text-background"
@@ -68,9 +70,11 @@ export function CatalogFilters({
             {brands.map((brand) => (
               <button
                 key={brand}
+                type="button"
                 onClick={() =>
                   setFilter("brand", activeBrand === brand ? "" : brand)
                 }
+                aria-pressed={activeBrand === brand}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                   activeBrand === brand
                     ? "bg-foreground text-background"
@@ -81,18 +85,20 @@ export function CatalogFilters({
               </button>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Category filter */}
       {categories.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-medium text-muted-foreground">
+        <section aria-labelledby="category-filter-title">
+          <h2 id="category-filter-title" className="mb-2 text-sm font-medium text-muted-foreground">
             {dict.category}
-          </p>
-          <div className="flex flex-wrap gap-2">
+          </h2>
+          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.category}>
             <button
+              type="button"
               onClick={() => setFilter("category", "")}
+              aria-pressed={!activeCategory}
               className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                 !activeCategory
                   ? "bg-foreground text-background"
@@ -104,9 +110,11 @@ export function CatalogFilters({
             {categories.map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() =>
                   setFilter("category", activeCategory === cat ? "" : cat)
                 }
+                aria-pressed={activeCategory === cat}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                   activeCategory === cat
                     ? "bg-foreground text-background"
@@ -117,18 +125,20 @@ export function CatalogFilters({
               </button>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Size filter */}
       {sizes.length > 0 && (
-        <div>
-          <p className="mb-2 text-sm font-medium text-muted-foreground">
+        <section aria-labelledby="size-filter-title">
+          <h2 id="size-filter-title" className="mb-2 text-sm font-medium text-muted-foreground">
             {dict.size}
-          </p>
-          <div className="flex flex-wrap gap-2">
+          </h2>
+          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.size}>
             <button
+              type="button"
               onClick={() => setFilter("size", "")}
+              aria-pressed={!activeSize}
               className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                 !activeSize
                   ? "bg-foreground text-background"
@@ -140,9 +150,11 @@ export function CatalogFilters({
             {sizes.map((size) => (
               <button
                 key={size}
+                type="button"
                 onClick={() =>
                   setFilter("size", activeSize === size ? "" : size)
                 }
+                aria-pressed={activeSize === size}
                 className={`rounded-full px-3 py-1.5 text-sm font-medium transition-all duration-200 ${
                   activeSize === size
                     ? "bg-foreground text-background"
@@ -153,7 +165,7 @@ export function CatalogFilters({
               </button>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Reset */}
