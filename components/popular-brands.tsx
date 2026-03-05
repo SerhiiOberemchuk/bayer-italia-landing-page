@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Send } from "lucide-react"
 import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 interface PopularBrandsProps {
   dict: Dictionary["popularBrands"]

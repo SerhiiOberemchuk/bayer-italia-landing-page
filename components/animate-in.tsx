@@ -11,7 +11,6 @@ interface AnimateInProps {
   delay?: number
   duration?: number
   className?: string
-  as?: keyof React.JSX.IntrinsicElements
 }
 
 const variantStyles: Record<AnimationVariant, { from: string; to: string }> = {
@@ -51,14 +50,13 @@ export function AnimateIn({
   delay = 0,
   duration = 600,
   className,
-  as: Tag = "div",
 }: AnimateInProps) {
   const { ref, isInView } = useInView<HTMLDivElement>()
   const styles = variantStyles[variant]
 
   return (
-    <Tag
-      ref={ref as React.Ref<never>}
+    <div
+      ref={ref}
       className={cn(
         "transition-all ease-out will-change-transform",
         isInView ? styles.to : styles.from,
@@ -70,7 +68,7 @@ export function AnimateIn({
       }}
     >
       {children}
-    </Tag>
+    </div>
   )
 }
 

@@ -1,15 +1,27 @@
-"use client"
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  CheckCircle,
+  Camera,
+  MapPin,
+  FileText,
+  Headphones,
+  RefreshCw,
+} from "lucide-react";
+import { AnimateIn } from "@/components/animate-in";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
-import { Card, CardContent } from "@/components/ui/card"
-import { CheckCircle, Camera, MapPin, FileText, Headphones, RefreshCw } from "lucide-react"
-import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+const trustIcons = [
+  CheckCircle,
+  Camera,
+  MapPin,
+  FileText,
+  Headphones,
+  RefreshCw,
+];
 
-const trustIcons = [CheckCircle, Camera, MapPin, FileText, Headphones, RefreshCw]
-
-interface TrustSectionProps {
-  dict: Dictionary["trust"]
-}
+type TrustSectionProps = {
+  dict: Dictionary["trust"];
+};
 
 export function TrustSection({ dict }: TrustSectionProps) {
   return (
@@ -28,23 +40,31 @@ export function TrustSection({ dict }: TrustSectionProps) {
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {dict.items.map((point, index) => {
-            const Icon = trustIcons[index]
+            const Icon = trustIcons[index];
             return (
-              <AnimateIn key={index} variant="fade-left" delay={150 + index * 100}>
+              <AnimateIn
+                key={index}
+                variant="fade-left"
+                delay={150 + index * 100}
+              >
                 <Card className="border-0 bg-card shadow-md rounded-2xl hover-lift h-full">
                   <CardContent className="p-6">
                     <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-italy-green/10">
                       <Icon className="size-6 text-italy-green" />
                     </div>
-                    <h3 className="font-semibold text-foreground">{point.title}</h3>
-                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{point.description}</p>
+                    <h3 className="font-semibold text-foreground">
+                      {point.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                      {point.description}
+                    </p>
                   </CardContent>
                 </Card>
               </AnimateIn>
-            )
+            );
           })}
         </div>
       </div>
     </section>
-  )
+  );
 }

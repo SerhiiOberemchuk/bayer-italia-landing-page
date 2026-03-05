@@ -1,17 +1,16 @@
-import type { MetadataRoute } from 'next'
+import type { MetadataRoute } from "next"
+import { siteUrl } from "@/lib/i18n/config"
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = 'https://buyer-italia.shop'
-  
   return {
     rules: [
       {
-        userAgent: '*',
-        allow: '/',
-        disallow: ['/api/', '/_next/'],
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/api/"],
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
-    host: baseUrl,
+    sitemap: `${siteUrl}/sitemap.xml`,
+    host: siteUrl,
   }
 }

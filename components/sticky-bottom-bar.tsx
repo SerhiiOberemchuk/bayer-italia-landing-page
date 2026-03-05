@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Send, MessageCircle } from "lucide-react"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 interface StickyBottomBarProps {
   dict: Dictionary["stickyBar"]

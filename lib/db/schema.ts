@@ -22,9 +22,9 @@ import {
   timestamp,
   index,
   uniqueIndex,
-} from "drizzle-orm/pg-core"
+} from "drizzle-orm/pg-core";
 
-export const products = pgTable(
+export const productsSchema = pgTable(
   "products",
   {
     /** Унікальний ідентифікатор товару (UUID v4) */
@@ -96,11 +96,7 @@ export const products = pgTable(
     index("idx_products_category").on(table.category),
     index("idx_products_created").on(table.createdAt),
     uniqueIndex("idx_products_tg_msg").on(table.tgMessageId),
-  ]
-)
+  ],
+);
 
-/** TypeScript-тип рядка з таблиці products */
-export type Product = typeof products.$inferSelect
-
-/** TypeScript-тип для вставки нового запису */
-export type NewProduct = typeof products.$inferInsert
+export type ProductType = typeof productsSchema.$inferSelect;

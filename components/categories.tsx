@@ -1,9 +1,7 @@
-"use client"
-
 import { Card, CardContent } from "@/components/ui/card"
 import { Shirt, Footprints, Briefcase, Watch, Sparkles, Baby } from "lucide-react"
 import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 const categoryIcons = [Shirt, Footprints, Briefcase, Watch, Sparkles, Baby]
 

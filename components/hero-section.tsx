@@ -1,49 +1,16 @@
-"use client"
-
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Send, MessageCircle, ArrowRight } from "lucide-react"
-import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
-import { LanguageSwitcher } from "@/components/language-switcher"
 import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
-import type { Locale } from "@/lib/i18n/config"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 interface HeroSectionProps {
   dict: Dictionary["hero"]
-  locale: Locale
 }
 
-export function HeroSection({ dict, locale }: HeroSectionProps) {
+export function HeroSection({ dict }: HeroSectionProps) {
   return (
     <section className="relative overflow-hidden">
-      {/* Top Bar with Logo */}
-      <div className="border-b border-border/50 bg-card/80 backdrop-blur-sm px-4 py-4 md:px-8">
-        <div className="mx-auto max-w-6xl flex items-center justify-between">
-          <BuyerItaliaLogo size="sm" />
-          <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-            <span>{dict.topBar.directPurchases}</span>
-            <span className="w-1 h-1 rounded-full bg-italy-green" />
-            <span>{dict.topBar.original}</span>
-            <span className="w-1 h-1 rounded-full bg-italy-red" />
-            <span>{dict.topBar.delivery}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher locale={locale} />
-            <Button 
-              size="sm" 
-              className="bg-[#0088cc] hover:bg-[#0077b5] text-white gap-1.5"
-              asChild
-            >
-              <a href="https://t.me/buyer_italia_shop" target="_blank" rel="noopener noreferrer">
-                <Send className="size-4" />
-                <span className="hidden sm:inline">Telegram</span>
-              </a>
-            </Button>
-          </div>
-        </div>
-      </div>
-
       {/* Main Hero Content */}
       <div className="px-4 py-16 md:px-8 md:py-24 lg:py-32">
         <div className="mx-auto max-w-6xl">
@@ -120,7 +87,7 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
             {/* Hero Image */}
             <AnimateIn variant="scale" delay={200} duration={800}>
               <div className="relative">
-                <div className="relative aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl">
+                <div className="relative aspect-4/5 rounded-3xl overflow-hidden shadow-2xl">
                   <Image
                     src="/images/hero-banner.jpg"
                     alt={dict.heroImageAlt}
@@ -129,7 +96,7 @@ export function HeroSection({ dict, locale }: HeroSectionProps) {
                     priority
                   />
                   {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/20 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-foreground/20 via-transparent to-transparent" />
                 </div>
                 
                 {/* Floating badges */}

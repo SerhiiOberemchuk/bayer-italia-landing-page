@@ -1,5 +1,3 @@
-"use client"
-
 import { AnimateIn } from "@/components/animate-in"
 
 const brands = [

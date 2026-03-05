@@ -1,35 +1,37 @@
-"use client"
+"use client";
 
-import { usePathname, useRouter } from "next/navigation"
-import type { Locale } from "@/lib/i18n/config"
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import type { Locale } from "@/lib/i18n/config";
+import {
+  LOCALE_COOKIE_NAME,
+  replaceLocaleInPathname,
+} from "@/lib/i18n/routing";
 
 interface LanguageSwitcherProps {
-  locale: Locale
+  locale: Locale;
 }
 
 export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
-  const pathname = usePathname()
-  const router = useRouter()
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
 
   const switchLocale = (newLocale: Locale) => {
-    // Replace current locale in pathname
-    const segments = pathname.split("/")
-    segments[1] = newLocale
-    const newPath = segments.join("/")
+    const newPath = replaceLocaleInPathname(pathname, newLocale);
+    const query = searchParams.toString();
 
-    // Set cookie for persistence
-    document.cookie = `NEXT_LOCALE=${newLocale};path=/;max-age=31536000`
-    router.push(newPath)
-  }
+    document.cookie = `${LOCALE_COOKIE_NAME}=${newLocale};path=/;max-age=31536000;samesite=lax`;
+    router.push(query ? `${newPath}?${query}` : newPath);
+  };
 
   return (
     <div className="flex items-center rounded-lg border bg-card overflow-hidden">
       <button
         onClick={() => switchLocale("uk")}
-        className={`px-2.5 py-1.5 text-xs font-medium transition-colors ${
+        className={`px-2.5 py-1.5 text-xs font-medium  transition-colors ${
           locale === "uk"
             ? "bg-foreground text-background"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-foreground hover:cursor-pointer"
         }`}
         aria-label="Українська"
       >
@@ -37,15 +39,15 @@ export function LanguageSwitcher({ locale }: LanguageSwitcherProps) {
       </button>
       <button
         onClick={() => switchLocale("en")}
-        className={`px-2.5 py-1.5 text-xs font-medium transition-colors ${
+        className={`px-2.5 py-1.5 text-xs  font-medium transition-colors ${
           locale === "en"
             ? "bg-foreground text-background"
-            : "text-muted-foreground hover:text-foreground"
+            : "text-muted-foreground hover:text-foreground hover:cursor-pointer"
         }`}
         aria-label="English"
       >
         EN
       </button>
     </div>
-  )
+  );
 }

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams, usePathname } from "next/navigation"
 import { useCallback } from "react"
 import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import type { Dictionary } from "@/lib/i18n/dictionaries/uk"
+import type { Dictionary } from "@/lib/i18n/dictionary"
 
 interface CatalogFiltersProps {
   dict: Dictionary["catalog"]["filters"]
