@@ -39,6 +39,7 @@
   --sidebar-ring: oklch(0.708 0 0);
   --italy-green: oklch(0.45 0.16 145);
   --italy-red: oklch(0.5 0.18 25);
+  interpolate-size: allow-keywords;
 }
 
 .dark {
@@ -331,7 +332,42 @@ section {
   box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.12);
 }
 
+.faq-item {
+  position: relative;
+  overflow: clip;
+  border-radius: 0.75rem;
+  background-color: color-mix(in oklch, var(--card) 96%, var(--secondary));
+  /* padding-left: 1rem; */
+}
+
+.faq-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.6rem;
+  bottom: 0.6rem;
+  width: 2px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in oklch, var(--italy-green) 88%, white),
+    color-mix(in oklch, var(--italy-red) 80%, white)
+  );
+  opacity: 0.24;
+  transform-origin: top;
+  transform: scaleY(0.2);
+  transition:
+    transform 360ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    opacity 260ms ease;
+}
+
+.faq-item[open]::before {
+  opacity: 0.9;
+  transform: scaleY(1);
+}
+
 .faq-item > summary {
+  position: relative;
   border-radius: 0.5rem;
   transition:
     background-color 260ms ease,
@@ -344,6 +380,42 @@ section {
 
 .faq-item > summary::-webkit-details-marker {
   display: none;
+}
+
+.faq-item > summary::before,
+.faq-item > summary::after {
+  content: "";
+  position: absolute;
+  right: 0.9rem;
+  top: 1.35rem;
+  width: 0.95rem;
+  height: 2px;
+  border-radius: 999px;
+  background-color: color-mix(
+    in oklch,
+    var(--foreground) 60%,
+    var(--muted-foreground)
+  );
+  transform-origin: center;
+  transition:
+    transform 280ms cubic-bezier(0.2, 0.9, 0.2, 1),
+    background-color 220ms ease;
+}
+
+.faq-item > summary::before {
+  transform: rotate(90deg) scaleX(1);
+}
+
+.faq-item > summary::after {
+  transform: rotate(0deg) scaleX(1);
+}
+
+.faq-item[open] > summary::before {
+  transform: rotate(90deg) scaleX(0);
+}
+
+.faq-item[open] > summary::after {
+  background-color: var(--italy-green);
 }
 
 .faq-item:hover > summary {
@@ -359,6 +431,7 @@ section {
   outline-offset: 2px;
 }
 
+/* Fallback animation for browsers without ::details-content support */
 .faq-item > .faq-answer {
   display: grid;
   grid-template-rows: 0fr;
@@ -382,13 +455,45 @@ section {
   padding-bottom: 0;
   transform: translateY(-4px);
   transition:
-    transform 260ms ease,
-    padding-bottom 260ms ease;
+    transform 280ms ease,
+    padding-bottom 280ms ease;
 }
 
 .faq-item[open] > .faq-answer > .faq-answer-inner {
   padding-bottom: 1rem;
   transform: translateY(0);
+}
+
+/* Modern path: native details content animation */
+@supports selector(details::details-content) {
+  .faq-item > .faq-answer {
+    display: block;
+    opacity: 1;
+    clip-path: none;
+    transition: none;
+  }
+
+  .faq-item::details-content {
+    block-size: 0;
+    opacity: 0;
+    overflow: clip;
+    transition-property: block-size, opacity, content-visibility;
+    transition-duration: 420ms, 280ms, 420ms;
+    transition-timing-function: cubic-bezier(0.2, 0.9, 0.2, 1), ease, linear;
+    transition-behavior: allow-discrete;
+  }
+
+  .faq-item[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+
+  @starting-style {
+    .faq-item[open]::details-content {
+      block-size: 0;
+      opacity: 0;
+    }
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -415,9 +520,17 @@ section {
     box-shadow: none;
   }
 
+  .faq-item::before,
+  .faq-item > summary::before,
+  .faq-item > summary::after,
   .faq-item > .faq-answer,
+  .faq-item > .faq-answer > .faq-answer-inner,
+  .faq-item::details-content {
+    transition: none !important;
+    animation: none !important;
+  }
+
   .faq-item > .faq-answer > .faq-answer-inner {
-    transition: none;
     transform: none;
   }
 }

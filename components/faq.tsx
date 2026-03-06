@@ -1,8 +1,8 @@
-import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionary"
+import { AnimateIn } from "@/components/animate-in";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
 interface FAQProps {
-  dict: Dictionary["faq"]
+  dict: Dictionary["faq"];
 }
 
 export function FAQ({ dict }: FAQProps) {
@@ -17,7 +17,7 @@ export function FAQ({ dict }: FAQProps) {
         text: faq.answer,
       },
     })),
-  }
+  };
 
   return (
     <section
@@ -49,15 +49,9 @@ export function FAQ({ dict }: FAQProps) {
             <ul className="w-full divide-y divide-border/70">
               {dict.items.map((faq, index) => (
                 <li key={index} className="list-none py-1">
-                  <details className="faq-item group rounded-lg">
-                    <summary className="flex cursor-pointer items-start justify-between gap-4 py-4 text-left text-sm font-medium text-foreground">
-                      <span>{faq.question}</span>
-                      <span
-                        className="mt-0.5 text-muted-foreground transition-transform duration-300 ease-out group-open:rotate-45 group-open:scale-110"
-                        aria-hidden="true"
-                      >
-                        +
-                      </span>
+                  <details className="faq-item rounded-lg" name="faq-item">
+                    <summary className="faq-summary cursor-pointer py-4 pr-11 text-left text-sm font-medium text-foreground">
+                      {faq.question}
                     </summary>
                     <div className="faq-answer" aria-live="polite">
                       <div className="faq-answer-inner pr-8 text-sm text-muted-foreground leading-relaxed">
@@ -72,5 +66,5 @@ export function FAQ({ dict }: FAQProps) {
         </AnimateIn>
       </div>
     </section>
-  )
+  );
 }
