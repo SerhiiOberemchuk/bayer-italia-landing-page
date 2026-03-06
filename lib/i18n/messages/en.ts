@@ -2,7 +2,7 @@ import type { Dictionary } from "./uk"
 
 const en: Dictionary = {
   meta: {
-    title: "Buyer Italia - Personal Shopper from Italy | ZARA, Mango, Nike, COS, Calvin Klein & More",
+    title: "Buyer Italia - Personal Shopper from Italy, Delivery to Ukraine & EU",
     description:
       "Professional buyer service from Italy. We purchase original items from ZARA, Mango, Massimo Dutti, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Furla directly from Italian stores. Delivery to Ukraine in 7-10 days, to Europe in 10-14 days.",
     ogTitle: "Buyer Italia - Personal Shopper from Italy | Original Clothing",

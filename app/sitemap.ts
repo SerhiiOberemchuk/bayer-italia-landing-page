@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next"
 import { locales, siteUrl } from "@/lib/i18n/config"
 import {
-  buildLocalizedAlternates,
   localizedPublicPaths,
   withLocalePath,
 } from "@/lib/i18n/routing"
@@ -31,9 +30,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
               : page === "/catalog"
                 ? 0.7
                 : 0.3,
-        alternates: {
-          languages: buildLocalizedAlternates(page, siteUrl),
-        },
       })
     }
   }

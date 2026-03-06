@@ -1,6 +1,6 @@
 const uk = {
   meta: {
-    title: "Buyer Italia - Баєр з Італії | ZARA, Mango, Nike, COS, Calvin Klein та інші бренди",
+    title: "Buyer Italia - Баєр з Італії, доставка в Україну та Європу",
     description:
       "Професійний баєр-сервіс з Італії. Закуповуємо оригінальні речі ZARA, Mango, Massimo Dutti, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Furla прямо з італійських магазинів. Доставка в Україну 7-10 днів, в Європу 10-14 днів.",
     ogTitle: "Buyer Italia - Баєр з Італії | Оригінальний одяг з Італії",
