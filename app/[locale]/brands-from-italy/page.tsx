@@ -30,8 +30,8 @@ export async function generateMetadata({
   const pathname = "/brands-from-italy"
   const title =
     locale === "uk"
-      ? "Бренди з Італії: ZARA, Mango, COS, Nike | Buyer Italia"
-      : "Italian Brands: ZARA, Mango, COS, Nike | Buyer Italia"
+      ? "Бренди з Італії: ZARA, Mango, COS, Nike"
+      : "Italian brands: ZARA, Mango, COS, Nike"
   const description =
     locale === "uk"
       ? "Огляд брендів, які замовляє Buyer Italia, та як ми перевіряємо оригінальність товарів перед доставкою."

@@ -29,7 +29,7 @@ export async function generateMetadata({
   const pathname = "/"
 
   return {
-    title: dict.meta.title,
+    title: { absolute: dict.meta.title },
     description: dict.meta.description,
     alternates: {
       canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,

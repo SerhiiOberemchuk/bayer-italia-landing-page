@@ -17,8 +17,8 @@ export async function generateMetadata({
   const pathname = "/delivery-from-italy"
   const title =
     locale === "uk"
-      ? "Доставка одягу з Італії в Україну та Європу | Buyer Italia"
-      : "Delivery from Italy to Ukraine and Europe | Buyer Italia"
+      ? "Доставка з Італії в Україну та Європу"
+      : "Delivery from Italy to Ukraine & Europe"
   const description =
     locale === "uk"
       ? "Терміни, вартість і процес доставки оригінального одягу з Італії. Buyer Italia: прозорі умови, фото перед відправкою, підтримка в Telegram."
