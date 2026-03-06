@@ -51,8 +51,8 @@ export function PopularBrands({ dict }: PopularBrandsProps) {
             const brands = dict.brands.filter((brand) => brand.category === key)
 
             return (
-              <AnimateIn key={key} variant="fade-up" delay={240 + index * 80}>
-                <li className="list-none">
+              <li key={key} className="list-none">
+                <AnimateIn variant="fade-up" delay={240 + index * 80} className="h-full">
                   <section className="rounded-2xl border border-border/60 bg-card p-5 md:p-6">
                     <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                       {dict.categories[key]}
@@ -70,8 +70,8 @@ export function PopularBrands({ dict }: PopularBrandsProps) {
                       ))}
                     </ul>
                   </section>
-                </li>
-              </AnimateIn>
+                </AnimateIn>
+              </li>
             )
           })}
         </ul>

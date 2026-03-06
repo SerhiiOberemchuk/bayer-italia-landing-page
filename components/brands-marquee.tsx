@@ -22,8 +22,11 @@ export function BrandsMarquee() {
     <AnimateIn variant="fade" duration={800}>
       <section
         className="group border-y border-border/50 bg-card py-6 overflow-hidden"
-        aria-label="Supported brands"
+        aria-labelledby="brands-marquee-title"
       >
+        <h2 id="brands-marquee-title" className="sr-only">
+          Supported brands
+        </h2>
         <p className="sr-only">{brandNames}</p>
         <div className="relative">
           <div

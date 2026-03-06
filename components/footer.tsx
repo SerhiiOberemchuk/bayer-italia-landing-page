@@ -52,7 +52,7 @@ export function Footer({ dict, locale }: FooterProps) {
             </ul>
 
             <nav className="mt-6" aria-label="Footer links">
-              <ul className="flex flex-wrap items-center justify-center gap-4 text-xs">
+              <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs">
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/delivery-from-italy")}
@@ -61,7 +61,6 @@ export function Footer({ dict, locale }: FooterProps) {
                     {locale === "uk" ? "Доставка з Італії" : "Delivery from Italy"}
                   </Link>
                 </li>
-                <li className="list-none text-muted-foreground/50" aria-hidden="true">|</li>
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/brands-from-italy")}
@@ -70,7 +69,6 @@ export function Footer({ dict, locale }: FooterProps) {
                     {locale === "uk" ? "Бренди з Італії" : "Brands from Italy"}
                   </Link>
                 </li>
-                <li className="list-none text-muted-foreground/50" aria-hidden="true">|</li>
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/privacy")}
@@ -79,7 +77,6 @@ export function Footer({ dict, locale }: FooterProps) {
                     {dict.privacy}
                   </Link>
                 </li>
-                <li className="list-none text-muted-foreground/50" aria-hidden="true">|</li>
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/cookies")}
@@ -88,7 +85,6 @@ export function Footer({ dict, locale }: FooterProps) {
                     {dict.cookies}
                   </Link>
                 </li>
-                <li className="list-none text-muted-foreground/50" aria-hidden="true">|</li>
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/terms")}

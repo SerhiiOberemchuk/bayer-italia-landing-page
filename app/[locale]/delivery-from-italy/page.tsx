@@ -63,12 +63,18 @@ export default async function DeliveryFromItalyPage({
             : "Buyer Italia helps you buy original items in Italian stores and safely deliver them to Ukraine and European countries."}
         </p>
 
-        <section className="mt-10 grid gap-4 sm:grid-cols-3">
+        <section
+          className="mt-10 grid gap-4 sm:grid-cols-3"
+          aria-labelledby="delivery-highlights-title"
+        >
+          <h2 id="delivery-highlights-title" className="sr-only">
+            {isUk ? "Переваги доставки" : "Delivery highlights"}
+          </h2>
           <article className="rounded-2xl border bg-card p-5">
             <Package className="size-5 text-italy-green" aria-hidden="true" />
-            <h2 className="mt-3 font-medium text-foreground">
+            <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Фото перед відправкою" : "Photo before shipping"}
-            </h2>
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {isUk
                 ? "Ви бачите реальний товар перед відправкою."
@@ -77,9 +83,9 @@ export default async function DeliveryFromItalyPage({
           </article>
           <article className="rounded-2xl border bg-card p-5">
             <Truck className="size-5 text-italy-green" aria-hidden="true" />
-            <h2 className="mt-3 font-medium text-foreground">
+            <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Прозорі терміни" : "Clear timelines"}
-            </h2>
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {isUk
                 ? "Орієнтовно 7-10 днів в Україну, 10-14 днів в Європу."
@@ -88,9 +94,9 @@ export default async function DeliveryFromItalyPage({
           </article>
           <article className="rounded-2xl border bg-card p-5">
             <ShieldCheck className="size-5 text-italy-green" aria-hidden="true" />
-            <h2 className="mt-3 font-medium text-foreground">
+            <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Оригінальність" : "Authenticity"}
-            </h2>
+            </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {isUk
                 ? "Закупівлі в офіційних магазинах Італії."
@@ -131,26 +137,34 @@ export default async function DeliveryFromItalyPage({
           <h2 className="font-serif text-2xl font-semibold text-foreground">
             {isUk ? "Корисні сторінки" : "Useful pages"}
           </h2>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href={withLocalePath(locale, "/brands-from-italy")}
-              className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-            >
-              {isUk ? "Бренди з Італії" : "Brands from Italy"}
-            </Link>
-            <Link
-              href={withLocalePath(locale, "/catalog")}
-              className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-            >
-              {isUk ? "Каталог товарів" : "Product catalog"}
-            </Link>
-            <Link
-              href={withLocalePath(locale, "/terms")}
-              className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-            >
-              {isUk ? "Умови сервісу" : "Terms of service"}
-            </Link>
-          </div>
+          <nav className="mt-4" aria-label={isUk ? "Корисні сторінки" : "Useful pages"}>
+            <ul className="flex flex-wrap gap-3">
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/brands-from-italy")}
+                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                >
+                  {isUk ? "Бренди з Італії" : "Brands from Italy"}
+                </Link>
+              </li>
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/catalog")}
+                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                >
+                  {isUk ? "Каталог товарів" : "Product catalog"}
+                </Link>
+              </li>
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/terms")}
+                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                >
+                  {isUk ? "Умови сервісу" : "Terms of service"}
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </section>
       </div>
     </main>

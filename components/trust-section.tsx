@@ -48,12 +48,12 @@ export function TrustSection({ dict }: TrustSectionProps) {
           {dict.items.map((point, index) => {
             const Icon = trustIcons[index];
             return (
-              <AnimateIn
-                key={index}
-                variant="fade-left"
-                delay={150 + index * 100}
-              >
-                <li className="list-none">
+              <li key={index} className="list-none">
+                <AnimateIn
+                  variant="fade-left"
+                  delay={150 + index * 100}
+                  className="h-full"
+                >
                   <Card className="border-0 bg-card shadow-md rounded-2xl hover-lift h-full">
                     <CardContent className="p-6">
                       <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-italy-green/10">
@@ -67,8 +67,8 @@ export function TrustSection({ dict }: TrustSectionProps) {
                       </p>
                     </CardContent>
                   </Card>
-                </li>
-              </AnimateIn>
+                </AnimateIn>
+              </li>
             );
           })}
         </ul>

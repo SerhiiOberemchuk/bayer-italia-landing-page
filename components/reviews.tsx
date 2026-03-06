@@ -30,8 +30,8 @@ export function Reviews({ dict }: ReviewsProps) {
 
         <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {dict.items.map((review, index) => (
-            <AnimateIn key={index} variant="fade-up" delay={200 + index * 120}>
-              <li className="list-none">
+            <li key={index} className="list-none">
+              <AnimateIn variant="fade-up" delay={200 + index * 120} className="h-full">
                 <Card className="border bg-card rounded-2xl hover-lift h-full">
                   <CardContent className="p-6">
                     <div className="flex gap-1 mb-4" aria-label={`${review.rating} out of 5 stars`}>
@@ -46,8 +46,8 @@ export function Reviews({ dict }: ReviewsProps) {
                     </div>
                   </CardContent>
                 </Card>
-              </li>
-            </AnimateIn>
+              </AnimateIn>
+            </li>
           ))}
         </ul>
       </div>

@@ -113,15 +113,15 @@ async function CatalogResults({
     return (
       <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-label={dict.title}>
         {productList.map((product, i) => (
-          <AnimateIn key={product.id} variant="fade-up" delay={100 + i * 60}>
-            <li className="list-none">
+          <li key={product.id} className="list-none">
+            <AnimateIn variant="fade-up" delay={100 + i * 60} className="h-full">
               <ProductCard
                 product={product}
                 locale={locale}
                 currencyLabel={dict.currency}
               />
-            </li>
-          </AnimateIn>
+            </AnimateIn>
+          </li>
         ))}
       </ul>
     );

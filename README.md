@@ -1,30 +1,42 @@
-# Bayer Italia landing page
+# Buyer Italia Landing Page
 
-*Automatically synced with your [v0.app](https://v0.app) deployments*
+Лендінг і каталог сервісу `Buyer Italia` для замовлення оригінальних товарів з Італії з доставкою в Україну та Європу.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/serhii-oberemchuks-projects/v0-bayer-italia-landing-page)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.app-black?style=for-the-badge)](https://v0.app/chat/sOyhpntq9f8)
+## Що є в проєкті
 
-## Overview
+- локалізація `uk/en` з маршрутизацією за локаллю;
+- головна сторінка з блоками довіри, FAQ, CTA та SEO-посиланнями;
+- каталог товарів з фільтрами та сторінкою детального перегляду;
+- службові сторінки: `delivery`, `brands`, `privacy`, `cookies`, `terms`;
+- акцент на семантичну HTML-структуру та доступність (ARIA, валідні списки, landmarks).
 
-This repository will stay in sync with your deployed chats on [v0.app](https://v0.app).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.app](https://v0.app).
+## Стек
 
-## Deployment
+- Next.js 16 (App Router)
+- React 19
+- TypeScript
+- Tailwind CSS 4
 
-Your project is live at:
+## Запуск локально
 
-**[https://vercel.com/serhii-oberemchuks-projects/v0-bayer-italia-landing-page](https://vercel.com/serhii-oberemchuks-projects/v0-bayer-italia-landing-page)**
+```bash
+pnpm install
+pnpm dev
+```
 
-## Build your app
+За замовчуванням застосунок доступний на `http://localhost:3000`.
 
-Continue building your app on:
+## Корисні команди
 
-**[https://v0.app/chat/sOyhpntq9f8](https://v0.app/chat/sOyhpntq9f8)**
+```bash
+pnpm build
+pnpm start
+```
 
-## How It Works
+## Структура
 
-1. Create and modify your project using [v0.app](https://v0.app)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+- `app/[locale]` — сторінки за локалями та SEO-метадані;
+- `components` — UI і секції лендінгу;
+- `lib/i18n` — словники, конфіг локалей, маршрутизація;
+- `actions` — серверні дії для каталогу;
+- `lib/db` — схема та доступ до БД.

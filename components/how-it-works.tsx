@@ -34,8 +34,8 @@ export function HowItWorks({ dict }: HowItWorksProps) {
           {dict.steps.map((step, index) => {
             const Icon = stepIcons[index]
             return (
-              <AnimateIn key={index} variant="fade-up" delay={200 + index * 120}>
-                <li className="list-none">
+              <li key={index} className="list-none">
+                <AnimateIn variant="fade-up" delay={200 + index * 120} className="h-full">
                   <Card className="relative border-0 bg-card shadow-md rounded-2xl hover-lift h-full">
                     <CardContent className="pt-8 pb-6 px-6 text-center">
                       <div
@@ -51,8 +51,8 @@ export function HowItWorks({ dict }: HowItWorksProps) {
                       <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                     </CardContent>
                   </Card>
-                </li>
-              </AnimateIn>
+                </AnimateIn>
+              </li>
             )
           })}
         </ol>

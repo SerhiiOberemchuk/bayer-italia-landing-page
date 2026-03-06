@@ -34,8 +34,8 @@ export function DeliveryPayment({ dict }: DeliveryPaymentProps) {
           {dict.items.map((info, index) => {
             const Icon = deliveryIcons[index]
             return (
-              <AnimateIn key={index} variant="fade-up" delay={200 + index * 100}>
-                <li className="list-none">
+              <li key={index} className="list-none">
+                <AnimateIn variant="fade-up" delay={200 + index * 100} className="h-full">
                   <Card className="border bg-card rounded-2xl hover-lift h-full">
                     <CardContent className="p-6">
                       <div className="mb-4 flex size-12 items-center justify-center rounded-xl bg-secondary">
@@ -49,8 +49,8 @@ export function DeliveryPayment({ dict }: DeliveryPaymentProps) {
                       </ul>
                     </CardContent>
                   </Card>
-                </li>
-              </AnimateIn>
+                </AnimateIn>
+              </li>
             )
           })}
         </ul>
