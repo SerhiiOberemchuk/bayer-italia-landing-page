@@ -48,13 +48,19 @@ export function ZaraSection({ dict }: ZaraSectionProps) {
               <AnimateIn variant="fade-up" delay={500}>
                 <ul className="mt-8 flex flex-wrap items-center justify-center gap-4">
                   <li className="list-none flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 transition-transform hover:scale-105">
-                    <TrendingDown className="size-5 text-italy-red" aria-hidden="true" />
+                    <TrendingDown
+                      className="size-5 text-italy-red"
+                      aria-hidden="true"
+                    />
                     <span className="text-sm font-medium">
                       {dict.discountTag}
                     </span>
                   </li>
                   <li className="list-none flex items-center gap-2 rounded-xl bg-secondary px-4 py-2 transition-transform hover:scale-105">
-                    <Clock className="size-5 text-italy-green" aria-hidden="true" />
+                    <Clock
+                      className="size-5 text-italy-green"
+                      aria-hidden="true"
+                    />
                     <span className="text-sm font-medium">
                       {dict.limitedTag}
                     </span>

@@ -34,8 +34,8 @@ export function Categories({ dict }: CategoriesProps) {
           {dict.items.map((category, index) => {
             const Icon = categoryIcons[index]
             return (
-              <AnimateIn key={index} variant="scale" delay={150 + index * 80}>
-                <li className="list-none">
+              <li key={index} className="list-none">
+                <AnimateIn variant="scale" delay={150 + index * 80} className="h-full">
                   <Card className="group border bg-card hover:shadow-lg transition-all duration-300 rounded-2xl hover:border-italy-green/30 hover-lift h-full">
                     <CardContent className="p-6 text-center">
                       <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-xl bg-secondary group-hover:bg-italy-green/10 transition-colors duration-300">
@@ -48,8 +48,8 @@ export function Categories({ dict }: CategoriesProps) {
                       <p className="mt-1 text-sm text-muted-foreground">{category.description}</p>
                     </CardContent>
                   </Card>
-                </li>
-              </AnimateIn>
+                </AnimateIn>
+              </li>
             )
           })}
         </ul>

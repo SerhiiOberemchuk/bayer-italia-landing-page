@@ -80,17 +80,17 @@ export default async function BrandsFromItalyPage({
           <h2 className="font-serif text-2xl font-semibold text-foreground">
             {isUk ? "Популярні бренди" : "Popular brands"}
           </h2>
-          <div className="mt-4 flex flex-wrap gap-2">
+          <ul className="mt-4 flex flex-wrap gap-2">
             {BRANDS.map((brand) => (
-              <span
+              <li
                 key={brand}
-                className="inline-flex items-center rounded-full border px-3 py-1.5 text-sm"
+                className="list-none inline-flex items-center rounded-full border px-3 py-1.5 text-sm"
               >
                 <Tag className="mr-1.5 size-3.5" aria-hidden="true" />
                 {brand}
-              </span>
+              </li>
             ))}
-          </div>
+          </ul>
         </section>
 
         <section className="mt-10 rounded-2xl border bg-card p-6">
@@ -129,26 +129,34 @@ export default async function BrandsFromItalyPage({
           <h2 className="font-serif text-2xl font-semibold text-foreground">
             {isUk ? "Корисні сторінки" : "Useful pages"}
           </h2>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link
-              href={withLocalePath(locale, "/delivery-from-italy")}
-              className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-            >
-              {isUk ? "Доставка з Італії" : "Delivery from Italy"}
-            </Link>
-            <Link
-              href={withLocalePath(locale, "/catalog")}
-              className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-            >
-              {isUk ? "Каталог товарів" : "Product catalog"}
-            </Link>
-            <Link
-              href={withLocalePath(locale, "/privacy")}
-              className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-            >
-              {isUk ? "Політика конфіденційності" : "Privacy policy"}
-            </Link>
-          </div>
+          <nav className="mt-4" aria-label={isUk ? "Корисні сторінки" : "Useful pages"}>
+            <ul className="flex flex-wrap gap-3">
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/delivery-from-italy")}
+                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                >
+                  {isUk ? "Доставка з Італії" : "Delivery from Italy"}
+                </Link>
+              </li>
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/catalog")}
+                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                >
+                  {isUk ? "Каталог товарів" : "Product catalog"}
+                </Link>
+              </li>
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/privacy")}
+                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                >
+                  {isUk ? "Політика конфіденційності" : "Privacy policy"}
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </section>
       </div>
     </main>

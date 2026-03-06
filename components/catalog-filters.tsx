@@ -50,11 +50,11 @@ export function CatalogFilters({
     <div className="flex flex-col gap-6">
       {/* Brand filter */}
       {brands.length > 0 && (
-        <section aria-labelledby="brand-filter-title">
-          <h2 id="brand-filter-title" className="mb-2 text-sm font-medium text-muted-foreground">
+        <fieldset className="min-w-0 border-0 p-0">
+          <legend className="mb-2 text-sm font-medium text-muted-foreground">
             {dict.brand}
-          </h2>
-          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.brand}>
+          </legend>
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setFilter("brand", "")}
@@ -85,16 +85,16 @@ export function CatalogFilters({
               </button>
             ))}
           </div>
-        </section>
+        </fieldset>
       )}
 
       {/* Category filter */}
       {categories.length > 0 && (
-        <section aria-labelledby="category-filter-title">
-          <h2 id="category-filter-title" className="mb-2 text-sm font-medium text-muted-foreground">
+        <fieldset className="min-w-0 border-0 p-0">
+          <legend className="mb-2 text-sm font-medium text-muted-foreground">
             {dict.category}
-          </h2>
-          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.category}>
+          </legend>
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setFilter("category", "")}
@@ -125,16 +125,16 @@ export function CatalogFilters({
               </button>
             ))}
           </div>
-        </section>
+        </fieldset>
       )}
 
       {/* Size filter */}
       {sizes.length > 0 && (
-        <section aria-labelledby="size-filter-title">
-          <h2 id="size-filter-title" className="mb-2 text-sm font-medium text-muted-foreground">
+        <fieldset className="min-w-0 border-0 p-0">
+          <legend className="mb-2 text-sm font-medium text-muted-foreground">
             {dict.size}
-          </h2>
-          <div className="flex flex-wrap gap-2" role="group" aria-label={dict.size}>
+          </legend>
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => setFilter("size", "")}
@@ -165,7 +165,7 @@ export function CatalogFilters({
               </button>
             ))}
           </div>
-        </section>
+        </fieldset>
       )}
 
       {/* Reset */}

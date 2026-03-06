@@ -133,7 +133,6 @@ export async function generateMetadata({
       },
     },
     category: "shopping",
-    generator: "v0.app",
   };
 }
 
@@ -197,6 +196,8 @@ export default async function LocaleLayout({
 }) {
   const locale = ensureLocale((await params).locale);
   const dict = await getDictionary(locale);
+  const skipLinkLabel =
+    locale === "uk" ? "Перейти до основного вмісту" : "Skip to main content";
 
   const organizationJsonLd = getOrganizationJsonLd(locale);
   const serviceJsonLd = getServiceJsonLd(locale);
@@ -222,7 +223,7 @@ export default async function LocaleLayout({
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-foreground focus:px-4 focus:py-2 focus:text-background"
         >
-          Skip to main content
+          {skipLinkLabel}
         </a>
         <div className="min-h-screen bg-background">
           <SiteHeader locale={locale} topBar={dict.hero.topBar} />

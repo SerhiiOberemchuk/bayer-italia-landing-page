@@ -1,5 +1,5 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -18,10 +18,10 @@
   --muted-foreground: oklch(0.45 0.01 260);
   --accent: oklch(0.45 0.16 145);
   --accent-foreground: oklch(1 0 0);
-  --destructive: oklch(0.50 0.18 25);
+  --destructive: oklch(0.5 0.18 25);
   --destructive-foreground: oklch(1 0 0);
-  --border: oklch(0.90 0.008 75);
-  --input: oklch(0.90 0.008 75);
+  --border: oklch(0.9 0.008 75);
+  --input: oklch(0.9 0.008 75);
   --ring: oklch(0.45 0.16 145);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
@@ -38,7 +38,7 @@
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
   --italy-green: oklch(0.45 0.16 145);
-  --italy-red: oklch(0.50 0.18 25);
+  --italy-red: oklch(0.5 0.18 25);
 }
 
 .dark {
@@ -77,9 +77,9 @@
 }
 
 @theme inline {
-  --font-sans: 'DM Sans', 'DM Sans Fallback', sans-serif;
-  --font-serif: 'Playfair Display', 'Playfair Display Fallback', serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: "DM Sans", "DM Sans Fallback", sans-serif;
+  --font-serif: "Playfair Display", "Playfair Display Fallback", serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback";
   --color-italy-green: var(--italy-green);
   --color-italy-red: var(--italy-red);
   --color-background: var(--background);
@@ -259,7 +259,8 @@
 
 /* Floating animation for hero badges */
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -268,7 +269,8 @@
 }
 
 @keyframes float-delayed {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -286,7 +288,8 @@
 }
 
 @keyframes gentle-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
   }
   50% {
@@ -318,7 +321,9 @@ section {
 
 /* Hover lift for interactive cards */
 .hover-lift {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s ease;
 }
 
 .hover-lift:hover {
@@ -328,7 +333,9 @@ section {
 
 .faq-item > summary {
   border-radius: 0.5rem;
-  transition: background-color 260ms ease, color 220ms ease;
+  transition:
+    background-color 260ms ease,
+    color 220ms ease;
 }
 
 .faq-item > summary::marker {
@@ -413,4 +420,9 @@ section {
     transition: none;
     transform: none;
   }
+}
+
+button,
+a {
+  transition: all 0.3s ease-in-out;
 }

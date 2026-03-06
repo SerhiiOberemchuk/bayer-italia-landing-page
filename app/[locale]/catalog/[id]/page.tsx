@@ -296,19 +296,19 @@ async function ProductDetailPageContent({
 
               {/* Attributes */}
               <AnimateIn variant="fade-up" delay={350}>
-                <div className="mt-8 flex flex-col gap-4">
+                <dl className="mt-8 flex flex-col gap-4">
                   {category && (
                     <div className="flex items-center gap-3">
                       <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
                         <Tag className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">
+                        <dt className="text-xs text-muted-foreground">
                           {dict.catalog.filters.category}
-                        </p>
-                        <p className="text-sm font-medium text-foreground">
+                        </dt>
+                        <dd className="text-sm font-medium text-foreground">
                           {category}
-                        </p>
+                        </dd>
                       </div>
                     </div>
                   )}
@@ -319,12 +319,12 @@ async function ProductDetailPageContent({
                         <Ruler className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">
+                        <dt className="text-xs text-muted-foreground">
                           {dict.catalog.filters.size}
-                        </p>
-                        <p className="text-sm font-medium text-foreground">
+                        </dt>
+                        <dd className="text-sm font-medium text-foreground">
                           {product.size}
-                        </p>
+                        </dd>
                       </div>
                     </div>
                   )}
@@ -335,12 +335,12 @@ async function ProductDetailPageContent({
                         <Sparkles className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">
+                        <dt className="text-xs text-muted-foreground">
                           {dict.catalog.condition}
-                        </p>
-                        <p className="text-sm font-medium text-foreground">
+                        </dt>
+                        <dd className="text-sm font-medium text-foreground">
                           {condition}
-                        </p>
+                        </dd>
                       </div>
                     </div>
                   )}
@@ -351,16 +351,16 @@ async function ProductDetailPageContent({
                         <StickyNote className="size-4 text-muted-foreground" aria-hidden="true" />
                       </div>
                       <div>
-                        <p className="text-xs text-muted-foreground">
+                        <dt className="text-xs text-muted-foreground">
                           {dict.catalog.note}
-                        </p>
-                        <p className="text-sm text-foreground leading-relaxed">
+                        </dt>
+                        <dd className="text-sm text-foreground leading-relaxed">
                           {note}
-                        </p>
+                        </dd>
                       </div>
                     </div>
                   )}
-                </div>
+                </dl>
               </AnimateIn>
 
               {/* CTA */}
