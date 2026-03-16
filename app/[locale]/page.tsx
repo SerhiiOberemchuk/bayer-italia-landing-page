@@ -13,6 +13,7 @@ import { TrustSection } from "@/components/trust-section"
 import { Reviews } from "@/components/reviews"
 import { FAQ } from "@/components/faq"
 import { PopularBrands } from "@/components/popular-brands"
+import { InStockShowcase } from "@/components/in-stock-showcase"
 import { FinalCTA } from "@/components/final-cta"
 import { StickyBottomBar } from "@/components/sticky-bottom-bar"
 import { SeoLinks } from "@/components/seo-links"
@@ -58,6 +59,7 @@ export default async function Home({
       <DeliveryPayment dict={dict.delivery} />
       <TrustSection dict={dict.trust} />
       <Reviews dict={dict.reviews} />
+      <InStockShowcase dict={dict.inStock} locale={locale} />
       <PopularBrands dict={dict.popularBrands} />
       <FAQ dict={dict.faq} />
       <FinalCTA dict={dict.finalCta} />

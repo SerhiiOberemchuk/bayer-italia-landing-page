@@ -277,6 +277,14 @@ const uk = {
     images: "Фото",
     noImages: "Фото з'являться після обробки",
   },
+  inStock: {
+    title: "Товари в наявності",
+    subtitle:
+      "Викуплені мною речі, які можна купити прямо у мене.",
+    ctaVinted: "Vinted: профіль raisaob",
+    ctaCatalog: "Показати наявні товари на сайті",
+    catalogAria: "Відкрити каталог наявних товарів",
+  },
   finalCta: {
     title: "Підписуйтесь на Telegram — новинки щодня",
     subtitle:

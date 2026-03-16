@@ -279,6 +279,14 @@ const en: Dictionary = {
     images: "Photos",
     noImages: "Photos will appear after processing",
   },
+  inStock: {
+    title: "In-Stock Items",
+    subtitle:
+      "Items already purchased by me that you can buy directly from me.",
+    ctaVinted: "Vinted: raisaob profile",
+    ctaCatalog: "View in-stock items on site",
+    catalogAria: "Open catalog of in-stock items",
+  },
   finalCta: {
     title: "Subscribe to Telegram — new arrivals daily",
     subtitle:
