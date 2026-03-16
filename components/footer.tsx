@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Send, MessageCircle } from "lucide-react"
+import { Send, MessageCircle, Store } from "lucide-react"
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
 import { AnimateIn } from "@/components/animate-in"
 import type { Dictionary } from "@/lib/i18n/dictionary"
@@ -49,6 +49,18 @@ export function Footer({ dict, locale }: FooterProps) {
                   @raisa_orb
                 </a>
               </li>
+              <li className="list-none">
+                <a
+                  href="https://www.vinted.it/member/85835210-raisaob"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Vinted account raisaob"
+                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+                >
+                  <Store className="size-4" aria-hidden="true" />
+                  Vinted: raisaob
+                </a>
+              </li>
             </ul>
 
             <nav className="mt-6" aria-label="Footer links">
@@ -67,6 +79,14 @@ export function Footer({ dict, locale }: FooterProps) {
                     className="text-muted-foreground hover:text-foreground transition-colors duration-300"
                   >
                     {locale === "uk" ? "Бренди з Італії" : "Brands from Italy"}
+                  </Link>
+                </li>
+                <li className="list-none">
+                  <Link
+                    href={withLocalePath(locale, "/vinted-in-stock")}
+                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+                  >
+                    {locale === "uk" ? "Vinted: товари в наявності" : "Vinted in-stock"}
                   </Link>
                 </li>
                 <li className="list-none">
