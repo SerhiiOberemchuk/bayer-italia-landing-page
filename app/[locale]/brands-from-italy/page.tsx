@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowLeft, Tag, CheckCircle2 } from "lucide-react"
-import { isValidLocale, siteUrl } from "@/lib/i18n/config"
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
-import { ensureLocale } from "@/lib/i18n/server"
-import { Button } from "@/components/ui/button"
+import type { Metadata } from "next";
+import Link from "next/link";
+import { ArrowLeft, Tag, CheckCircle2, Layers3, Send, SearchCheck } from "lucide-react";
+import { isValidLocale, siteUrl } from "@/lib/i18n/config";
+import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { ensureLocale } from "@/lib/i18n/server";
+import { Button } from "@/components/ui/button";
 
 const BRANDS = [
   "ZARA",
@@ -17,25 +17,25 @@ const BRANDS = [
   "Tommy Hilfiger",
   "Pinko",
   "Furla",
-]
+];
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params
-  if (!isValidLocale(locale)) return {}
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
 
-  const pathname = "/brands-from-italy"
+  const pathname = "/brands-from-italy";
   const title =
     locale === "uk"
       ? "Бренди з Італії: ZARA, Mango, COS, Nike"
-      : "Italian brands: ZARA, Mango, COS, Nike"
+      : "Italian brands: ZARA, Mango, COS, Nike";
   const description =
     locale === "uk"
       ? "Огляд брендів, які замовляє Buyer Italia, та як ми перевіряємо оригінальність товарів перед доставкою."
-      : "Overview of brands sourced by Buyer Italia and how we verify authenticity before shipping."
+      : "Overview of brands sourced by Buyer Italia and how we verify authenticity before shipping.";
 
   return {
     title,
@@ -44,16 +44,16 @@ export async function generateMetadata({
       canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
       languages: buildLocalizedAlternates(pathname, siteUrl),
     },
-  }
+  };
 }
 
 export default async function BrandsFromItalyPage({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }) {
-  const locale = ensureLocale((await params).locale)
-  const isUk = locale === "uk"
+  const locale = ensureLocale((await params).locale);
+  const isUk = locale === "uk";
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
@@ -93,6 +93,37 @@ export default async function BrandsFromItalyPage({
           </ul>
         </section>
 
+        <section className="mt-10 grid gap-4 sm:grid-cols-3" aria-labelledby="brand-groups-title">
+          <h2 id="brand-groups-title" className="sr-only">
+            {isUk ? "Групи брендів" : "Brand groups"}
+          </h2>
+          <article className="rounded-2xl border bg-card p-5">
+            <Layers3 className="size-5 text-italy-green" aria-hidden="true" />
+            <h3 className="mt-3 font-medium text-foreground">Mass market</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              ZARA, Mango, Bershka, Pull & Bear, Stradivarius, H&M.
+            </p>
+          </article>
+          <article className="rounded-2xl border bg-card p-5">
+            <Tag className="size-5 text-italy-green" aria-hidden="true" />
+            <h3 className="mt-3 font-medium text-foreground">Premium</h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Massimo Dutti, Calvin Klein, Tommy Hilfiger, Pinko, Liu Jo, MAX&Co.
+            </p>
+          </article>
+          <article className="rounded-2xl border bg-card p-5">
+            <SearchCheck className="size-5 text-italy-green" aria-hidden="true" />
+            <h3 className="mt-3 font-medium text-foreground">
+              {isUk ? "Під запит" : "On request"}
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {isUk
+                ? "Якщо потрібного бренду немає в списку, можна надіслати посилання або фото для перевірки."
+                : "If your brand is not listed, you can send a link or photo for sourcing review."}
+            </p>
+          </article>
+        </section>
+
         <section className="mt-10 rounded-2xl border bg-card p-6">
           <h2 className="font-serif text-2xl font-semibold text-foreground">
             {isUk ? "Як ми перевіряємо оригінальність" : "How we verify authenticity"}
@@ -123,6 +154,40 @@ export default async function BrandsFromItalyPage({
               </span>
             </li>
           </ul>
+        </section>
+
+        <section className="mt-10 rounded-2xl border bg-card p-6">
+          <h2 className="font-serif text-2xl font-semibold text-foreground">
+            {isUk ? "Як замовити бренд під запит" : "How to request a brand"}
+          </h2>
+          <ol className="mt-4 list-decimal space-y-2 pl-6 text-foreground/90">
+            <li>
+              {isUk
+                ? "Надішліть посилання на товар або фото моделі, яка вас цікавить."
+                : "Send a product link or a photo of the item you want."}
+            </li>
+            <li>
+              {isUk
+                ? "Уточніть розмір, колір і країну доставки."
+                : "Specify size, color, and delivery country."}
+            </li>
+            <li>
+              {isUk
+                ? "Ми перевіримо наявність у магазинах Італії та назвемо фінальну суму до оплати."
+                : "We check availability in Italian stores and confirm the final total before payment."}
+            </li>
+          </ol>
+          <div className="mt-6">
+            <a
+              href="https://t.me/raisa_orb"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background"
+            >
+              <Send className="size-4" aria-hidden="true" />
+              {isUk ? "Запитати про свій бренд" : "Ask about your brand"}
+            </a>
+          </div>
         </section>
 
         <section className="mt-10 rounded-2xl border bg-card p-6">
@@ -160,5 +225,5 @@ export default async function BrandsFromItalyPage({
         </section>
       </div>
     </main>
-  )
+  );
 }

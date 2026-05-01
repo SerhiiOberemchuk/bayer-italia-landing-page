@@ -1,13 +1,13 @@
-import Link from "next/link"
-import type { Locale } from "@/lib/i18n/config"
-import { withLocalePath } from "@/lib/i18n/routing"
+import Link from "next/link";
+import type { Locale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
 
 interface SeoLinksProps {
-  locale: Locale
+  locale: Locale;
 }
 
 export function SeoLinks({ locale }: SeoLinksProps) {
-  const isUk = locale === "uk"
+  const isUk = locale === "uk";
 
   return (
     <section className="px-4 py-10 md:px-8" aria-labelledby="seo-links-title">
@@ -17,8 +17,8 @@ export function SeoLinks({ locale }: SeoLinksProps) {
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {isUk
-            ? "Деталі про бренди, доставку, товари в наявності та покупку через Vinted."
-            : "Details about brands, delivery, in-stock items and buying via Vinted."}
+            ? "Деталі про бренди, доставку та каталог товарів сервісу."
+            : "Details about brands, delivery, and the product catalog."}
         </p>
 
         <nav className="mt-4" aria-label="Internal service links">
@@ -47,17 +47,9 @@ export function SeoLinks({ locale }: SeoLinksProps) {
                 {isUk ? "Каталог товарів" : "Product catalog"}
               </Link>
             </li>
-            <li className="list-none">
-              <Link
-                href={withLocalePath(locale, "/vinted-in-stock")}
-                className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
-              >
-                {isUk ? "Vinted: товари в наявності" : "Vinted: in-stock items"}
-              </Link>
-            </li>
           </ul>
         </nav>
       </div>
     </section>
-  )
+  );
 }

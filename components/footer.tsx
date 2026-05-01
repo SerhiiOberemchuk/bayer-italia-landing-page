@@ -1,14 +1,14 @@
-import Link from "next/link"
-import { Send, MessageCircle, Store } from "lucide-react"
-import { BuyerItaliaLogo } from "@/components/buyer-italia-logo"
-import { AnimateIn } from "@/components/animate-in"
-import type { Dictionary } from "@/lib/i18n/dictionary"
-import type { Locale } from "@/lib/i18n/config"
-import { withLocalePath } from "@/lib/i18n/routing"
+import Link from "next/link";
+import { Send, MessageCircle } from "lucide-react";
+import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
+import { AnimateIn } from "@/components/animate-in";
+import type { Dictionary } from "@/lib/i18n/dictionary";
+import type { Locale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
 
 interface FooterProps {
-  dict: Dictionary["footer"]
-  locale: Locale
+  dict: Dictionary["footer"];
+  locale: Locale;
 }
 
 export function Footer({ dict, locale }: FooterProps) {
@@ -22,7 +22,7 @@ export function Footer({ dict, locale }: FooterProps) {
             <h2 id="footer-title" className="font-serif text-xl font-semibold text-foreground">
               Buyer Italia
             </h2>
-            <p className="mt-2 text-sm text-muted-foreground max-w-md">{dict.description}</p>
+            <p className="mt-2 max-w-md text-sm text-muted-foreground">{dict.description}</p>
 
             <ul className="mt-6 flex flex-wrap items-center justify-center gap-4">
               <li className="list-none">
@@ -31,7 +31,7 @@ export function Footer({ dict, locale }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Buyer Italia Telegram channel"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 >
                   <Send className="size-4" aria-hidden="true" />
                   @buyer_italia_shop
@@ -43,22 +43,10 @@ export function Footer({ dict, locale }: FooterProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Write to Raisa on Telegram"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
+                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 >
                   <MessageCircle className="size-4" aria-hidden="true" />
                   @raisa_orb
-                </a>
-              </li>
-              <li className="list-none">
-                <a
-                  href="https://www.vinted.it/member/85835210-raisaob"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Vinted account raisaob"
-                  className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors duration-300"
-                >
-                  <Store className="size-4" aria-hidden="true" />
-                  Vinted: raisaob
                 </a>
               </li>
             </ul>
@@ -68,7 +56,7 @@ export function Footer({ dict, locale }: FooterProps) {
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/delivery-from-italy")}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {locale === "uk" ? "Доставка з Італії" : "Delivery from Italy"}
                   </Link>
@@ -76,23 +64,15 @@ export function Footer({ dict, locale }: FooterProps) {
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/brands-from-italy")}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {locale === "uk" ? "Бренди з Італії" : "Brands from Italy"}
                   </Link>
                 </li>
                 <li className="list-none">
                   <Link
-                    href={withLocalePath(locale, "/vinted-in-stock")}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
-                  >
-                    {locale === "uk" ? "Vinted: товари в наявності" : "Vinted in-stock"}
-                  </Link>
-                </li>
-                <li className="list-none">
-                  <Link
                     href={withLocalePath(locale, "/privacy")}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {dict.privacy}
                   </Link>
@@ -100,7 +80,7 @@ export function Footer({ dict, locale }: FooterProps) {
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/cookies")}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {dict.cookies}
                   </Link>
@@ -108,7 +88,7 @@ export function Footer({ dict, locale }: FooterProps) {
                 <li className="list-none">
                   <Link
                     href={withLocalePath(locale, "/terms")}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300"
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {dict.terms}
                   </Link>
@@ -124,5 +104,5 @@ export function Footer({ dict, locale }: FooterProps) {
         </AnimateIn>
       </div>
     </footer>
-  )
+  );
 }

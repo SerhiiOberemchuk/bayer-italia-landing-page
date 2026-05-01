@@ -1,28 +1,36 @@
-import type { Metadata } from "next"
-import Link from "next/link"
-import { ArrowLeft, Package, Truck, ShieldCheck } from "lucide-react"
-import { isValidLocale, siteUrl } from "@/lib/i18n/config"
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
-import { ensureLocale } from "@/lib/i18n/server"
-import { Button } from "@/components/ui/button"
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  Package,
+  Truck,
+  ShieldCheck,
+  Wallet,
+  MessagesSquare,
+  MapPinned,
+} from "lucide-react";
+import { isValidLocale, siteUrl } from "@/lib/i18n/config";
+import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { ensureLocale } from "@/lib/i18n/server";
+import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { locale } = await params
-  if (!isValidLocale(locale)) return {}
+  const { locale } = await params;
+  if (!isValidLocale(locale)) return {};
 
-  const pathname = "/delivery-from-italy"
+  const pathname = "/delivery-from-italy";
   const title =
     locale === "uk"
       ? "Доставка з Італії в Україну та Європу"
-      : "Delivery from Italy to Ukraine & Europe"
+      : "Delivery from Italy to Ukraine & Europe";
   const description =
     locale === "uk"
       ? "Терміни, вартість і процес доставки оригінального одягу з Італії. Buyer Italia: прозорі умови, фото перед відправкою, підтримка в Telegram."
-      : "Delivery terms, costs and process for original clothing from Italy. Buyer Italia: transparent terms, photo report before shipping, Telegram support."
+      : "Delivery terms, costs and process for original clothing from Italy. Buyer Italia: transparent terms, photo report before shipping, Telegram support.";
 
   return {
     title,
@@ -31,16 +39,16 @@ export async function generateMetadata({
       canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
       languages: buildLocalizedAlternates(pathname, siteUrl),
     },
-  }
+  };
 }
 
 export default async function DeliveryFromItalyPage({
   params,
 }: {
-  params: Promise<{ locale: string }>
+  params: Promise<{ locale: string }>;
 }) {
-  const locale = ensureLocale((await params).locale)
-  const isUk = locale === "uk"
+  const locale = ensureLocale((await params).locale);
+  const isUk = locale === "uk";
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
@@ -133,6 +141,68 @@ export default async function DeliveryFromItalyPage({
           </ol>
         </section>
 
+        <section className="mt-10 grid gap-4 sm:grid-cols-3" aria-labelledby="delivery-details-title">
+          <h2 id="delivery-details-title" className="sr-only">
+            {isUk ? "Деталі доставки" : "Delivery details"}
+          </h2>
+          <article className="rounded-2xl border bg-card p-5">
+            <Wallet className="size-5 text-italy-green" aria-hidden="true" />
+            <h3 className="mt-3 font-medium text-foreground">
+              {isUk ? "Що входить у фінальну суму" : "What is included in the final total"}
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {isUk
+                ? "Ціна магазину, сервіс баєра та доставка. Остаточну калькуляцію погоджуємо до оплати."
+                : "Store price, buyer service, and shipping. We confirm the final breakdown before payment."}
+            </p>
+          </article>
+          <article className="rounded-2xl border bg-card p-5">
+            <MessagesSquare className="size-5 text-italy-green" aria-hidden="true" />
+            <h3 className="mt-3 font-medium text-foreground">
+              {isUk ? "Що підготувати перед замовленням" : "What to prepare before ordering"}
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {isUk
+                ? "Посилання на товар, бренд, розмір, колір і країну доставки. Це пришвидшує підтвердження наявності."
+                : "A product link, brand, size, color, and delivery country. This speeds up availability checks."}
+            </p>
+          </article>
+          <article className="rounded-2xl border bg-card p-5">
+            <MapPinned className="size-5 text-italy-green" aria-hidden="true" />
+            <h3 className="mt-3 font-medium text-foreground">
+              {isUk ? "Для яких країн підходить сервіс" : "Which countries the service fits"}
+            </h3>
+            <p className="mt-2 text-sm text-muted-foreground">
+              {isUk
+                ? "Найчастіше відправляємо в Україну, Польщу, Німеччину, Чехію та інші країни Європи."
+                : "Most often we ship to Ukraine, Poland, Germany, Czechia, and other European countries."}
+            </p>
+          </article>
+        </section>
+
+        <section className="mt-10 rounded-2xl border bg-card p-6">
+          <h2 className="font-serif text-2xl font-semibold text-foreground">
+            {isUk ? "Кому підходить доставка з Італії" : "Who this delivery model fits"}
+          </h2>
+          <ul className="mt-4 space-y-3 text-foreground/90">
+            <li>
+              {isUk
+                ? "Тим, хто шукає конкретну модель у бренді на кшталт ZARA, Mango, COS або Massimo Dutti."
+                : "People looking for a specific model from brands like ZARA, Mango, COS, or Massimo Dutti."}
+            </li>
+            <li>
+              {isUk
+                ? "Клієнтам, яким важливо отримати підтвердження оригінальності та фото до відправки."
+                : "Clients who want authenticity confirmation and photos before shipment."}
+            </li>
+            <li>
+              {isUk
+                ? "Покупцям, які хочуть замовити товар із розпродажів в Італії без самостійної логістики."
+                : "Shoppers who want access to Italian sale items without handling logistics themselves."}
+            </li>
+          </ul>
+        </section>
+
         <section className="mt-10 rounded-2xl border bg-card p-6">
           <h2 className="font-serif text-2xl font-semibold text-foreground">
             {isUk ? "Корисні сторінки" : "Useful pages"}
@@ -168,5 +238,5 @@ export default async function DeliveryFromItalyPage({
         </section>
       </div>
     </main>
-  )
+  );
 }
