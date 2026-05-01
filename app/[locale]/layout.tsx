@@ -9,6 +9,7 @@ import { ensureLocale } from "@/lib/i18n/server";
 import { SiteHeader } from "@/components/site-header";
 import { Footer } from "@/components/footer";
 import "../globals.css";
+
 const dmSans = DM_Sans({
   subsets: ["latin", "latin-ext"],
   variable: "--font-dm-sans",
@@ -43,48 +44,11 @@ export async function generateMetadata({
     },
     description: dict.meta.description,
     keywords: [
-      "баєр італія",
       "buyer italia",
-      "zara італія",
-      "одяг з італії",
-      "шопінг італія",
-      "доставка з італії",
-      "оригінальний одяг італія",
-      "mango італія",
-      "massimo dutti італія",
-      "cos італія",
-      "puma італія",
-      "розпродаж zara італія",
-      "баєр сервіс",
-      "купити одяг з італії",
-      "доставка в україну з італії",
-      "брендовий одяг італія",
+      "personal shopper italy",
+      "delivery from italy",
       "zara sale italy",
       "italian fashion buyer",
-      "personal shopper italy",
-      "bershka італія",
-      "pull and bear італія",
-      "stradivarius італія",
-      "h&m італія",
-      "nike італія",
-      "adidas італія",
-      "new balance італія",
-      "calvin klein італія",
-      "tommy hilfiger італія",
-      "guess італія",
-      "pinko італія",
-      "liu jo італія",
-      "furla італія",
-      "geox італія",
-      "other stories італія",
-      "max&co італія",
-      "parfois італія",
-      "брендовий одяг з європи",
-      "оригінальні бренди італія",
-      "розпродаж брендів італія",
-      "купити nike з італії",
-      "купити adidas з італії",
-      "купити calvin klein з італії",
     ],
     icons: {
       icon: [
@@ -136,7 +100,6 @@ export async function generateMetadata({
   };
 }
 
-// JSON-LD structured data for Organization
 function getOrganizationJsonLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
@@ -153,10 +116,7 @@ function getOrganizationJsonLd(locale: Locale) {
       contactType: "customer service",
       availableLanguage: ["Ukrainian", "English", "Italian"],
     },
-    sameAs: [
-      "https://t.me/buyer_italia_shop",
-      "https://instagram.com/buyer_italia",
-    ],
+    sameAs: ["https://t.me/buyer_italia_shop"],
   };
 }
 

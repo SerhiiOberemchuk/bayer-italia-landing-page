@@ -6,7 +6,6 @@ const localePrefixRegex = new RegExp(`^/(${locales.join("|")})(?=/|$)`)
 
 export const localizedPublicPaths = [
   "/",
-  "/vinted-in-stock",
   "/catalog",
   "/delivery-from-italy",
   "/brands-from-italy",
@@ -83,7 +82,10 @@ export function buildLocalizedAlternates(
 ): Record<string, string> {
   const pathWithoutLocale = stripLocaleFromPathname(pathname)
 
-  return Object.fromEntries(
-    locales.map((locale) => [locale, `${baseUrl}${withLocalePath(locale, pathWithoutLocale)}`])
-  )
+  return {
+    ...Object.fromEntries(
+      locales.map((locale) => [locale, `${baseUrl}${withLocalePath(locale, pathWithoutLocale)}`])
+    ),
+    "x-default": `${baseUrl}${withLocalePath(defaultLocale, pathWithoutLocale)}`,
+  }
 }
