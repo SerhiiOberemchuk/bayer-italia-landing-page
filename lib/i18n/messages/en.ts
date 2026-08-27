@@ -257,7 +257,7 @@ const en: Dictionary = {
   },
   catalog: {
     title: "Product Catalog",
-    subtitle: "Original items from Italy in stock",
+    subtitle: "Original pieces from Italy: available now and selected past arrivals",
     filters: {
       all: "All",
       brand: "Brand",
@@ -280,9 +280,9 @@ const en: Dictionary = {
     noImages: "Photos will appear after processing",
   },
   inStock: {
-    title: "In-Stock Items",
+    title: "Selected from the catalog",
     subtitle:
-      "Items already purchased by me that you can buy directly from me.",
+      "Current pieces and selected past arrivals sourced in Italy.",
     ctaVinted: "Vinted: raisaob profile",
     ctaCatalog: "View in-stock items on site",
     catalogAria: "Open catalog of in-stock items",

@@ -1,13 +1,14 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ShoppingBag } from "lucide-react";
-import { getFilterOptions, getProducts } from "@/actions/catalog";
+import { getFilterOptions } from "@/actions/catalog/get-filter-options";
+import { getProducts } from "@/actions/catalog/get-products";
 import { getDictionary, type Dictionary } from "@/lib/i18n/dictionary";
 import { isValidLocale, siteUrl, type Locale } from "@/lib/i18n/config";
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
-import { CatalogFilters } from "@/components/catalog-filters";
-import { ProductCard } from "@/components/product-card";
+import { PremiumCatalogFilters } from "@/components/premium-catalog-filters";
+import { PremiumProductCard } from "@/components/premium-product-card";
 import { AnimateIn } from "@/components/animate-in";
 
 export async function generateMetadata({
@@ -40,36 +41,38 @@ export default async function CatalogPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ brand?: string; category?: string; size?: string }>;
+  searchParams: Promise<{ brand?: string; category?: string; q?: string }>;
 }) {
   const locale = ensureLocale((await params).locale);
   const dict = await getDictionary(locale);
   const filterOptions = await getFilterOptions();
 
   return (
-    <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
-      <div className="mx-auto max-w-6xl">
+    <main id="main-content" className="px-4 py-14 md:px-8 md:py-20">
+      <div className="mx-auto max-w-370">
         {/* Title */}
         <AnimateIn variant="fade-up">
-          <h1 className="font-serif text-3xl font-semibold text-foreground md:text-4xl lg:text-5xl text-balance">
+          <p className="premium-eyebrow text-muted-foreground">
+            {locale === "uk" ? "Відібрано в Італії" : "Curated in Italy"}
+          </p>
+          <h1 className="mt-4 font-serif text-5xl font-normal tracking-[-0.04em] text-foreground md:text-7xl">
             {dict.catalog.title}
           </h1>
         </AnimateIn>
         <AnimateIn variant="fade-up" delay={100}>
-          <p className="mt-3 text-lg text-muted-foreground">
+          <p className="mt-5 max-w-xl text-sm leading-6 text-muted-foreground md:text-base">
             {dict.catalog.subtitle}
           </p>
         </AnimateIn>
 
         {/* Filters */}
         <AnimateIn variant="fade-up" delay={200}>
-          <div className="mt-8 rounded-2xl border border-border/60 bg-card p-5">
+          <div className="mt-10">
             <Suspense fallback={null}>
-              <CatalogFilters
-                dict={dict.catalog.filters}
+              <PremiumCatalogFilters
+                locale={locale}
                 brands={filterOptions.brands}
                 categories={filterOptions.categories}
-                sizes={filterOptions.sizes}
               />
             </Suspense>
           </div>
@@ -95,31 +98,27 @@ async function CatalogResults({
 }: {
   locale: Locale;
   dict: Dictionary["catalog"];
-  searchParams: Promise<{ brand?: string; category?: string; size?: string }>;
+  searchParams: Promise<{ brand?: string; category?: string; q?: string }>;
 }) {
   const resolvedSearchParams = await searchParams;
   const productList = await getProducts({
-    brand: resolvedSearchParams.brand,
-    category: resolvedSearchParams.category,
-    size: resolvedSearchParams.size,
+    brandId: resolvedSearchParams.brand,
+    categoryId: resolvedSearchParams.category,
+    q: resolvedSearchParams.q,
   });
 
   const hasFilters =
     resolvedSearchParams.brand ||
     resolvedSearchParams.category ||
-    resolvedSearchParams.size;
+    resolvedSearchParams.q;
 
   if (productList.length > 0) {
     return (
-      <ul className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" aria-label={dict.title}>
+      <ul className="mt-10 grid grid-cols-2 gap-x-3 gap-y-12 md:grid-cols-3 md:gap-x-5 lg:grid-cols-4" aria-label={dict.title}>
         {productList.map((product, i) => (
           <li key={product.id} className="list-none">
             <AnimateIn variant="fade-up" delay={100 + i * 60} className="h-full">
-              <ProductCard
-                product={product}
-                locale={locale}
-                currencyLabel={dict.currency}
-              />
+              <PremiumProductCard product={product} locale={locale} />
             </AnimateIn>
           </li>
         ))}

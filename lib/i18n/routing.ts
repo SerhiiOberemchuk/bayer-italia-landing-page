@@ -7,6 +7,8 @@ const localePrefixRegex = new RegExp(`^/(${locales.join("|")})(?=/|$)`)
 export const localizedPublicPaths = [
   "/",
   "/catalog",
+  "/cart",
+  "/checkout",
   "/delivery-from-italy",
   "/brands-from-italy",
   "/privacy",

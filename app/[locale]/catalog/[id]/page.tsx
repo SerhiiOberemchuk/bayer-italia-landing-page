@@ -1,38 +1,21 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Image from "next/image";
-import { Suspense } from "react";
+import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProduct } from "@/actions/catalog";
-import {
-  ArrowLeft,
-  Send,
-  ShoppingBag,
-  Tag,
-  Ruler,
-  Sparkles,
-  StickyNote,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
-import { getDictionary } from "@/lib/i18n/dictionary";
+import { Suspense } from "react";
+import { ArrowLeft, ShieldCheck, Truck, MessageCircle, Send } from "lucide-react";
+import { getProduct } from "@/actions/catalog/get-product";
+import { AddToCartButton } from "@/components/cart/add-to-cart-button";
+import { ensureLocale } from "@/lib/i18n/server";
 import { isValidLocale, siteUrl } from "@/lib/i18n/config";
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
-import { ensureLocale } from "@/lib/i18n/server";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { AnimateIn } from "@/components/animate-in";
-
-/** Повертає локалізоване значення поля */
-function localized(
-  locale: string,
-  uk: string | null | undefined,
-  en: string | null | undefined,
-  fallback: string | null | undefined,
-): string {
-  const value = locale === "uk" ? uk : en;
-  return value || fallback || "";
-}
+import {
+  formatMoney,
+  getCustomField,
+  getProductDescription,
+  getProductName,
+  getProductPrice,
+} from "@/lib/storefront/products";
 
 export async function generateMetadata({
   params,
@@ -41,31 +24,21 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, id } = await params;
   if (!isValidLocale(locale)) return {};
-
   const product = await getProduct(id);
   if (!product) return {};
 
-  const dict = await getDictionary(locale);
-  const title = localized(
-    locale,
-    product.titleUk,
-    product.titleEn,
-    product.title,
-  );
+  const name = getProductName(product, locale);
+  const description = getProductDescription(product, locale) || `${name} — Buyer Italia`;
   const pathname = `/catalog/${id}`;
-  const images = (product.images ?? []) as string[];
 
   return {
-    title: `${title} | ${dict.catalog.title}`,
-    description: `${product.brand} ${title} - ${product.price} ${dict.catalog.currency}`,
+    title: name,
+    description,
     alternates: {
       canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
       languages: buildLocalizedAlternates(pathname, siteUrl),
     },
-    openGraph:
-      images.length > 0
-        ? { images: [{ url: images[0], width: 800, height: 1000 }] }
-        : undefined,
+    openGraph: product.images[0]?.url ? { images: [product.images[0].url] } : undefined,
   };
 }
 
@@ -75,321 +48,201 @@ export default function ProductDetailPage({
   params: Promise<{ locale: string; id: string }>;
 }) {
   return (
-    <Suspense fallback={null}>
-      <ProductDetailPageContent params={params} />
+    <Suspense fallback={<ProductDetailSkeleton />}>
+      <ProductDetailContent params={params} />
     </Suspense>
   );
 }
 
-async function ProductDetailPageContent({
+async function ProductDetailContent({
   params,
 }: {
   params: Promise<{ locale: string; id: string }>;
 }) {
   const { locale: rawLocale, id } = await params;
   const locale = ensureLocale(rawLocale);
+  const isUk = locale === "uk";
+  const product = await getProduct(id);
+  if (!product || product.status !== "active") notFound();
 
-  const [dict, product] = await Promise.all([
-    getDictionary(locale),
-    getProduct(id),
-  ]);
-
-  if (!product) {
-    notFound();
-  }
-
-  // Localized fields
-  const title = localized(
-    locale,
-    product.titleUk,
-    product.titleEn,
-    product.title,
-  );
-  const category = localized(
-    locale,
-    product.categoryUk,
-    product.categoryEn,
-    product.category,
-  );
-  const condition = localized(
-    locale,
-    product.conditionUk,
-    product.conditionEn,
-    product.condition,
-  );
-  const note = localized(locale, product.noteUk, product.noteEn, product.note);
-
-  // Telegram prefilled message
-  const telegramText = encodeURIComponent(
-    locale === "uk"
-      ? `Привіт! Цікавить товар: ${title} (ID: ${product.id}). Чи є він в наявності?`
-      : `Hi! I'm interested in: ${title} (ID: ${product.id}). Is it available?`,
-  );
-  const telegramLink = `https://t.me/buyer_italia_shop?text=${telegramText}`;
-
-  const images = (product.images ?? []) as string[];
-  const hasImages = images.length > 0;
-  const productPath = `/catalog/${product.id}`;
-  const productUrl = `${siteUrl}${withLocalePath(locale, productPath)}`;
-  const productJsonLd = {
+  const name = getProductName(product, locale);
+  const description = getProductDescription(product, locale);
+  const price = getProductPrice(product, "EUR");
+  const size = getCustomField(product, ["size", "розмір", "taglia"]);
+  const color = getCustomField(product, ["color", "колір", "colore"]);
+  const condition = getCustomField(product, ["condition", "стан", "condizione"]);
+  const image = product.images[0]?.url || null;
+  const inStock = product.stock === null || product.stock > 0;
+  const productUrl = `${siteUrl}${withLocalePath(locale, `/catalog/${product.id}`)}`;
+  const question = isUk
+    ? `Вітаю! Маю питання щодо товару «${name}»: ${productUrl}`
+    : `Hello! I have a question about “${name}”: ${productUrl}`;
+  const questionUrl = `https://t.me/raisa_orb?text=${encodeURIComponent(question)}`;
+  const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: title,
-    description: `${product.brand} ${title}`,
-    image: images,
-    sku: product.id,
-    brand: product.brand
-      ? {
-          "@type": "Brand",
-          name: product.brand,
-        }
-      : undefined,
+    name,
+    description,
+    image: product.images.map((item) => item.url),
+    sku: product.sku || product.id,
+    brand: product.brand?.name ? { "@type": "Brand", name: product.brand.name } : undefined,
     offers: {
       "@type": "Offer",
-      priceCurrency: "EUR",
-      price: product.price,
-      availability: "https://schema.org/InStock",
+      priceCurrency: price.currency,
+      price: price.amount,
+      availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
       url: productUrl,
     },
   };
-  const breadcrumbJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: locale === "uk" ? "Головна" : "Home",
-        item: `${siteUrl}${withLocalePath(locale)}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: dict.catalog.title,
-        item: `${siteUrl}${withLocalePath(locale, "/catalog")}`,
-      },
-      {
-        "@type": "ListItem",
-        position: 3,
-        name: title,
-        item: productUrl,
-      },
-    ],
-  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+    <main id="main-content">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <div className="mx-auto max-w-[1480px] px-4 py-6 md:px-8 md:py-10">
+        <Link
+          href={withLocalePath(locale, "/catalog")}
+          className="mb-7 inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground"
+        >
+          <ArrowLeft className="size-3.5" aria-hidden="true" />
+          {isUk ? "Назад до магазину" : "Back to shop"}
+        </Link>
 
-      <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
-        <div className="mx-auto max-w-5xl">
-          {/* Back link (mobile) */}
-          <AnimateIn variant="fade-right">
-            <Link
-              href={withLocalePath(locale, "/catalog")}
-              className="sm:hidden inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-            >
-              <ArrowLeft className="size-3.5" aria-hidden="true" />
-              {dict.catalog.backToCatalog}
-            </Link>
-          </AnimateIn>
-
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-16">
-            {/* Image area */}
-            <AnimateIn variant="fade-right" delay={100}>
-              <div className="relative aspect-4/5 rounded-3xl overflow-hidden bg-secondary border border-border/40">
-                {hasImages ? (
-                  <>
-                    <Image
-                      src={images[0]}
-                      alt={title}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 1024px) 100vw, 50vw"
-                      priority
-                    />
-                    {/* Image counter */}
-                    {images.length > 1 && (
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 rounded-full bg-foreground/70 px-3 py-1.5 backdrop-blur-sm">
-                        <ChevronLeft className="size-3.5 text-background/70" aria-hidden="true" />
-                        <span className="text-xs font-medium text-background">
-                          1 / {images.length}
-                        </span>
-                        <ChevronRight className="size-3.5 text-background/70" aria-hidden="true" />
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 text-muted-foreground/30">
-                    <ShoppingBag className="size-16" strokeWidth={1} aria-hidden="true" />
-                    <span className="text-sm font-medium tracking-wider uppercase">
-                      {product.brand || "Buyer Italia"}
-                    </span>
-                    <p className="mt-2 text-xs text-muted-foreground/50 max-w-50 text-center">
-                      {dict.catalog.noImages}
-                    </p>
-                  </div>
-                )}
-                {/* Condition badge */}
-                {condition && (
-                  <div className="absolute top-4 left-4">
-                    <Badge className="bg-card/90 text-foreground backdrop-blur-sm border-border/60 text-sm">
-                      {condition}
-                    </Badge>
-                  </div>
-                )}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(360px,0.75fr)] lg:gap-16">
+          <div className="grid gap-3 sm:grid-cols-2">
+            {product.images.length > 0 ? (
+              product.images.map((item, index) => (
+                <div
+                  key={item.url}
+                  className={`relative bg-secondary ${index === 0 && product.images.length % 2 === 1 ? "sm:col-span-2 aspect-[4/5] sm:aspect-[16/11]" : "aspect-[3/4]"}`}
+                >
+                  <Image
+                    src={item.url}
+                    alt={`${name} ${index + 1}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 38vw"
+                    priority={index === 0}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="flex aspect-[3/4] items-center justify-center bg-secondary font-serif text-3xl italic text-muted-foreground/60 sm:col-span-2">
+                Buyer Italia
               </div>
+            )}
+          </div>
 
-              {/* Thumbnail row for multiple images */}
-              {images.length > 1 && (
-                <ul className="mt-3 flex gap-2 overflow-x-auto pb-2" aria-label={dict.catalog.images}>
-                  {images.map((img, i) => (
-                    <li
-                      key={i}
-                      className={`relative size-16 shrink-0 rounded-xl overflow-hidden border-2 ${
-                        i === 0
-                          ? "border-italy-green"
-                          : "border-border/40 opacity-60"
-                      }`}
-                    >
-                      <Image
-                        src={img}
-                        alt={`${title} ${i + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="64px"
-                      />
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </AnimateIn>
+          <aside className="lg:sticky lg:top-32 lg:h-fit lg:pr-[4vw]">
+            <p className="premium-eyebrow text-muted-foreground">
+              {product.brand?.name || product.category?.name || "Buyer Italia"}
+            </p>
+            <h1 className="mt-4 font-serif text-4xl font-normal leading-tight tracking-[-0.035em] md:text-5xl">
+              {name}
+            </h1>
+            <div className="mt-5 flex items-center gap-3 text-base">
+              <span>{formatMoney(price.amount, price.currency, locale)}</span>
+              {price.compareAtAmount && price.compareAtAmount > price.amount ? (
+                <span className="text-muted-foreground line-through">
+                  {formatMoney(price.compareAtAmount, price.currency, locale)}
+                </span>
+              ) : null}
+            </div>
 
-            {/* Product details */}
-            <div className="flex flex-col">
-              <AnimateIn variant="fade-up" delay={150}>
-                {product.brand && (
-                  <p className="text-sm font-medium tracking-widest text-italy-green uppercase mb-2">
-                    {product.brand}
+            <p className="mt-7 text-sm leading-7 text-muted-foreground">
+              {description ||
+                (isUk
+                  ? "Оригінальна річ, відібрана в Італії командою Buyer Italia."
+                  : "An original piece selected in Italy by Buyer Italia.")}
+            </p>
+
+            {(size || color || condition || product.sku) && (
+              <dl className="mt-8 divide-y divide-border border-y border-border text-sm">
+                {size ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Розмір" : "Size"}</dt><dd>{size}</dd></div> : null}
+                {color ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Колір" : "Color"}</dt><dd>{color}</dd></div> : null}
+                {condition ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Стан" : "Condition"}</dt><dd>{condition}</dd></div> : null}
+                {product.sku ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">SKU</dt><dd>{product.sku}</dd></div> : null}
+              </dl>
+            )}
+
+            <div className="mt-8">
+              {inStock ? (
+                <>
+                  <AddToCartButton
+                    locale={locale}
+                    item={{
+                      productId: product.id,
+                      name,
+                      sku: product.sku,
+                      price: price.amount,
+                      currency: price.currency,
+                      image,
+                      maxQuantity: product.stock,
+                    }}
+                  />
+                  <p className="mt-3 text-center text-[11px] leading-5 text-muted-foreground">
+                    {isUk
+                      ? "Наявність і доставку підтвердить менеджер. Оплата на сайті не списується."
+                      : "Availability and delivery are confirmed by a manager. No online charge is made."}
                   </p>
-                )}
-                <h1 className="font-serif text-3xl font-semibold text-foreground md:text-4xl text-balance leading-tight">
-                  {title}
-                </h1>
-              </AnimateIn>
-
-              <AnimateIn variant="fade-up" delay={250}>
-                <p className="mt-4 text-4xl font-serif font-semibold text-foreground">
-                  {product.price}{" "}
-                  <span className="text-xl text-muted-foreground font-sans font-normal">
-                    {dict.catalog.currency}
-                  </span>
-                </p>
-              </AnimateIn>
-
-              {/* Attributes */}
-              <AnimateIn variant="fade-up" delay={350}>
-                <dl className="mt-8 flex flex-col gap-4">
-                  {category && (
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
-                        <Tag className="size-4 text-muted-foreground" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <dt className="text-xs text-muted-foreground">
-                          {dict.catalog.filters.category}
-                        </dt>
-                        <dd className="text-sm font-medium text-foreground">
-                          {category}
-                        </dd>
-                      </div>
-                    </div>
-                  )}
-
-                  {product.size && (
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
-                        <Ruler className="size-4 text-muted-foreground" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <dt className="text-xs text-muted-foreground">
-                          {dict.catalog.filters.size}
-                        </dt>
-                        <dd className="text-sm font-medium text-foreground">
-                          {product.size}
-                        </dd>
-                      </div>
-                    </div>
-                  )}
-
-                  {condition && (
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-9 items-center justify-center rounded-lg bg-secondary">
-                        <Sparkles className="size-4 text-muted-foreground" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <dt className="text-xs text-muted-foreground">
-                          {dict.catalog.condition}
-                        </dt>
-                        <dd className="text-sm font-medium text-foreground">
-                          {condition}
-                        </dd>
-                      </div>
-                    </div>
-                  )}
-
-                  {note && (
-                    <div className="flex items-start gap-3">
-                      <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary">
-                        <StickyNote className="size-4 text-muted-foreground" aria-hidden="true" />
-                      </div>
-                      <div>
-                        <dt className="text-xs text-muted-foreground">
-                          {dict.catalog.note}
-                        </dt>
-                        <dd className="text-sm text-foreground leading-relaxed">
-                          {note}
-                        </dd>
-                      </div>
-                    </div>
-                  )}
-                </dl>
-              </AnimateIn>
-
-              {/* CTA */}
-              <AnimateIn variant="fade-up" delay={450}>
-                <div className="mt-10 flex flex-col gap-3">
-                  <Button
-                    size="lg"
-                    className="w-full gap-2 bg-[#0088cc] hover:bg-[#0077b5] text-white rounded-full h-14 text-base font-medium transition-transform hover:scale-[1.02] active:scale-[0.98]"
-                    asChild
-                  >
+                </>
+              ) : (
+                <div className="border-y border-border py-6">
+                  <p className="premium-eyebrow text-muted-foreground">
+                    {isUk ? "Наразі немає в наявності" : "Currently unavailable"}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                    {isUk
+                      ? "Цю позицію не можна замовити зараз. Запитайте про схожий товар або стежте за новими надходженнями в Telegram."
+                      : "This piece cannot be ordered right now. Ask about a similar item or follow new arrivals on Telegram."}
+                  </p>
+                  <div className="mt-5 grid gap-3">
                     <a
-                      href={telegramLink}
+                      href={questionUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label={`${dict.catalog.writeToTelegram}: ${title}`}
+                      className="inline-flex h-13 items-center justify-center gap-2 bg-foreground px-6 text-xs font-medium uppercase tracking-[0.15em] text-background transition-colors hover:bg-[#34322f]"
                     >
-                      <Send className="size-5" aria-hidden="true" />
-                      {dict.catalog.writeToTelegram}
+                      <MessageCircle className="size-4" strokeWidth={1.5} aria-hidden="true" />
+                      {isUk ? "Запитати про цей товар" : "Ask about this item"}
                     </a>
-                  </Button>
-                  <p className="text-center text-xs text-muted-foreground">
-                    {dict.catalog.orderItem}
-                  </p>
+                    <a
+                      href="https://t.me/buyer_italia_shop"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex h-13 items-center justify-center gap-2 border border-foreground px-6 text-xs font-medium uppercase tracking-[0.15em] transition-colors hover:bg-foreground hover:text-background"
+                    >
+                      <Send className="size-4" strokeWidth={1.5} aria-hidden="true" />
+                      {isUk ? "Новинки в Telegram" : "New arrivals on Telegram"}
+                    </a>
+                  </div>
                 </div>
-              </AnimateIn>
+              )}
             </div>
-          </div>
+
+            <div className="mt-8 space-y-4 border-t border-border pt-6 text-xs leading-5 text-muted-foreground">
+              <p className="flex gap-3"><ShieldCheck className="mt-0.5 size-4 shrink-0" strokeWidth={1.5} aria-hidden="true" />{isUk ? "Оригінальність підтверджується покупкою в офіційних магазинах Італії." : "Authenticity is backed by sourcing from official Italian stores."}</p>
+              <p className="flex gap-3"><Truck className="mt-0.5 size-4 shrink-0" strokeWidth={1.5} aria-hidden="true" />{isUk ? "Доставка в Україну та країни Європи після підтвердження замовлення." : "Delivery to Ukraine and across Europe after confirmation."}</p>
+              {inStock ? <a className="flex gap-3 hover:text-foreground" href={questionUrl} target="_blank" rel="noopener noreferrer"><MessageCircle className="mt-0.5 size-4 shrink-0" strokeWidth={1.5} aria-hidden="true" />{isUk ? "Потрібна консультація? Напишіть особистому баєру." : "Need advice? Message your personal buyer."}</a> : null}
+            </div>
+          </aside>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
+  );
+}
+
+function ProductDetailSkeleton() {
+  return (
+    <main id="main-content" className="mx-auto max-w-[1480px] px-4 py-10 md:px-8">
+      <div className="grid animate-pulse gap-10 lg:grid-cols-[1.25fr_0.75fr] lg:gap-16">
+        <div className="aspect-[4/5] bg-secondary sm:aspect-[16/11]" />
+        <div className="space-y-5 pt-8">
+          <div className="h-3 w-28 bg-secondary" />
+          <div className="h-12 w-4/5 bg-secondary" />
+          <div className="h-5 w-24 bg-secondary" />
+          <div className="h-24 w-full bg-secondary" />
+        </div>
+      </div>
+    </main>
   );
 }

@@ -6,8 +6,9 @@ import { locales, isValidLocale, siteUrl } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { ensureLocale } from "@/lib/i18n/server";
-import { SiteHeader } from "@/components/site-header";
+import { PremiumSiteHeader } from "@/components/premium-site-header";
 import { Footer } from "@/components/footer";
+import { CartProvider } from "@/components/cart/cart-provider";
 import "../globals.css";
 
 const dmSans = DM_Sans({
@@ -185,11 +186,17 @@ export default async function LocaleLayout({
         >
           {skipLinkLabel}
         </a>
-        <div className="min-h-screen bg-background">
-          <SiteHeader locale={locale} topBar={dict.hero.topBar} />
-          {children}
-          <Footer dict={dict.footer} locale={locale} />
-        </div>
+        <CartProvider>
+        <CartProvider>
+        <CartProvider>
+          <div className="min-h-screen bg-background">
+            <PremiumSiteHeader locale={locale} topBar={dict.hero.topBar} />
+            {children}
+            <Footer dict={dict.footer} locale={locale} />
+          </div>
+        </CartProvider>
+        </CartProvider>
+        </CartProvider>
         <Analytics />
       </body>
     </html>

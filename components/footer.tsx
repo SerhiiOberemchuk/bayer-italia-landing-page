@@ -19,7 +19,7 @@ export function Footer({ dict, locale }: FooterProps) {
           <div className="flex flex-col items-center text-center">
             <BuyerItaliaLogo size="sm" className="mb-4" />
 
-            <h2 id="footer-title" className="font-serif text-xl font-semibold text-foreground">
+            <h2 id="footer-title" className="sr-only">
               Buyer Italia
             </h2>
             <p className="mt-2 max-w-md text-sm text-muted-foreground">{dict.description}</p>
