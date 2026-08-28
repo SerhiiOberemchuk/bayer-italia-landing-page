@@ -291,18 +291,21 @@ const en: Dictionary = {
     title: "Subscribe to Telegram — new arrivals daily",
     subtitle:
       "Be the first to know about new arrivals, sales and exclusive offers. Join our community!",
-    ctaTelegram: "Go to Telegram",
-    ctaPersonal: "Message @raisa_orb",
+    ctaTelegram: "View new arrivals",
+    ctaPersonal: "Message your buyer",
   },
   footer: {
     description:
       "Your personal buyer from Italy. Original items directly from Italian stores.",
+    telegramChannel: "New arrivals on Telegram",
+    personalContact: "Message your buyer",
     privacy: "Privacy Policy",
     cookies: "Cookie Policy",
     terms: "Terms of Use",
     disclaimer:
       "We are not an official store. We operate as a personal buyer service — purchasing original items in Italy on behalf of our clients.",
     copyright: "Buyer Italia. All rights reserved.",
+    developedBy: "Website by",
   },
   stickyBar: {
     telegram: "Telegram",

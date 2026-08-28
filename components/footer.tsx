@@ -30,11 +30,11 @@ export function Footer({ dict, locale }: FooterProps) {
                   href="https://t.me/buyer_italia_shop"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Buyer Italia Telegram channel"
+                  aria-label={dict.telegramChannel}
                   className="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 >
                   <Send className="size-4" aria-hidden="true" />
-                  @buyer_italia_shop
+                  {dict.telegramChannel}
                 </a>
               </li>
               <li className="list-none">
@@ -42,11 +42,11 @@ export function Footer({ dict, locale }: FooterProps) {
                   href="https://t.me/raisa_orb"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Write to Raisa on Telegram"
+                  aria-label={dict.personalContact}
                   className="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
                 >
                   <MessageCircle className="size-4" aria-hidden="true" />
-                  @raisa_orb
+                  {dict.personalContact}
                 </a>
               </li>
             </ul>
@@ -98,7 +98,21 @@ export function Footer({ dict, locale }: FooterProps) {
 
             <div className="mt-8 w-full border-t pt-8">
               <p className="text-xs text-muted-foreground">{dict.disclaimer}</p>
-              <p className="mt-2 text-xs text-muted-foreground">{dict.copyright}</p>
+              <div className="mt-3 flex flex-col items-center justify-center gap-2 text-xs text-muted-foreground sm:flex-row sm:gap-4">
+                <p>{dict.copyright}</p>
+                <span className="hidden text-border sm:inline" aria-hidden="true">/</span>
+                <p>
+                  {dict.developedBy}{" "}
+                  <a
+                    href="https://oberemchuk.pro/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium uppercase tracking-[0.08em] text-foreground transition-colors hover:text-italy-green"
+                  >
+                    Oberemchuk
+                  </a>
+                </p>
+              </div>
             </div>
           </div>
         </AnimateIn>
