@@ -1,10 +1,12 @@
 import { Suspense } from "react";
 import Link from "next/link";
+import { Menu } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { CartLink } from "@/components/cart/cart-link";
+import { MobileMenu } from "@/components/mobile-menu";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 
 interface SiteHeaderProps {
@@ -22,8 +24,35 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
         <span className="hidden sm:inline">{topBar.directPurchases} · {topBar.original}</span>
       </div>
       <div className="border-b border-border/80 px-4 md:px-8">
-        <div className="mx-auto grid h-[72px] max-w-[1480px] grid-cols-[auto_1fr_auto] items-center lg:grid-cols-[1fr_auto_1fr]">
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
+        <div className="mx-auto grid h-16 max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center lg:hidden">
+          <div className="justify-self-start">
+            <Suspense
+              fallback={
+                <div
+                  className="inline-flex size-10 items-center justify-center"
+                  aria-hidden="true"
+                >
+                  <Menu className="size-5" strokeWidth={1.5} />
+                </div>
+              }
+            >
+              <MobileMenu locale={locale} />
+            </Suspense>
+          </div>
+          <Link
+            href={withLocalePath(locale)}
+            aria-label={isUk ? "Головна Buyer Italia" : "Buyer Italia home"}
+            className="col-start-2"
+          >
+            <BuyerItaliaLogo size="sm" />
+          </Link>
+          <div className="col-start-3 justify-self-end">
+            <CartLink locale={locale} />
+          </div>
+        </div>
+
+        <div className="mx-auto hidden h-[72px] max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center lg:grid">
+          <nav className="flex items-center gap-7" aria-label={isUk ? "Основна навігація" : "Primary navigation"}>
             <Link className="premium-nav-link" href={withLocalePath(locale, "/catalog")}>
               {isUk ? "Магазин" : "Shop"}
             </Link>
@@ -46,17 +75,15 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
           <Link
             href={withLocalePath(locale)}
             aria-label={isUk ? "Головна Buyer Italia" : "Buyer Italia home"}
-            className="col-start-1 lg:col-start-2"
+            className="col-start-2"
           >
             <BuyerItaliaLogo size="sm" />
           </Link>
 
-          <nav className="col-start-3 flex items-center justify-end gap-1" aria-label="Header actions">
-            <div className="hidden sm:block">
-              <Suspense fallback={null}>
-                <LanguageSwitcher locale={locale} />
-              </Suspense>
-            </div>
+          <nav className="col-start-3 flex items-center justify-end gap-1" aria-label={isUk ? "Дії у шапці" : "Header actions"}>
+            <Suspense fallback={null}>
+              <LanguageSwitcher locale={locale} />
+            </Suspense>
             <CartLink locale={locale} />
           </nav>
         </div>

@@ -108,28 +108,35 @@ async function ProductDetailContent({
         </Link>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.25fr)_minmax(360px,0.75fr)] lg:gap-16">
-          <div className="grid gap-3 sm:grid-cols-2">
-            {product.images.length > 0 ? (
-              product.images.map((item, index) => (
-                <div
-                  key={item.url}
-                  className={`relative bg-secondary ${index === 0 && product.images.length % 2 === 1 ? "sm:col-span-2 aspect-[4/5] sm:aspect-[16/11]" : "aspect-[3/4]"}`}
-                >
-                  <Image
-                    src={item.url}
-                    alt={`${name} ${index + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 1024px) 100vw, 38vw"
-                    priority={index === 0}
-                  />
+          <div>
+            <div className="flex snap-x snap-mandatory gap-3 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:grid sm:grid-cols-2 sm:overflow-visible">
+              {product.images.length > 0 ? (
+                product.images.map((item, index) => (
+                  <div
+                    key={item.url}
+                    className={`relative aspect-[3/4] min-w-full shrink-0 snap-center bg-secondary sm:min-w-0 ${index === 0 && product.images.length % 2 === 1 ? "sm:col-span-2 sm:aspect-[16/11]" : ""}`}
+                  >
+                    <Image
+                      src={item.url}
+                      alt={`${name} ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 38vw"
+                      priority={index === 0}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="flex aspect-[3/4] min-w-full shrink-0 items-center justify-center bg-secondary font-serif text-3xl italic text-muted-foreground/60 sm:col-span-2 sm:min-w-0">
+                  Buyer Italia
                 </div>
-              ))
-            ) : (
-              <div className="flex aspect-[3/4] items-center justify-center bg-secondary font-serif text-3xl italic text-muted-foreground/60 sm:col-span-2">
-                Buyer Italia
-              </div>
-            )}
+              )}
+            </div>
+            {product.images.length > 1 ? (
+              <p className="mt-2 text-right text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:hidden">
+                {isUk ? `Гортайте фото · ${product.images.length}` : `Swipe photos · ${product.images.length}`}
+              </p>
+            ) : null}
           </div>
 
           <aside className="lg:sticky lg:top-32 lg:h-fit lg:pr-[4vw]">

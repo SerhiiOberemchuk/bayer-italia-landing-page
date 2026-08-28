@@ -1,4 +1,3 @@
-import { Card, CardContent } from "@/components/ui/card"
 import { Star } from "lucide-react"
 import { AnimateIn } from "@/components/animate-in"
 import type { Dictionary } from "@/lib/i18n/dictionary"
@@ -10,42 +9,42 @@ interface ReviewsProps {
 export function Reviews({ dict }: ReviewsProps) {
   return (
     <section
-      className="px-4 py-16 md:px-8 md:py-24"
+      className="px-4 py-20 md:px-8 md:py-28"
       aria-labelledby="reviews-title"
     >
-      <div className="mx-auto max-w-5xl">
-        <AnimateIn variant="fade-up">
-          <h2
-            id="reviews-title"
-            className="text-center font-serif text-2xl font-semibold text-foreground md:text-3xl lg:text-4xl"
-          >
-            {dict.title}
-          </h2>
-        </AnimateIn>
-        <AnimateIn variant="fade-up" delay={100}>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-muted-foreground">
-            {dict.subtitle}
-          </p>
-        </AnimateIn>
+      <div className="mx-auto max-w-[1280px]">
+        <div className="grid gap-5 border-b border-border pb-6 md:grid-cols-[1fr_auto] md:items-end">
+          <AnimateIn variant="fade-up">
+            <h2
+              id="reviews-title"
+              className="font-serif text-4xl font-normal tracking-[-0.04em] text-foreground md:text-5xl"
+            >
+              {dict.title}
+            </h2>
+          </AnimateIn>
+          <AnimateIn variant="fade-up" delay={100}>
+            <p className="max-w-xl text-sm leading-6 text-muted-foreground md:text-right">
+              {dict.subtitle}
+            </p>
+          </AnimateIn>
+        </div>
 
-        <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="grid lg:grid-cols-3">
           {dict.items.map((review, index) => (
-            <li key={index} className="list-none">
+            <li key={index} className="list-none lg:border-l lg:border-border lg:first:border-l-0">
               <AnimateIn variant="fade-up" delay={200 + index * 120} className="h-full">
-                <Card className="border bg-card rounded-2xl hover-lift h-full">
-                  <CardContent className="p-6">
-                    <div className="flex gap-1 mb-4" aria-label={`${review.rating} out of 5 stars`}>
+                <article className="h-full border-b border-border px-1 py-8 sm:px-6 lg:px-8 lg:py-10">
+                    <div className="mb-7 flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
                       {Array.from({ length: review.rating }).map((_, i) => (
-                        <Star key={i} className="size-4 fill-yellow-400 text-yellow-400" aria-hidden="true" />
+                        <Star key={i} className="size-3.5 fill-foreground text-foreground" aria-hidden="true" />
                       ))}
                     </div>
-                    <p className="text-sm text-foreground leading-relaxed">&ldquo;{review.text}&rdquo;</p>
-                    <div className="mt-4 pt-4 border-t">
-                      <p className="font-semibold text-foreground">{review.name}</p>
-                      <p className="text-sm text-muted-foreground">{review.location}</p>
+                    <p className="font-serif text-xl leading-8 text-foreground">&ldquo;{review.text}&rdquo;</p>
+                    <div className="mt-8 border-t border-border pt-4">
+                      <p className="text-sm font-medium text-foreground">{review.name}</p>
+                      <p className="mt-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">{review.location}</p>
                     </div>
-                  </CardContent>
-                </Card>
+                </article>
               </AnimateIn>
             </li>
           ))}

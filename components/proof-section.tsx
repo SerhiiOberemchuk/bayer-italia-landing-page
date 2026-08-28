@@ -15,85 +15,82 @@ export function ProofSection({ locale }: ProofSectionProps) {
 
   const items = [
     {
-      title: isUk ? "Фото перед відправкою" : "Photos before shipping",
+      title: isUk ? "Показуємо саме ваш товар" : "See your actual item",
       text: isUk
-        ? "Показуємо реальний товар, бірки, стан і деталі покупки до відправки клієнту."
-        : "We show the real item, tags, condition, and purchase details before shipment.",
+        ? "Перед відправленням надсилаємо фото речі, бірок, пакування та важливих деталей."
+        : "Before dispatch, we send photos of the item, its tags, packaging, and important details.",
     },
     {
-      title: isUk ? "Чеки та оригінальність" : "Receipts and authenticity",
+      title: isUk ? "Купуємо в офіційних магазинах" : "Sourced from official stores",
       text: isUk
-        ? "Працюємо з офіційними магазинами та надсилаємо підтвердження покупки, коли це доступно."
-        : "We buy from official stores and share purchase confirmation whenever available.",
+        ? "Замовляємо у брендів та перевірених ритейлерів Італії, зберігаючи чек або інше підтвердження покупки."
+        : "We order from brands and trusted Italian retailers, keeping the receipt or other proof of purchase.",
     },
     {
-      title: isUk ? "Прозорий маршрут" : "Clear delivery route",
+      title: isUk ? "Залишаємося на зв’язку" : "Updates at every stage",
       text: isUk
-        ? "Після викупу пояснюємо етапи: покупка, фото, пакування, трекінг, доставка в Україну або ЄС."
-        : "After purchase, we explain each step: buying, photos, packing, tracking, and delivery to Ukraine or the EU.",
+        ? "Повідомляємо про викуп, отримання товару в Італії, пакування та передачу в доставку."
+        : "We keep you updated when the item is purchased, received in Italy, packed, and handed over for delivery.",
     },
     {
-      title: isUk ? "Зрозуміла калькуляція" : "Clear price breakdown",
+      title: isUk ? "Вартість без сюрпризів" : "No surprises in the price",
       text: isUk
-        ? "Фінальна сума складається з ціни магазину, сервісу та доставки без прихованих доплат."
-        : "The final total includes store price, service fee, and shipping with no hidden add-ons.",
+        ? "До оплати пояснюємо повну суму: вартість товару, послугу баєра та доставку."
+        : "Before payment, we explain the full total: the item, the buyer service, and delivery.",
     },
   ];
 
   return (
-    <section className="px-4 py-16 md:px-8 md:py-24" aria-labelledby="proof-title">
-      <div className="mx-auto max-w-6xl">
+    <section className="border-y border-border/70 bg-secondary/20 px-4 py-20 md:px-8 md:py-28" aria-labelledby="proof-title">
+      <div className="mx-auto max-w-[1280px]">
         <AnimateIn variant="fade-up">
-          <div className="rounded-[2rem] border border-border/60 bg-linear-to-br from-card via-card to-secondary/40 p-6 md:p-10">
-            <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+          <div className="grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
               <div>
-                <p className="text-sm font-medium uppercase tracking-[0.18em] text-italy-green">
-                  {isUk ? "Довіра в деталях" : "Trust in details"}
+                <p className="premium-eyebrow text-italy-green">
+                  {isUk ? "Довіра, підтверджена діями" : "Trust, backed by action"}
                 </p>
                 <h2
                   id="proof-title"
-                  className="mt-3 font-serif text-3xl font-semibold text-foreground md:text-4xl"
+                  className="mt-5 max-w-[13ch] font-serif text-4xl font-normal leading-[1.02] tracking-[-0.04em] text-foreground md:text-5xl"
                 >
                   {isUk
-                    ? "Що клієнт бачить до того, як товар приїде"
-                    : "What the client sees before the item arrives"}
+                    ? "Від викупу в Італії до відправлення — усе прозоро"
+                    : "From purchase in Italy to dispatch — everything is clear"}
                 </h2>
-                <p className="mt-4 max-w-2xl text-muted-foreground">
+                <p className="mt-6 max-w-xl text-[15px] leading-7 text-muted-foreground">
                   {isUk
-                    ? "Для баєр-сервісу важливі не лише красиві обіцянки. Сайт має одразу пояснювати, як ви підтверджуєте оригінальність, як проходить викуп і чому замовлення виглядає контрольованим на кожному етапі."
-                    : "A buyer service needs more than attractive promises. The site should clearly explain how authenticity is confirmed, how sourcing works, and why each order feels controlled at every step."}
+                    ? "Ми купуємо речі в офіційних магазинах і особисто супроводжуємо кожне замовлення. Ви отримуєте фото саме свого товару, підтвердження покупки та зрозумілий розрахунок вартості. На кожному етапі знаєте, де перебуває замовлення і що відбуватиметься далі."
+                    : "We source from official stores and personally oversee every order. You receive photos of your actual item, proof of purchase, and a clear price breakdown. At every stage, you know where your order is and what happens next."}
                 </p>
 
-                <div className="mt-8 flex flex-wrap gap-3">
+                <div className="mt-9 flex flex-wrap gap-3">
                   <Link
                     href={withLocalePath(locale, "/delivery-from-italy")}
-                    className="inline-flex items-center gap-2 rounded-full bg-foreground px-5 py-3 text-sm font-medium text-background"
+                    className="inline-flex h-13 items-center gap-3 bg-foreground px-7 text-[11px] font-medium uppercase tracking-[0.15em] text-background transition-colors hover:bg-[#34322f]"
                   >
-                    {isUk ? "Як проходить доставка" : "How delivery works"}
+                    {isUk ? "Детальніше про доставку" : "Explore delivery"}
                     <ArrowRight className="size-4" aria-hidden="true" />
                   </Link>
                   <Link
                     href={withLocalePath(locale, "/brands-from-italy")}
-                    className="inline-flex items-center gap-2 rounded-full border px-5 py-3 text-sm font-medium hover:bg-secondary"
+                    className="inline-flex h-13 items-center border border-foreground px-7 text-[11px] font-medium uppercase tracking-[0.15em] transition-colors hover:bg-foreground hover:text-background"
                   >
-                    {isUk ? "Які бренди замовляємо" : "Brands we source"}
+                    {isUk ? "Переглянути бренди" : "Explore brands"}
                   </Link>
                 </div>
               </div>
 
-              <ul className="grid gap-4 sm:grid-cols-2">
+              <ul className="grid gap-x-8 gap-y-10 sm:grid-cols-2">
                 {items.map((item, index) => {
                   const Icon = proofIcons[index];
 
                   return (
                     <li key={item.title} className="list-none">
                       <AnimateIn variant="fade-up" delay={120 + index * 70} className="h-full">
-                        <article className="h-full rounded-2xl border border-border/60 bg-card p-5 shadow-sm">
-                          <div className="flex size-11 items-center justify-center rounded-xl bg-italy-green/10">
-                            <Icon className="size-5 text-italy-green" aria-hidden="true" />
-                          </div>
-                          <h3 className="mt-4 font-semibold text-foreground">{item.title}</h3>
-                          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                        <article className="h-full border-t border-border pt-5">
+                          <Icon className="size-5 text-italy-green" strokeWidth={1.5} aria-hidden="true" />
+                          <h3 className="mt-5 text-base font-medium text-foreground">{item.title}</h3>
+                          <p className="mt-3 text-sm leading-6 text-muted-foreground">
                             {item.text}
                           </p>
                         </article>
@@ -102,7 +99,6 @@ export function ProofSection({ locale }: ProofSectionProps) {
                   );
                 })}
               </ul>
-            </div>
           </div>
         </AnimateIn>
       </div>

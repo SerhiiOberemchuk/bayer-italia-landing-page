@@ -52,7 +52,7 @@ export default async function DeliveryFromItalyPage({
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8 md:py-16">
-      <div className="mx-auto max-w-4xl">
+      <div className="mx-auto max-w-[1100px]">
         <Button variant="ghost" className="mb-8" asChild>
           <Link href={withLocalePath(locale)}>
             <ArrowLeft className="mr-2 size-4" aria-hidden="true" />
@@ -60,12 +60,12 @@ export default async function DeliveryFromItalyPage({
           </Link>
         </Button>
 
-        <h1 className="font-serif text-3xl font-semibold text-foreground md:text-4xl">
+        <h1 className="max-w-[18ch] font-serif text-4xl font-normal leading-[1.05] tracking-[-0.04em] text-foreground md:text-6xl">
           {isUk
             ? "Доставка одягу з Італії в Україну та Європу"
             : "Delivery from Italy to Ukraine and Europe"}
         </h1>
-        <p className="mt-4 text-lg text-muted-foreground">
+        <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground md:text-lg">
           {isUk
             ? "Buyer Italia допомагає купувати оригінальні речі в італійських магазинах і безпечно доставляти їх в Україну та країни Європи."
             : "Buyer Italia helps you buy original items in Italian stores and safely deliver them to Ukraine and European countries."}
@@ -78,7 +78,7 @@ export default async function DeliveryFromItalyPage({
           <h2 id="delivery-highlights-title" className="sr-only">
             {isUk ? "Переваги доставки" : "Delivery highlights"}
           </h2>
-          <article className="rounded-2xl border bg-card p-5">
+          <article className="border-t border-border pt-5">
             <Package className="size-5 text-italy-green" aria-hidden="true" />
             <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Фото перед відправкою" : "Photo before shipping"}
@@ -89,7 +89,7 @@ export default async function DeliveryFromItalyPage({
                 : "You see the real product before shipping."}
             </p>
           </article>
-          <article className="rounded-2xl border bg-card p-5">
+          <article className="border-t border-border pt-5">
             <Truck className="size-5 text-italy-green" aria-hidden="true" />
             <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Прозорі терміни" : "Clear timelines"}
@@ -100,7 +100,7 @@ export default async function DeliveryFromItalyPage({
                 : "Typically 7-10 days to Ukraine, 10-14 days to Europe."}
             </p>
           </article>
-          <article className="rounded-2xl border bg-card p-5">
+          <article className="border-t border-border pt-5">
             <ShieldCheck className="size-5 text-italy-green" aria-hidden="true" />
             <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Оригінальність" : "Authenticity"}
@@ -113,8 +113,8 @@ export default async function DeliveryFromItalyPage({
           </article>
         </section>
 
-        <section className="mt-10 rounded-2xl border bg-card p-6">
-          <h2 className="font-serif text-2xl font-semibold text-foreground">
+        <section className="mt-14 border-t border-border pt-8">
+          <h2 className="font-serif text-3xl font-normal tracking-[-0.03em] text-foreground">
             {isUk ? "Як відбувається доставка" : "How delivery works"}
           </h2>
           <ol className="mt-4 list-decimal space-y-2 pl-6 text-foreground/90">
@@ -145,7 +145,7 @@ export default async function DeliveryFromItalyPage({
           <h2 id="delivery-details-title" className="sr-only">
             {isUk ? "Деталі доставки" : "Delivery details"}
           </h2>
-          <article className="rounded-2xl border bg-card p-5">
+          <article className="border-t border-border pt-5">
             <Wallet className="size-5 text-italy-green" aria-hidden="true" />
             <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Що входить у фінальну суму" : "What is included in the final total"}
@@ -156,7 +156,7 @@ export default async function DeliveryFromItalyPage({
                 : "Store price, buyer service, and shipping. We confirm the final breakdown before payment."}
             </p>
           </article>
-          <article className="rounded-2xl border bg-card p-5">
+          <article className="border-t border-border pt-5">
             <MessagesSquare className="size-5 text-italy-green" aria-hidden="true" />
             <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Що підготувати перед замовленням" : "What to prepare before ordering"}
@@ -167,7 +167,7 @@ export default async function DeliveryFromItalyPage({
                 : "A product link, brand, size, color, and delivery country. This speeds up availability checks."}
             </p>
           </article>
-          <article className="rounded-2xl border bg-card p-5">
+          <article className="border-t border-border pt-5">
             <MapPinned className="size-5 text-italy-green" aria-hidden="true" />
             <h3 className="mt-3 font-medium text-foreground">
               {isUk ? "Для яких країн підходить сервіс" : "Which countries the service fits"}
@@ -180,8 +180,8 @@ export default async function DeliveryFromItalyPage({
           </article>
         </section>
 
-        <section className="mt-10 rounded-2xl border bg-card p-6">
-          <h2 className="font-serif text-2xl font-semibold text-foreground">
+        <section className="mt-14 border-t border-border pt-8">
+          <h2 className="font-serif text-3xl font-normal tracking-[-0.03em] text-foreground">
             {isUk ? "Кому підходить доставка з Італії" : "Who this delivery model fits"}
           </h2>
           <ul className="mt-4 space-y-3 text-foreground/90">
@@ -203,8 +203,8 @@ export default async function DeliveryFromItalyPage({
           </ul>
         </section>
 
-        <section className="mt-10 rounded-2xl border bg-card p-6">
-          <h2 className="font-serif text-2xl font-semibold text-foreground">
+        <section className="mt-14 border-t border-border pt-8">
+          <h2 className="font-serif text-3xl font-normal tracking-[-0.03em] text-foreground">
             {isUk ? "Корисні сторінки" : "Useful pages"}
           </h2>
           <nav className="mt-4" aria-label={isUk ? "Корисні сторінки" : "Useful pages"}>
@@ -212,7 +212,7 @@ export default async function DeliveryFromItalyPage({
               <li className="list-none">
                 <Link
                   href={withLocalePath(locale, "/brands-from-italy")}
-                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                  className="inline-flex border border-foreground px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-foreground hover:text-background"
                 >
                   {isUk ? "Бренди з Італії" : "Brands from Italy"}
                 </Link>
@@ -220,7 +220,7 @@ export default async function DeliveryFromItalyPage({
               <li className="list-none">
                 <Link
                   href={withLocalePath(locale, "/catalog")}
-                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                  className="inline-flex border border-foreground px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-foreground hover:text-background"
                 >
                   {isUk ? "Каталог товарів" : "Product catalog"}
                 </Link>
@@ -228,7 +228,7 @@ export default async function DeliveryFromItalyPage({
               <li className="list-none">
                 <Link
                   href={withLocalePath(locale, "/terms")}
-                  className="rounded-full border px-4 py-2 text-sm hover:bg-secondary"
+                  className="inline-flex border border-foreground px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-foreground hover:text-background"
                 >
                   {isUk ? "Умови сервісу" : "Terms of service"}
                 </Link>

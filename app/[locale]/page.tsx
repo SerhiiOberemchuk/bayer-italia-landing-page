@@ -43,7 +43,7 @@ export default async function Home({
   const dict = await getDictionary(locale);
 
   return (
-    <main id="main-content" className="min-h-screen bg-background pb-24 md:pb-0">
+    <main id="main-content" className="min-h-screen bg-background">
       <PremiumHero dict={dict.hero} locale={locale} />
       <InStockShowcase dict={dict.inStock} locale={locale} />
       <ProofSection locale={locale} />

@@ -187,15 +187,11 @@ export default async function LocaleLayout({
           {skipLinkLabel}
         </a>
         <CartProvider>
-        <CartProvider>
-        <CartProvider>
           <div className="min-h-screen bg-background">
             <PremiumSiteHeader locale={locale} topBar={dict.hero.topBar} />
             {children}
             <Footer dict={dict.footer} locale={locale} />
           </div>
-        </CartProvider>
-        </CartProvider>
         </CartProvider>
         <Analytics />
       </body>
