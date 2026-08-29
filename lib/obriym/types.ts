@@ -95,6 +95,15 @@ export type OrderInput = {
       region?: string;
     };
   };
+  delivery: {
+    carrier?: string;
+    method: "branch" | "courier" | "pickup";
+    branch?: string;
+    recipientName?: string;
+    phone?: string;
+    comment?: string;
+    cod?: boolean;
+  };
   items: Array<{
     productName: string;
     quantity: number;

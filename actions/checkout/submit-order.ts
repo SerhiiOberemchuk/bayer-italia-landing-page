@@ -24,22 +24,42 @@ const optionalText = (maxLength: number) =>
     .max(maxLength)
     .transform((value) => value || undefined);
 
+const recipientSchema = z.discriminatedUnion("isCustomer", [
+  z.object({ isCustomer: z.literal(true) }),
+  z.object({
+    isCustomer: z.literal(false),
+    name: z.string().trim().min(1).max(200),
+    phone: z.string().trim().min(6).max(50),
+  }),
+]);
+
 const checkoutOrderSchema = z.object({
   requestId: z.string().uuid(),
   locale: z.enum(["uk", "en"]),
   customer: z.object({
     firstName: z.string().trim().min(1).max(120),
-    lastName: optionalText(120),
-    email: z
-      .union([z.string().trim().email().max(255), z.literal("")])
-      .transform((value) => value || undefined),
+    lastName: z.string().trim().min(1).max(120),
+    email: z.string().trim().email().max(255),
     phone: z.string().trim().min(6).max(50),
     country: z.string().trim().length(2).transform((value) => value.toUpperCase()),
     city: z.string().trim().min(1).max(120),
-    line1: z.string().trim().min(1).max(255),
     line2: optionalText(255),
     postalCode: optionalText(32),
   }),
+  delivery: z.discriminatedUnion("method", [
+    z.object({
+      method: z.literal("branch"),
+      branch: z.string().trim().min(1).max(200),
+      comment: optionalText(1000),
+      recipient: recipientSchema,
+    }),
+    z.object({
+      method: z.literal("courier"),
+      address: z.string().trim().min(1).max(255),
+      comment: optionalText(1000),
+      recipient: recipientSchema,
+    }),
+  ]),
   items: z
     .array(
       z.object({
@@ -118,7 +138,19 @@ export async function submitOrder(input: unknown): Promise<SubmitOrderResult> {
     return { ok: false, code: "SERVICE_UNAVAILABLE" };
   }
 
-  const { customer, items, locale, requestId } = parsed.data;
+  const { customer, delivery, items, locale, requestId } = parsed.data;
+
+  if (delivery.method === "branch" && customer.country !== "UA") {
+    return { ok: false, code: "INVALID_INPUT" };
+  }
+
+  if (
+    delivery.method === "courier" &&
+    customer.country !== "UA" &&
+    !customer.postalCode
+  ) {
+    return { ok: false, code: "INVALID_INPUT" };
+  }
 
   try {
     const orderItems = await resolveOrderItems(items, locale);
@@ -126,21 +158,37 @@ export async function submitOrder(input: unknown): Promise<SubmitOrderResult> {
 
     if (currencies.size !== 1) throw new ProductUnavailableError();
 
+    const shippingLine1 =
+      delivery.method === "branch" ? delivery.branch : delivery.address;
+    const recipient = delivery.recipient.isCustomer
+      ? {}
+      : {
+          recipientName: delivery.recipient.name,
+          phone: delivery.recipient.phone,
+        };
+
     const order: OrderInput = {
       externalId: `buyer-italia-${requestId}`,
       currency: orderItems[0].currency,
       customer: {
         firstName: customer.firstName,
-        ...(customer.lastName ? { lastName: customer.lastName } : {}),
-        ...(customer.email ? { email: customer.email } : {}),
+        lastName: customer.lastName,
+        email: customer.email,
         phone: customer.phone,
         shippingAddress: {
           city: customer.city,
           country: customer.country,
-          line1: customer.line1,
+          line1: shippingLine1,
           ...(customer.line2 ? { line2: customer.line2 } : {}),
           ...(customer.postalCode ? { postalCode: customer.postalCode } : {}),
         },
+      },
+      delivery: {
+        method: delivery.method,
+        ...(customer.country === "UA" ? { carrier: "nova_poshta" } : {}),
+        ...(delivery.method === "branch" ? { branch: delivery.branch } : {}),
+        ...recipient,
+        ...(delivery.comment ? { comment: delivery.comment } : {}),
       },
       items: orderItems.map(({ currency: _currency, ...item }) => item),
     };
