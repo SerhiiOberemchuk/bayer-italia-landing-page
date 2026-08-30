@@ -14,6 +14,7 @@ export const localizedPublicPaths = [
   "/privacy",
   "/cookies",
   "/terms",
+  "/returns",
 ] as const
 
 export function getLocaleFromPathname(pathname: string): Locale | null {

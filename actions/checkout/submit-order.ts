@@ -6,15 +6,13 @@ import { z } from "zod";
 
 import {
   isObriymConfigured,
-  ObriymRequestError,
   requestObriym,
 } from "@/lib/obriym/client";
-import { storefrontWarehouseId } from "@/lib/obriym/config";
 import type {
-  ObriymProduct,
   OrderInput,
   OrderResult,
 } from "@/lib/obriym/types";
+import { getCurrentProduct } from "@/lib/storefront/get-current-product";
 import { getProductName, getProductPrice } from "@/lib/storefront/products";
 
 const optionalText = (maxLength: number) =>
@@ -65,6 +63,12 @@ const checkoutOrderSchema = z.object({
       z.object({
         productId: z.string().trim().min(1).max(120),
         quantity: z.number().int().min(1).max(99),
+        expectedUnitPrice: z.number().finite().min(0),
+        expectedCurrency: z
+          .string()
+          .trim()
+          .length(3)
+          .transform((value) => value.toUpperCase()),
       }),
     )
     .min(1)
@@ -76,24 +80,15 @@ type SubmitOrderResult =
   | { ok: true; orderId: string }
   | {
       ok: false;
-      code: "INVALID_INPUT" | "PRODUCT_UNAVAILABLE" | "SERVICE_UNAVAILABLE";
+      code:
+        | "INVALID_INPUT"
+        | "CART_CHANGED"
+        | "PRODUCT_UNAVAILABLE"
+        | "SERVICE_UNAVAILABLE";
     };
 
 class ProductUnavailableError extends Error {}
-
-async function getCurrentProduct(productId: string) {
-  try {
-    const response = await requestObriym<{ data: ObriymProduct }>(
-      `/products/${encodeURIComponent(productId)}`,
-      { cache: "no-store" },
-    );
-    if (response.data.warehouseId !== storefrontWarehouseId) return null;
-    return response.data;
-  } catch (error) {
-    if (error instanceof ObriymRequestError && error.status === 404) return null;
-    throw error;
-  }
-}
+class CartChangedError extends Error {}
 
 async function resolveOrderItems(
   items: CheckoutOrder["items"],
@@ -105,17 +100,22 @@ async function resolveOrderItems(
 
   return items.map((item, index) => {
     const product = products[index];
-    if (
-      !product ||
-      product.status !== "active" ||
-      (product.stock !== null && product.stock < item.quantity)
-    ) {
+    if (!product || product.status !== "active") {
       throw new ProductUnavailableError();
+    }
+    if (product.stock !== null && product.stock < item.quantity) {
+      throw new CartChangedError();
     }
 
     const price = getProductPrice(product, "EUR");
     if (!Number.isFinite(price.amount) || price.amount < 0) {
       throw new ProductUnavailableError();
+    }
+    if (
+      price.amount !== item.expectedUnitPrice ||
+      price.currency.toUpperCase() !== item.expectedCurrency
+    ) {
+      throw new CartChangedError();
     }
 
     return {
@@ -202,6 +202,10 @@ export async function submitOrder(input: unknown): Promise<SubmitOrderResult> {
 
     return { ok: true, orderId: result.data.externalId };
   } catch (error) {
+    if (error instanceof CartChangedError) {
+      return { ok: false, code: "CART_CHANGED" };
+    }
+
     if (error instanceof ProductUnavailableError) {
       return { ok: false, code: "PRODUCT_UNAVAILABLE" };
     }

@@ -87,6 +87,14 @@ export function Footer({ dict, locale }: FooterProps) {
                 </li>
                 <li className="list-none">
                   <Link
+                    href={withLocalePath(locale, "/returns")}
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                  >
+                    {locale === "uk" ? "Повернення" : "Returns"}
+                  </Link>
+                </li>
+                <li className="list-none">
+                  <Link
                     href={withLocalePath(locale, "/terms")}
                     className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >

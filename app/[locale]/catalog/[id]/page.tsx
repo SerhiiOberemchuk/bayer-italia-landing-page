@@ -11,11 +11,11 @@ import { isValidLocale, siteUrl } from "@/lib/i18n/config";
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
 import {
   formatMoney,
-  getCustomField,
   getProductDescription,
   getProductName,
   getProductPrice,
 } from "@/lib/storefront/products";
+import { getProductSeoAttributes } from "@/lib/storefront/product-seo";
 
 export async function generateMetadata({
   params,
@@ -30,15 +30,29 @@ export async function generateMetadata({
   const name = getProductName(product, locale);
   const description = getProductDescription(product, locale) || `${name} — Buyer Italia`;
   const pathname = `/catalog/${id}`;
+  const url = `${siteUrl}${withLocalePath(locale, pathname)}`;
+  const images = product.images.map((image) => image.url);
 
   return {
     title: name,
     description,
     alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
+      canonical: url,
       languages: buildLocalizedAlternates(pathname, siteUrl),
     },
-    openGraph: product.images[0]?.url ? { images: [product.images[0].url] } : undefined,
+    openGraph: {
+      title: name,
+      description,
+      type: "website",
+      url,
+      images,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: name,
+      description,
+      images,
+    },
   };
 }
 
@@ -68,9 +82,15 @@ async function ProductDetailContent({
   const name = getProductName(product, locale);
   const description = getProductDescription(product, locale);
   const price = getProductPrice(product, "EUR");
-  const size = getCustomField(product, ["size", "розмір", "taglia"]);
-  const color = getCustomField(product, ["color", "колір", "colore"]);
-  const condition = getCustomField(product, ["condition", "стан", "condizione"]);
+  const seoAttributes = getProductSeoAttributes(product);
+  const {
+    size,
+    color,
+    material,
+    gtin,
+    mpn,
+    rawCondition: condition,
+  } = seoAttributes;
   const image = product.images[0]?.url || null;
   const inStock = product.stock === null || product.stock > 0;
   const productUrl = `${siteUrl}${withLocalePath(locale, `/catalog/${product.id}`)}`;
@@ -82,22 +102,64 @@ async function ProductDetailContent({
     "@context": "https://schema.org",
     "@type": "Product",
     name,
-    description,
+    description: description || undefined,
     image: product.images.map((item) => item.url),
+    url: productUrl,
     sku: product.sku || product.id,
+    category: product.category?.name || undefined,
+    size: seoAttributes.size || undefined,
+    color: seoAttributes.color || undefined,
+    material: seoAttributes.material || undefined,
+    gtin: seoAttributes.gtin || undefined,
+    mpn: seoAttributes.mpn || undefined,
     brand: product.brand?.name ? { "@type": "Brand", name: product.brand.name } : undefined,
+    isVariantOf: seoAttributes.productGroupId
+      ? {
+          "@type": "ProductGroup",
+          productGroupID: seoAttributes.productGroupId,
+        }
+      : undefined,
     offers: {
       "@type": "Offer",
       priceCurrency: price.currency,
       price: price.amount,
       availability: inStock ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+      itemCondition: seoAttributes.condition,
       url: productUrl,
     },
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: isUk ? "Головна" : "Home",
+        item: `${siteUrl}${withLocalePath(locale)}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: isUk ? "Магазин" : "Shop",
+        item: `${siteUrl}${withLocalePath(locale, "/catalog")}`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name,
+        item: productUrl,
+      },
+    ],
   };
 
   return (
     <main id="main-content">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="mx-auto max-w-[1480px] px-4 py-6 md:px-8 md:py-10">
         <Link
           href={withLocalePath(locale, "/catalog")}
@@ -162,11 +224,14 @@ async function ProductDetailContent({
                   : "An original piece selected in Italy by Buyer Italia.")}
             </p>
 
-            {(size || color || condition || product.sku) && (
+            {(size || color || material || condition || gtin || mpn || product.sku) && (
               <dl className="mt-8 divide-y divide-border border-y border-border text-sm">
                 {size ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Розмір" : "Size"}</dt><dd>{size}</dd></div> : null}
                 {color ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Колір" : "Color"}</dt><dd>{color}</dd></div> : null}
+                {material ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Матеріал" : "Material"}</dt><dd>{material}</dd></div> : null}
                 {condition ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">{isUk ? "Стан" : "Condition"}</dt><dd>{condition}</dd></div> : null}
+                {gtin ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">GTIN</dt><dd>{gtin}</dd></div> : null}
+                {mpn ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">MPN</dt><dd>{mpn}</dd></div> : null}
                 {product.sku ? <div className="flex justify-between py-4"><dt className="text-muted-foreground">SKU</dt><dd>{product.sku}</dd></div> : null}
               </dl>
             )}

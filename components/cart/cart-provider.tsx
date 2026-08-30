@@ -9,17 +9,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-
-export type CartItem = {
-  productId: string;
-  name: string;
-  sku: string | null;
-  price: number;
-  currency: string;
-  image: string | null;
-  quantity: number;
-  maxQuantity: number | null;
-};
+import type { CartItem } from "@/lib/storefront/cart";
 
 type AddCartItem = Omit<CartItem, "quantity"> & { quantity?: number };
 
@@ -31,6 +21,7 @@ type CartContextValue = {
   hydrated: boolean;
   addItem: (item: AddCartItem) => void;
   removeItem: (productId: string) => void;
+  replaceItems: (items: CartItem[]) => void;
   setQuantity: (productId: string, quantity: number) => void;
   clearCart: () => void;
 };
@@ -39,8 +30,33 @@ const STORAGE_KEY = "buyer-italia-cart-v1";
 const CartContext = createContext<CartContextValue | null>(null);
 
 function safeQuantity(item: CartItem, quantity: number) {
-  const upper = item.maxQuantity && item.maxQuantity > 0 ? item.maxQuantity : 99;
+  const upper =
+    item.maxQuantity === null ? 99 : Math.max(1, item.maxQuantity);
   return Math.max(1, Math.min(quantity, upper));
+}
+
+function isCartItem(value: unknown): value is CartItem {
+  if (!value || typeof value !== "object") return false;
+
+  const item = value as Record<string, unknown>;
+  return (
+    typeof item.productId === "string" &&
+    item.productId.length > 0 &&
+    typeof item.name === "string" &&
+    (typeof item.sku === "string" || item.sku === null) &&
+    typeof item.price === "number" &&
+    Number.isFinite(item.price) &&
+    item.price >= 0 &&
+    typeof item.currency === "string" &&
+    (typeof item.image === "string" || item.image === null) &&
+    typeof item.quantity === "number" &&
+    Number.isInteger(item.quantity) &&
+    item.quantity >= 1 &&
+    (item.maxQuantity === null ||
+      (typeof item.maxQuantity === "number" &&
+        Number.isInteger(item.maxQuantity) &&
+        item.maxQuantity >= 0))
+  );
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -50,7 +66,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
-      if (stored) setItems(JSON.parse(stored) as CartItem[]);
+      if (stored) {
+        const parsed: unknown = JSON.parse(stored);
+        if (!Array.isArray(parsed)) throw new Error("Invalid cart");
+        const normalizedItems = parsed.filter(isCartItem).map((item) => ({
+          ...item,
+          quantity: safeQuantity(item, item.quantity),
+        }));
+        setItems([
+          ...new Map(
+            normalizedItems.map((item) => [item.productId, item]),
+          ).values(),
+        ]);
+      }
     } catch {
       window.localStorage.removeItem(STORAGE_KEY);
     } finally {
@@ -66,11 +94,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems((current) => {
       const existing = current.find((item) => item.productId === incoming.productId);
       if (!existing) {
+        const item = {
+          ...incoming,
+          quantity: incoming.quantity ?? 1,
+        };
         return [
           ...current,
           {
-            ...incoming,
-            quantity: Math.max(1, incoming.quantity ?? 1),
+            ...item,
+            quantity: safeQuantity(item, item.quantity),
           },
         ];
       }
@@ -88,6 +120,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const removeItem = useCallback((productId: string) => {
     setItems((current) => current.filter((item) => item.productId !== productId));
+  }, []);
+
+  const replaceItems = useCallback((nextItems: CartItem[]) => {
+    setItems(nextItems);
   }, []);
 
   const setQuantity = useCallback((productId: string, quantity: number) => {
@@ -112,10 +148,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       hydrated,
       addItem,
       removeItem,
+      replaceItems,
       setQuantity,
       clearCart,
     };
-  }, [addItem, clearCart, hydrated, items, removeItem, setQuantity]);
+  }, [addItem, clearCart, hydrated, items, removeItem, replaceItems, setQuantity]);
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }

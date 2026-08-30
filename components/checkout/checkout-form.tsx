@@ -23,7 +23,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
 import { formatMoney } from "@/lib/storefront/products";
 
-type FormState = "idle" | "success" | "error";
+type FormState = "idle" | "success" | "error" | "cart-changed";
 type NovaPoshtaStatus =
   | "idle"
   | "searching-cities"
@@ -172,14 +172,19 @@ export function CheckoutForm({ locale }: { locale: Locale }) {
         postalCode: String(data.get("postalCode") || ""),
       },
       delivery,
-      items: items.map((item) => ({ productId: item.productId, quantity: item.quantity })),
+      items: items.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+        expectedUnitPrice: item.price,
+        expectedCurrency: item.currency,
+      })),
     };
 
     startTransition(async () => {
       try {
         const result = await submitOrder(payload);
         if (!result.ok) {
-          setState("error");
+          setState(result.code === "CART_CHANGED" ? "cart-changed" : "error");
           return;
         }
 
@@ -481,6 +486,22 @@ export function CheckoutForm({ locale }: { locale: Locale }) {
                   ? "Не вдалося передати замовлення. Перевірте дані або спробуйте ще раз."
                   : "We could not submit the order. Check your details and try again."}
               </p>
+            ) : null}
+
+            {state === "cart-changed" ? (
+              <div className="sm:col-span-2 border border-amber-800/35 bg-amber-50 p-4 text-sm leading-6">
+                <p>
+                  {isUk
+                    ? "Ціна або доступна кількість одного з товарів змінилася в CRM. Замовлення не створено — оновіть кошик і перевірте дані."
+                    : "A product price or available quantity changed in the CRM. The order was not created—refresh your bag and review the details."}
+                </p>
+                <Link
+                  href={withLocalePath(locale, "/cart")}
+                  className="mt-3 inline-block border-b border-foreground pb-1 text-xs font-medium uppercase tracking-[0.12em]"
+                >
+                  {isUk ? "Оновити кошик" : "Refresh bag"}
+                </Link>
+              </div>
             ) : null}
 
             <button

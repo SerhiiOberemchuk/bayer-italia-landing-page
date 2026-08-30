@@ -19,16 +19,12 @@ export async function generateMetadata({
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
   const dict = await getDictionary(locale);
-  const hasProducts = (await getProducts({})).length > 0;
   const pathname = "/catalog";
 
   return {
     title: dict.catalog.title,
     description: dict.catalog.subtitle,
-    robots: {
-      index: hasProducts,
-      follow: hasProducts,
-    },
+    robots: { index: true, follow: true },
     alternates: {
       canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
       languages: buildLocalizedAlternates(pathname, siteUrl),
@@ -139,4 +135,3 @@ async function CatalogResults({
     </AnimateIn>
   );
 }
-

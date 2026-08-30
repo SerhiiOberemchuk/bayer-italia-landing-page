@@ -6,6 +6,7 @@ import { locales, isValidLocale, siteUrl } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { ensureLocale } from "@/lib/i18n/server";
+import { withLocalePath } from "@/lib/i18n/routing";
 import { PremiumSiteHeader } from "@/components/premium-site-header";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/components/cart/cart-provider";
@@ -110,14 +111,20 @@ function getOrganizationJsonLd(locale: Locale) {
       locale === "uk"
         ? "Баєр-сервіс з прямими закупками оригінальних речей з Італії"
         : "Buyer service with direct purchases of original items from Italy",
-    url: "https://buyer-italia.shop",
-    logo: "https://buyer-italia.shop/images/og-image.jpg",
+    url: siteUrl,
+    logo: `${siteUrl}/images/og-image.jpg`,
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "customer service",
       availableLanguage: ["Ukrainian", "English", "Italian"],
     },
     sameAs: ["https://t.me/buyer_italia_shop"],
+    hasMerchantReturnPolicy: {
+      "@type": "MerchantReturnPolicy",
+      applicableCountry: ["UA", "PL", "DE", "CZ", "IT"],
+      returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
+      merchantReturnLink: `${siteUrl}${withLocalePath(locale, "/returns")}`,
+    },
   };
 }
 

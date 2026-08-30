@@ -1,46 +1,63 @@
-import type { MetadataRoute } from "next"
-import { locales, siteUrl } from "@/lib/i18n/config"
-import {
-  localizedPublicPaths,
-  withLocalePath,
-} from "@/lib/i18n/routing"
+import type { MetadataRoute } from "next";
+import { getAllProducts } from "@/actions/catalog/get-all-products";
+import { locales, siteUrl } from "@/lib/i18n/config";
+import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const entries: MetadataRoute.Sitemap = []
-  const lastModifiedByPage: Partial<Record<(typeof localizedPublicPaths)[number], Date>> = {
-    "/": new Date("2026-03-16T00:00:00.000Z"),
-    "/catalog": new Date("2026-03-16T00:00:00.000Z"),
-    "/delivery-from-italy": new Date("2026-03-05T00:00:00.000Z"),
-    "/brands-from-italy": new Date("2026-03-05T00:00:00.000Z"),
-    "/privacy": new Date("2026-03-05T00:00:00.000Z"),
-    "/cookies": new Date("2026-03-05T00:00:00.000Z"),
-    "/terms": new Date("2026-03-05T00:00:00.000Z"),
-  }
+const indexableStaticPages = [
+  "/",
+  "/catalog",
+  "/delivery-from-italy",
+  "/brands-from-italy",
+  "/privacy",
+  "/cookies",
+  "/terms",
+  "/returns",
+] as const;
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const entries: MetadataRoute.Sitemap = [];
+  const products = (await getAllProducts()).filter(
+    (product) => product.status === "active",
+  );
 
   for (const locale of locales) {
-    for (const page of localizedPublicPaths) {
+    for (const page of indexableStaticPages) {
       entries.push({
         url: `${siteUrl}${withLocalePath(locale, page)}`,
-        lastModified: lastModifiedByPage[page] ?? new Date("2026-03-05T00:00:00.000Z"),
+        alternates: {
+          languages: buildLocalizedAlternates(page, siteUrl),
+        },
         changeFrequency:
-          page === "/"
+          page === "/" || page === "/catalog"
             ? "weekly"
-            : page === "/catalog" ||
-                page === "/delivery-from-italy" ||
-                page === "/brands-from-italy"
+            : page === "/delivery-from-italy" || page === "/brands-from-italy"
               ? "monthly"
               : "yearly",
         priority:
           page === "/"
             ? 1
-            : page === "/delivery-from-italy" || page === "/brands-from-italy"
-              ? 0.8
-              : page === "/catalog"
-                ? 0.7
+            : page === "/catalog"
+              ? 0.9
+              : page === "/delivery-from-italy" || page === "/brands-from-italy"
+                ? 0.8
                 : 0.3,
-      })
+      });
+    }
+
+    for (const product of products) {
+      const pathname = `/catalog/${product.id}`;
+
+      entries.push({
+        url: `${siteUrl}${withLocalePath(locale, pathname)}`,
+        alternates: {
+          languages: buildLocalizedAlternates(pathname, siteUrl),
+        },
+        changeFrequency: "daily",
+        priority: 0.8,
+        images: product.images.map((image) => image.url),
+      });
     }
   }
 
-  return entries
+  return entries;
 }

@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 import { Check, ShoppingBag } from "lucide-react";
-import { useCart, type CartItem } from "./cart-provider";
+import { useCart } from "./cart-provider";
 import type { Locale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
+import type { CartItem } from "@/lib/storefront/cart";
 
 export function AddToCartButton({
   item,
@@ -14,13 +16,50 @@ export function AddToCartButton({
   locale: Locale;
   compact?: boolean;
 }) {
-  const { addItem } = useCart();
-  const [added, setAdded] = useState(false);
+  const { addItem, hydrated, items } = useCart();
+  const isInCart = items.some(({ productId }) => productId === item.productId);
 
   function handleAdd() {
     addItem(item);
-    setAdded(true);
-    window.setTimeout(() => setAdded(false), 1600);
+  }
+
+  const compactClassName =
+    "inline-flex size-10 items-center justify-center border border-foreground transition-colors";
+  const fullClassName =
+    "inline-flex h-13 w-full items-center justify-center gap-2 px-6 text-sm font-medium uppercase tracking-[0.15em] transition-colors";
+
+  if (!hydrated) {
+    return (
+      <span
+        className={`${compact ? compactClassName : fullClassName} cursor-wait border-border bg-secondary/60 text-muted-foreground`}
+        aria-hidden="true"
+      >
+        {!compact
+          ? locale === "uk"
+            ? "Перевіряємо кошик…"
+            : "Checking bag…"
+          : null}
+      </span>
+    );
+  }
+
+  if (isInCart) {
+    const label = locale === "uk" ? "У кошику" : "In bag";
+
+    return (
+      <Link
+        href={withLocalePath(locale, "/cart")}
+        className={`${compact ? compactClassName : fullClassName} bg-transparent text-foreground hover:bg-foreground hover:text-background`}
+        aria-label={
+          locale === "uk"
+            ? `${item.name} уже у кошику. Перейти до кошика`
+            : `${item.name} is already in your bag. View bag`
+        }
+      >
+        <Check className="size-4" aria-hidden="true" />
+        {!compact ? label : null}
+      </Link>
+    );
   }
 
   return (
@@ -28,26 +67,12 @@ export function AddToCartButton({
       type="button"
       onClick={handleAdd}
       disabled={item.maxQuantity === 0}
-      className={
-        compact
-          ? "inline-flex size-10 items-center justify-center border border-foreground bg-foreground text-background transition-colors hover:bg-transparent hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
-          : "inline-flex h-13 w-full items-center justify-center gap-2 bg-foreground px-6 text-sm font-medium uppercase tracking-[0.15em] text-background transition-colors hover:bg-[#34322f] disabled:cursor-not-allowed disabled:opacity-40"
-      }
+      className={`${compact ? compactClassName : fullClassName} bg-foreground text-background hover:bg-[#34322f] disabled:cursor-not-allowed disabled:opacity-40`}
       aria-label={locale === "uk" ? `Додати ${item.name} у кошик` : `Add ${item.name} to bag`}
     >
-      {added ? (
-        <Check className="size-4" aria-hidden="true" />
-      ) : (
-        <ShoppingBag className="size-4" strokeWidth={1.5} aria-hidden="true" />
-      )}
+      <ShoppingBag className="size-4" strokeWidth={1.5} aria-hidden="true" />
       {!compact &&
-        (added
-          ? locale === "uk"
-            ? "Додано"
-            : "Added"
-          : locale === "uk"
-            ? "Додати у кошик"
-            : "Add to bag")}
+        (locale === "uk" ? "Додати у кошик" : "Add to bag")}
     </button>
   );
 }
