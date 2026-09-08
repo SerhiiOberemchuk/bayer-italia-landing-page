@@ -39,6 +39,10 @@ export type ObriymProduct = {
   tags: string[];
   customFields: ObriymCustomField[];
   status: "draft" | "active" | "archived";
+  // ISO-8601 timestamp of the last write to the product in the CRM. Optional
+  // because a CRM deployed before this field existed simply omits it, and a
+  // missing `<lastmod>` is a better sitemap than a made-up one.
+  updatedAt?: string;
   description?: string | null;
   translations?: ObriymTranslation[];
   brand?: {
