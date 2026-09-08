@@ -39,7 +39,7 @@ export default async function CookiesPolicyPage({
   const locale = ensureLocale((await params).locale)
 
   const isUk = locale === "uk"
-  const lastUpdated = isUk ? "05.03.2026" : "March 5, 2026"
+  const lastUpdated = isUk ? "08.09.2026" : "September 8, 2026"
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8">
@@ -81,6 +81,23 @@ export default async function CookiesPolicyPage({
                 Ми використовуємо Vercel Analytics для збору анонімної статистики відвідувань.
                 Це допомагає нам зрозуміти, як відвідувачі взаємодіють з нашим сайтом, щоб
                 покращувати його.
+              </p>
+              <p className="mb-4">
+                Ми також використовуємо Microsoft Clarity, щоб бачити, як відвідувачі
+                користуються сайтом: цей сервіс записує знеособлені сесії (рухи миші, кліки,
+                прокрутку) та будує теплові карти сторінок. Clarity встановлює власні cookies
+                (<code>_clck</code>, <code>_clsk</code>), а зібрані дані обробляє Microsoft
+                відповідно до{" "}
+                <a
+                  href="https://privacy.microsoft.com/privacystatement"
+                  className="text-italy-green hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Заяви про конфіденційність Microsoft
+                </a>
+                . Ми не використовуємо ці дані для реклами й не поєднуємо їх із вашим іменем
+                чи контактами.
               </p>
               <h3 className="font-medium text-foreground mt-4 mb-2">Функціональні cookies</h3>
               <p>
@@ -146,6 +163,22 @@ export default async function CookiesPolicyPage({
               <p className="mb-4">
                 We use Vercel Analytics to collect anonymous visit statistics.
                 This helps us understand how visitors interact with our site to improve it.
+              </p>
+              <p className="mb-4">
+                We also use Microsoft Clarity to see how visitors use the site: it records
+                de-identified sessions (mouse movement, clicks, scrolling) and builds page
+                heatmaps. Clarity sets its own cookies (<code>_clck</code>, <code>_clsk</code>),
+                and Microsoft processes the collected data under the{" "}
+                <a
+                  href="https://privacy.microsoft.com/privacystatement"
+                  className="text-italy-green hover:underline"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Microsoft Privacy Statement
+                </a>
+                . We do not use this data for advertising and do not link it to your name or
+                contact details.
               </p>
               <h3 className="font-medium text-foreground mt-4 mb-2">Functional cookies</h3>
               <p>

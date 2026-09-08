@@ -10,6 +10,7 @@ import { withLocalePath } from "@/lib/i18n/routing";
 import { PremiumSiteHeader } from "@/components/premium-site-header";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/components/cart/cart-provider";
+import { ClarityAnalytics } from "@/components/clarity-analytics";
 import "../globals.css";
 
 const dmSans = DM_Sans({
@@ -201,6 +202,7 @@ export default async function LocaleLayout({
           </div>
         </CartProvider>
         <Analytics />
+        <ClarityAnalytics />
       </body>
     </html>
   );
