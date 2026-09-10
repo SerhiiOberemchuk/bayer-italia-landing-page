@@ -48,3 +48,9 @@ export function formatMoney(amount: number, currency: string, locale: Locale) {
     minimumFractionDigits: amount % 1 === 0 ? 0 : 2,
   }).format(amount);
 }
+
+// The CRM reports `null` stock for products that do not track inventory; the
+// storefront treats those as always available. Zero means the piece is sold.
+export function isProductInStock(product: ObriymProduct) {
+  return product.stock === null || product.stock > 0;
+}

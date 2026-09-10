@@ -278,11 +278,23 @@ const en: Dictionary = {
     currency: "EUR",
     images: "Photos",
     noImages: "Photos will appear after processing",
+    availableNow: "Available now",
+    emptyAvailable:
+      "Everything is sold out right now. New pieces arrive weekly, and we source to order — message the buyer.",
+    emptyAvailableFiltered:
+      "Nothing is available with these filters right now. Try other options or message the buyer and we'll source it for you.",
+    sold: {
+      eyebrow: "Already found their owners",
+      title: "What we've sourced before",
+      subtitle:
+        "Pieces we found in Italy and delivered to our clients. Need something similar? Message the buyer and we'll source it for you.",
+      cta: "I want something similar",
+    },
   },
   inStock: {
-    title: "Selected from the catalog",
+    title: "In stock now",
     subtitle:
-      "Current pieces and selected past arrivals sourced in Italy.",
+      "Pieces we already have, ready to ship. Can't see what you're after? We'll source it to order.",
     ctaVinted: "Vinted: raisaob profile",
     ctaCatalog: "View in-stock items on site",
     catalogAria: "Open catalog of in-stock items",

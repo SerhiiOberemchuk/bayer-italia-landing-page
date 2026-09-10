@@ -9,8 +9,12 @@ import {
   getCustomField,
   getProductName,
   getProductPrice,
+  isProductInStock,
 } from "@/lib/storefront/products";
 
+// One card, two states. In stock: a shoppable piece with add-to-bag on hover.
+// Sold: a quiet reference to what the buyer has sourced before — dimmed photo,
+// muted price, no bag, and a single "find me something similar" request.
 export function PremiumProductCard({
   product,
   locale,
@@ -18,17 +22,20 @@ export function PremiumProductCard({
   product: ObriymProduct;
   locale: Locale;
 }) {
+  const isUk = locale === "uk";
   const name = getProductName(product, locale);
   const price = getProductPrice(product, "EUR");
   const image = product.images[0]?.url || null;
   const size = getCustomField(product, ["size", "розмір", "taglia"]);
-  const inStock = product.stock === null || product.stock > 0;
+  const inStock = isProductInStock(product);
+  const onSale = Boolean(
+    price.compareAtAmount && price.compareAtAmount > price.amount,
+  );
   const productPath = withLocalePath(locale, `/catalog/${product.id}`);
-  const question =
-    locale === "uk"
-      ? `Вітаю! Маю питання щодо товару «${name}»: ${siteUrl}${productPath}`
-      : `Hello! I have a question about “${name}”: ${siteUrl}${productPath}`;
-  const questionUrl = `https://t.me/raisa_orb?text=${encodeURIComponent(question)}`;
+  const similarRequest = isUk
+    ? `Вітаю! Хочу знайти щось подібне до «${name}»: ${siteUrl}${productPath}`
+    : `Hello! I'd like to find something similar to “${name}”: ${siteUrl}${productPath}`;
+  const similarRequestUrl = `https://t.me/raisa_orb?text=${encodeURIComponent(similarRequest)}`;
 
   return (
     <article className="group h-full">
@@ -43,7 +50,11 @@ export function PremiumProductCard({
               src={image}
               alt={name}
               fill
-              className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.025]"
+              className={`object-cover transition-[transform,opacity,filter] duration-700 ease-out group-hover:scale-[1.025] ${
+                inStock
+                  ? ""
+                  : "opacity-80 saturate-[0.55] group-hover:opacity-100 group-hover:saturate-100"
+              }`}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             />
           ) : (
@@ -53,7 +64,11 @@ export function PremiumProductCard({
           )}
         </Link>
 
-        {price.compareAtAmount && price.compareAtAmount > price.amount ? (
+        {!inStock ? (
+          <span className="absolute left-3 top-3 bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            {isUk ? "Продано" : "Sold"}
+          </span>
+        ) : onSale ? (
           <span className="absolute left-3 top-3 bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]">
             Sale
           </span>
@@ -75,14 +90,14 @@ export function PremiumProductCard({
               }}
             />
           </div>
-        ) : (
-          <span className="absolute bottom-3 left-3 bg-background px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em]">
-            {locale === "uk" ? "Немає в наявності" : "Unavailable"}
-          </span>
-        )}
+        ) : null}
       </div>
 
-      <div className="flex items-start justify-between gap-4 pt-4">
+      <div
+        className={`flex items-start justify-between gap-4 pt-4 ${
+          inStock ? "" : "text-muted-foreground"
+        }`}
+      >
         <div className="min-w-0">
           <Link href={productPath}>
             <h3 className="truncate text-[13px] font-medium uppercase tracking-[0.055em]">
@@ -91,26 +106,27 @@ export function PremiumProductCard({
           </Link>
           <p className="mt-1 text-xs text-muted-foreground">
             {[product.category?.name, size].filter(Boolean).join(" · ") ||
-              (locale === "uk" ? "Відібрано в Італії" : "Curated in Italy")}
+              (isUk ? "Відібрано в Італії" : "Curated in Italy")}
           </p>
         </div>
         <div className="shrink-0 text-right text-[13px]">
           <span>{formatMoney(price.amount, price.currency, locale)}</span>
-          {price.compareAtAmount && price.compareAtAmount > price.amount ? (
+          {inStock && onSale && price.compareAtAmount ? (
             <span className="ml-2 text-muted-foreground line-through">
               {formatMoney(price.compareAtAmount, price.currency, locale)}
             </span>
           ) : null}
         </div>
       </div>
+
       {!inStock ? (
         <a
-          href={questionUrl}
+          href={similarRequestUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-block border-b border-foreground pb-1 text-[10px] font-medium uppercase tracking-[0.15em]"
+          className="mt-3 inline-block border-b border-foreground pb-1 text-[10px] font-medium uppercase tracking-[0.15em] text-foreground"
         >
-          {locale === "uk" ? "Запитати про товар" : "Ask about this item"}
+          {isUk ? "Хочу щось подібне" : "I want something similar"}
         </a>
       ) : null}
     </article>

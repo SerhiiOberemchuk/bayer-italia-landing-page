@@ -6,6 +6,7 @@ import {
   getProductDescription,
   getProductName,
   getProductPrice,
+  isProductInStock,
 } from "@/lib/storefront/products";
 
 export async function GET(request: Request) {
@@ -47,7 +48,7 @@ export async function GET(request: Request) {
       ...extraImages.map((image) => xmlElement("g:additional_image_link", image.url)),
       xmlElement(
         "g:availability",
-        product.stock === null || product.stock > 0 ? "in_stock" : "out_of_stock",
+        isProductInStock(product) ? "in_stock" : "out_of_stock",
       ),
       xmlElement("g:price", `${regularPrice.toFixed(2)} ${price.currency}`),
       salePrice ? xmlElement("g:sale_price", `${salePrice.toFixed(2)} ${price.currency}`) : "",

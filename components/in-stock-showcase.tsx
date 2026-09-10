@@ -11,27 +11,37 @@ interface InStockShowcaseProps {
   locale: Locale;
 }
 
+// The home page is about the buyer service first. The showcase is a single
+// row of the newest pieces that are actually available — sold items never
+// appear here, and when nothing is in stock the section disappears entirely.
 export async function InStockShowcase({ dict, locale }: InStockShowcaseProps) {
-  const products = await getProducts({ limit: 4 });
+  const products = await getProducts({ limit: 4, inStock: true, sort: "newest" });
   if (products.length === 0) return null;
+
+  const isUk = locale === "uk";
+  const viewAllLabel = isUk ? "Переглянути все" : "View all";
+  const catalogPath = withLocalePath(locale, "/catalog");
 
   return (
     <section className="px-4 py-20 md:px-8 md:py-28" aria-labelledby="new-arrivals-title">
       <div className="mx-auto max-w-[1480px]">
         <div className="mb-10 flex items-end justify-between gap-6 border-b border-border pb-5">
-          <div>
+          <div className="max-w-xl">
             <p className="premium-eyebrow text-muted-foreground">
-              {locale === "uk" ? "Щойно з Італії" : "Just in from Italy"}
+              {isUk ? "Щойно з Італії" : "Just in from Italy"}
             </p>
             <h2 id="new-arrivals-title" className="mt-3 font-serif text-4xl font-normal tracking-tight md:text-5xl">
               {dict.title}
             </h2>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">
+              {dict.subtitle}
+            </p>
           </div>
           <Link
-            href={withLocalePath(locale, "/catalog")}
-            className="hidden items-center gap-3 text-xs font-medium uppercase tracking-[0.16em] sm:inline-flex"
+            href={catalogPath}
+            className="hidden shrink-0 items-center gap-3 text-xs font-medium uppercase tracking-[0.16em] sm:inline-flex"
           >
-            {locale === "uk" ? "Переглянути все" : "View all"}
+            {viewAllLabel}
             <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
           </Link>
         </div>
@@ -43,6 +53,14 @@ export async function InStockShowcase({ dict, locale }: InStockShowcaseProps) {
             </li>
           ))}
         </ul>
+
+        <Link
+          href={catalogPath}
+          className="mt-10 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.16em] sm:hidden"
+        >
+          {viewAllLabel}
+          <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
+        </Link>
       </div>
     </section>
   );

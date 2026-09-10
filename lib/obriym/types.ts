@@ -75,6 +75,9 @@ export type CatalogFilters = {
   categoryId?: string;
   brandId?: string;
   limit?: number;
+  // Mirrors the CRM's `inStock=true`: untracked inventory or stock above zero.
+  inStock?: boolean;
+  sort?: "newest" | "name_asc" | "name_desc" | "price_asc" | "price_desc";
 };
 
 export type CatalogFilterOptions = {

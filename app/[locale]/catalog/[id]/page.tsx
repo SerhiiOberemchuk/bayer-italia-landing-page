@@ -14,6 +14,7 @@ import {
   getProductDescription,
   getProductName,
   getProductPrice,
+  isProductInStock,
 } from "@/lib/storefront/products";
 import { getProductSeoAttributes } from "@/lib/storefront/product-seo";
 
@@ -92,11 +93,17 @@ async function ProductDetailContent({
     rawCondition: condition,
   } = seoAttributes;
   const image = product.images[0]?.url || null;
-  const inStock = product.stock === null || product.stock > 0;
+  const inStock = isProductInStock(product);
   const productUrl = `${siteUrl}${withLocalePath(locale, `/catalog/${product.id}`)}`;
-  const question = isUk
-    ? `Вітаю! Маю питання щодо товару «${name}»: ${productUrl}`
-    : `Hello! I have a question about “${name}”: ${productUrl}`;
+  // A sold piece stays online as a reference; the only useful ask about it is
+  // "find me something like this", so the Telegram prefill says exactly that.
+  const question = inStock
+    ? isUk
+      ? `Вітаю! Маю питання щодо товару «${name}»: ${productUrl}`
+      : `Hello! I have a question about “${name}”: ${productUrl}`
+    : isUk
+      ? `Вітаю! Хочу знайти щось подібне до «${name}»: ${productUrl}`
+      : `Hello! I'd like to find something similar to “${name}”: ${productUrl}`;
   const questionUrl = `https://t.me/raisa_orb?text=${encodeURIComponent(question)}`;
   const jsonLd = {
     "@context": "https://schema.org",
@@ -260,12 +267,17 @@ async function ProductDetailContent({
               ) : (
                 <div className="border-y border-border py-6">
                   <p className="premium-eyebrow text-muted-foreground">
-                    {isUk ? "Наразі немає в наявності" : "Currently unavailable"}
+                    {isUk ? "Продано" : "Sold"}
+                  </p>
+                  <p className="mt-3 font-serif text-xl leading-snug">
+                    {isUk
+                      ? "Ця річ уже знайшла власника."
+                      : "This piece has already found its owner."}
                   </p>
                   <p className="mt-3 text-sm leading-6 text-muted-foreground">
                     {isUk
-                      ? "Цю позицію не можна замовити зараз. Запитайте про схожий товар або стежте за новими надходженнями в Telegram."
-                      : "This piece cannot be ordered right now. Ask about a similar item or follow new arrivals on Telegram."}
+                      ? "Хочете таку ж або схожу? Напишіть баєру — підберемо та привеземо з Італії під ваш запит."
+                      : "Want the same or something similar? Message the buyer and we'll source it in Italy for you."}
                   </p>
                   <div className="mt-5 grid gap-3">
                     <a
@@ -275,7 +287,7 @@ async function ProductDetailContent({
                       className="inline-flex h-13 items-center justify-center gap-2 bg-foreground px-6 text-xs font-medium uppercase tracking-[0.15em] text-background transition-colors hover:bg-[#34322f]"
                     >
                       <MessageCircle className="size-4" strokeWidth={1.5} aria-hidden="true" />
-                      {isUk ? "Запитати про цей товар" : "Ask about this item"}
+                      {isUk ? "Хочу щось подібне" : "I want something similar"}
                     </a>
                     <a
                       href="https://t.me/buyer_italia_shop"

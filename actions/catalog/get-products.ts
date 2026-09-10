@@ -30,6 +30,8 @@ export async function getProducts(filters: CatalogFilters = {}) {
   if (query) params.set("q", query);
   if (categoryId) params.set("categoryId", categoryId);
   if (brandId) params.set("brandId", brandId);
+  if (filters.inStock) params.set("inStock", "true");
+  if (filters.sort) params.set("sort", filters.sort);
 
   try {
     const response = await requestObriym<ObriymListResponse<ObriymProduct>>(
