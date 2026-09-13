@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ArrowLeft, ShieldCheck, Truck, MessageCircle, Send } from "lucide-react";
 import { getProduct } from "@/actions/catalog/get-product";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { AddToCartButton } from "@/components/cart/add-to-cart-button";
 import { ensureLocale } from "@/lib/i18n/server";
 import { isValidLocale, siteUrl } from "@/lib/i18n/config";
@@ -25,6 +26,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale, id } = await params;
   if (!isValidLocale(locale)) return {};
+  if (!isCatalogEnabled) return { robots: { index: false, follow: false } };
   const product = await getProduct(id);
   if (!product) return {};
 
@@ -62,6 +64,11 @@ export default function ProductDetailPage({
 }: {
   params: Promise<{ locale: string; id: string }>;
 }) {
+  // The catalog check belongs outside the Suspense boundary: the streamed child
+  // renders after the 200 has already gone out, so a `notFound()` in there would
+  // show the 404 page under a 200 status.
+  if (!isCatalogEnabled) notFound();
+
   return (
     <Suspense fallback={<ProductDetailSkeleton />}>
       <ProductDetailContent params={params} />

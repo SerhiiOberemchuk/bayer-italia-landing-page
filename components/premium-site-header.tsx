@@ -7,6 +7,7 @@ import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { CartLink } from "@/components/cart/cart-link";
 import { MobileMenu } from "@/components/mobile-menu";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 
 interface SiteHeaderProps {
@@ -47,15 +48,17 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
             <BuyerItaliaLogo size="sm" />
           </Link>
           <div className="col-start-3 justify-self-end">
-            <CartLink locale={locale} />
+            {isCatalogEnabled ? <CartLink locale={locale} /> : null}
           </div>
         </div>
 
         <div className="mx-auto hidden h-[72px] max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center lg:grid">
           <nav className="flex items-center gap-7" aria-label={isUk ? "Основна навігація" : "Primary navigation"}>
-            <Link className="premium-nav-link" href={withLocalePath(locale, "/catalog")}>
-              {isUk ? "Магазин" : "Shop"}
-            </Link>
+            {isCatalogEnabled ? (
+              <Link className="premium-nav-link" href={withLocalePath(locale, "/catalog")}>
+                {isUk ? "Магазин" : "Shop"}
+              </Link>
+            ) : null}
             <Link
               className="premium-nav-link"
               href={withLocalePath(locale, "/delivery-from-italy")}
@@ -84,7 +87,7 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
             <Suspense fallback={null}>
               <LanguageSwitcher locale={locale} />
             </Suspense>
-            <CartLink locale={locale} />
+            {isCatalogEnabled ? <CartLink locale={locale} /> : null}
           </nav>
         </div>
       </div>

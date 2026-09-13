@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ArrowRight, ShoppingBag } from "lucide-react";
 import { getFilterOptions } from "@/actions/catalog/get-filter-options";
 import { getProducts } from "@/actions/catalog/get-products";
@@ -8,6 +9,7 @@ import { isValidLocale, siteUrl, type Locale } from "@/lib/i18n/config";
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
 import type { ObriymProduct } from "@/lib/obriym/types";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { isProductInStock } from "@/lib/storefront/products";
 import { PremiumCatalogFilters } from "@/components/premium-catalog-filters";
 import { PremiumProductCard } from "@/components/premium-product-card";
@@ -26,6 +28,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   if (!isValidLocale(locale)) return {};
+  if (!isCatalogEnabled) return { robots: { index: false, follow: false } };
   const dict = await getDictionary(locale);
   const pathname = "/catalog";
 
@@ -47,6 +50,8 @@ export default async function CatalogPage({
   params: Promise<{ locale: string }>;
   searchParams: Promise<CatalogSearchParams>;
 }) {
+  if (!isCatalogEnabled) notFound();
+
   const locale = ensureLocale((await params).locale);
   const dict = await getDictionary(locale);
   const filterOptions = await getFilterOptions();

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 
 interface SeoLinksProps {
   locale: Locale;
@@ -20,8 +21,12 @@ export function SeoLinks({ locale }: SeoLinksProps) {
           </h2>
           <p className="mt-4 max-w-md text-sm leading-6 text-muted-foreground">
             {isUk
-              ? "Деталі про бренди, доставку та каталог товарів сервісу."
-              : "Details about brands, delivery, and the product catalog."}
+              ? isCatalogEnabled
+                ? "Деталі про бренди, доставку та каталог товарів сервісу."
+                : "Деталі про бренди та доставку сервісу."
+              : isCatalogEnabled
+                ? "Details about brands, delivery, and the product catalog."
+                : "Details about brands and delivery."}
           </p>
         </div>
 
@@ -45,15 +50,17 @@ export function SeoLinks({ locale }: SeoLinksProps) {
                 <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} aria-hidden="true" />
               </Link>
             </li>
-            <li className="list-none">
-              <Link
-                href={withLocalePath(locale, "/catalog")}
-                className="group flex items-center justify-between py-5 text-xs font-medium uppercase tracking-[0.14em]"
-              >
-                {isUk ? "Каталог товарів" : "Product catalog"}
-                <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} aria-hidden="true" />
-              </Link>
-            </li>
+            {isCatalogEnabled ? (
+              <li className="list-none">
+                <Link
+                  href={withLocalePath(locale, "/catalog")}
+                  className="group flex items-center justify-between py-5 text-xs font-medium uppercase tracking-[0.14em]"
+                >
+                  {isUk ? "Каталог товарів" : "Product catalog"}
+                  <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" strokeWidth={1.5} aria-hidden="true" />
+                </Link>
+              </li>
+            ) : null}
           </ul>
         </nav>
       </div>

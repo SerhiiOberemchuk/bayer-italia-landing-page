@@ -5,6 +5,7 @@ import { AnimateIn } from "@/components/animate-in";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 
 export function PremiumHero({
   dict,
@@ -38,20 +39,29 @@ export function PremiumHero({
             </AnimateIn>
             <AnimateIn variant="fade-up" delay={320}>
               <div className="mt-10 flex flex-wrap gap-3">
-                <Link
-                  href={withLocalePath(locale, "/catalog")}
-                  className="inline-flex h-13 items-center gap-3 bg-foreground px-7 text-xs font-medium uppercase tracking-[0.17em] text-background hover:bg-[#34322f]"
-                >
-                  {isUk ? "Дивитися колекцію" : "Shop the collection"}
-                  <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
-                </Link>
+                {isCatalogEnabled ? (
+                  <Link
+                    href={withLocalePath(locale, "/catalog")}
+                    className="inline-flex h-13 items-center gap-3 bg-foreground px-7 text-xs font-medium uppercase tracking-[0.17em] text-background hover:bg-[#34322f]"
+                  >
+                    {isUk ? "Дивитися колекцію" : "Shop the collection"}
+                    <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
+                  </Link>
+                ) : null}
                 <a
                   href="https://t.me/raisa_orb"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex h-13 items-center border border-foreground px-7 text-xs font-medium uppercase tracking-[0.17em] hover:bg-foreground hover:text-background"
+                  className={
+                    isCatalogEnabled
+                      ? "inline-flex h-13 items-center border border-foreground px-7 text-xs font-medium uppercase tracking-[0.17em] hover:bg-foreground hover:text-background"
+                      : "inline-flex h-13 items-center gap-3 bg-foreground px-7 text-xs font-medium uppercase tracking-[0.17em] text-background hover:bg-[#34322f]"
+                  }
                 >
                   {isUk ? "Персональний пошук" : "Personal sourcing"}
+                  {isCatalogEnabled ? null : (
+                    <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
+                  )}
                 </a>
               </div>
             </AnimateIn>

@@ -5,6 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { getProducts } from "@/actions/catalog/get-products";
 import { PremiumProductCard } from "@/components/premium-product-card";
 import { withLocalePath } from "@/lib/i18n/routing";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 
 interface InStockShowcaseProps {
   dict: Dictionary["inStock"];
@@ -15,6 +16,8 @@ interface InStockShowcaseProps {
 // row of the newest pieces that are actually available — sold items never
 // appear here, and when nothing is in stock the section disappears entirely.
 export async function InStockShowcase({ dict, locale }: InStockShowcaseProps) {
+  if (!isCatalogEnabled) return null;
+
   const products = await getProducts({ limit: 4, inStock: true, sort: "newest" });
   if (products.length === 0) return null;
 

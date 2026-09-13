@@ -10,6 +10,7 @@ import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 
 export function MobileMenu({ locale }: { locale: Locale }) {
   const pathname = usePathname();
@@ -105,11 +106,13 @@ export function MobileMenu({ locale }: { locale: Locale }) {
                     {isUk ? "Головна" : "Home"}
                   </Link>
                 </li>
-                <li>
-                  <Link className="mobile-menu-link" href={withLocalePath(locale, "/catalog")} onClick={() => setIsOpen(false)}>
-                    {isUk ? "Магазин" : "Shop"}
-                  </Link>
-                </li>
+                {isCatalogEnabled ? (
+                  <li>
+                    <Link className="mobile-menu-link" href={withLocalePath(locale, "/catalog")} onClick={() => setIsOpen(false)}>
+                      {isUk ? "Магазин" : "Shop"}
+                    </Link>
+                  </li>
+                ) : null}
                 <li>
                   <Link className="mobile-menu-link" href={withLocalePath(locale, "/delivery-from-italy")} onClick={() => setIsOpen(false)}>
                     {isUk ? "Доставка з Італії" : "Delivery from Italy"}

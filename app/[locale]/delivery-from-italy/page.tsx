@@ -12,6 +12,7 @@ import {
 import { isValidLocale, siteUrl } from "@/lib/i18n/config";
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { Button } from "@/components/ui/button";
 
 export async function generateMetadata({
@@ -217,14 +218,16 @@ export default async function DeliveryFromItalyPage({
                   {isUk ? "Бренди з Італії" : "Brands from Italy"}
                 </Link>
               </li>
-              <li className="list-none">
-                <Link
-                  href={withLocalePath(locale, "/catalog")}
-                  className="inline-flex border border-foreground px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-foreground hover:text-background"
-                >
-                  {isUk ? "Каталог товарів" : "Product catalog"}
-                </Link>
-              </li>
+              {isCatalogEnabled ? (
+                <li className="list-none">
+                  <Link
+                    href={withLocalePath(locale, "/catalog")}
+                    className="inline-flex border border-foreground px-4 py-3 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-foreground hover:text-background"
+                  >
+                    {isUk ? "Каталог товарів" : "Product catalog"}
+                  </Link>
+                </li>
+              ) : null}
               <li className="list-none">
                 <Link
                   href={withLocalePath(locale, "/terms")}

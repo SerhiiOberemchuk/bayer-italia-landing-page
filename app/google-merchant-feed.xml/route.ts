@@ -1,6 +1,7 @@
 import { getAllProducts } from "@/actions/catalog/get-all-products";
 import { isValidLocale, siteUrl, type Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { getProductSeoAttributes } from "@/lib/storefront/product-seo";
 import {
   getProductDescription,
@@ -10,6 +11,10 @@ import {
 } from "@/lib/storefront/products";
 
 export async function GET(request: Request) {
+  // The feed points at product pages that now answer 404, so it stays offline
+  // together with the catalog rather than feeding Merchant Center dead links.
+  if (!isCatalogEnabled) return new Response("Not found", { status: 404 });
+
   const requestedLocale = new URL(request.url).searchParams.get("locale") || "uk";
   const locale: Locale = isValidLocale(requestedLocale) ? requestedLocale : "uk";
   const products = (await getAllProducts()).filter((product) => {

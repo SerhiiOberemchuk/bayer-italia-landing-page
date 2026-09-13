@@ -2,10 +2,16 @@ import type { MetadataRoute } from "next";
 import { getAllProducts } from "@/actions/catalog/get-all-products";
 import { locales, siteUrl } from "@/lib/i18n/config";
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
+
+// While the catalog is hidden it is absent from the sitemap entirely: the
+// listing page and every product URL answer 404, so advertising them would
+// only send crawlers to dead ends.
+const catalogPages = ["/catalog"] as const;
 
 const indexableStaticPages = [
   "/",
-  "/catalog",
+  ...(isCatalogEnabled ? catalogPages : []),
   "/delivery-from-italy",
   "/brands-from-italy",
   "/privacy",
@@ -27,9 +33,9 @@ function parseUpdatedAt(value: string | undefined): Date | undefined {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries: MetadataRoute.Sitemap = [];
-  const products = (await getAllProducts()).filter(
-    (product) => product.status === "active",
-  );
+  const products = isCatalogEnabled
+    ? (await getAllProducts()).filter((product) => product.status === "active")
+    : [];
 
   const productLastModified = new Map<string, Date>();
   for (const product of products) {
