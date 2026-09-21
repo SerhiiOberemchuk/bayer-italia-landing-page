@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { isValidLocale, siteUrl } from "@/lib/i18n/config"
 import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
 import { ensureLocale } from "@/lib/i18n/server"
+import { getObriymCrmHref } from "@/components/obriym-crm-link"
 
 export async function generateMetadata({
   params,
@@ -40,7 +41,8 @@ export default async function PrivacyPolicyPage({
   const locale = ensureLocale((await params).locale)
 
   const isUk = locale === "uk"
-  const lastUpdated = isUk ? "05.03.2026" : "March 5, 2026"
+  const lastUpdated = isUk ? "21.09.2026" : "September 21, 2026"
+  const obriymCrmHref = getObriymCrmHref(locale, "privacy")
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8">
@@ -99,6 +101,12 @@ export default async function PrivacyPolicyPage({
                 інформації від несанкціонованого доступу, зміни, розкриття або знищення. Ми не продаємо
                 та не передаємо вашу особисту інформацію третім особам, окрім випадків, необхідних для
                 виконання замовлення (наприклад, служби доставки).
+              </p>
+              <p className="mt-3">
+                Замовлення, оплати та відправлення ми ведемо в{" "}
+                <a href={obriymCrmHref} className="text-italy-green hover:underline" target="_blank" rel="noopener">Obriym CRM</a>{" "}
+                — нашому технічному партнері з організації роботи. Дані, потрібні для виконання замовлення,
+                зберігаються в цій системі й використовуються лише для цілей, описаних у цій політиці.
               </p>
             </section>
             <section>
@@ -165,6 +173,12 @@ export default async function PrivacyPolicyPage({
                 information from unauthorized access, alteration, disclosure or destruction. We do not sell
                 or share your personal information with third parties, except as necessary to
                 fulfill orders (e.g., delivery services).
+              </p>
+              <p className="mt-3">
+                We manage orders, payments and shipments in{" "}
+                <a href={obriymCrmHref} className="text-italy-green hover:underline" target="_blank" rel="noopener">Obriym CRM</a>
+                , our technical partner for organising our work. The data needed to fulfill your order is
+                stored in this system and used only for the purposes described in this policy.
               </p>
             </section>
             <section>

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Send, MessageCircle } from "lucide-react";
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
 import { AnimateIn } from "@/components/animate-in";
+import { ObriymCrmLink } from "@/components/obriym-crm-link";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
@@ -103,6 +104,13 @@ export function Footer({ dict, locale }: FooterProps) {
                 </li>
               </ul>
             </nav>
+
+            <div className="mt-8 flex flex-col items-center gap-2">
+              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                {dict.techPartner}
+              </p>
+              <ObriymCrmLink locale={locale} placement="footer" />
+            </div>
 
             <div className="mt-8 w-full border-t pt-8">
               <p className="text-xs text-muted-foreground">{dict.disclaimer}</p>

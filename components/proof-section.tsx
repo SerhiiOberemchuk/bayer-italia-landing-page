@@ -3,6 +3,7 @@ import { Camera, FileCheck2, PackageCheck, Euro, ArrowRight } from "lucide-react
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
 import { AnimateIn } from "@/components/animate-in";
+import { ObriymCrmLink } from "@/components/obriym-crm-link";
 
 interface ProofSectionProps {
   locale: Locale;
@@ -100,6 +101,22 @@ export function ProofSection({ locale }: ProofSectionProps) {
                 })}
               </ul>
           </div>
+
+          <AnimateIn variant="fade-up" delay={420}>
+            <div className="mt-16 flex flex-col gap-5 border-t border-border pt-8 md:flex-row md:items-center md:justify-between md:gap-12">
+              <div className="max-w-2xl">
+                <p className="premium-eyebrow text-muted-foreground">
+                  {isUk ? "Технічний партнер" : "Technical partner"}
+                </p>
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {isUk
+                    ? "Obriym CRM — наш технічний партнер з організації роботи. У ньому ми ведемо кожне замовлення: від запиту й оплати до відправлення, тож завжди швидко підкажемо, на якому етапі ваша покупка."
+                    : "Obriym CRM is our technical partner for organising our work. Every order is tracked there, from request and payment to dispatch, so we can always tell you exactly where your purchase is."}
+                </p>
+              </div>
+              <ObriymCrmLink locale={locale} placement="home_trust" className="shrink-0" />
+            </div>
+          </AnimateIn>
         </AnimateIn>
       </div>
     </section>

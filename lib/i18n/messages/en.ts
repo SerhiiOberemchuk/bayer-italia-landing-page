@@ -318,6 +318,7 @@ const en: Dictionary = {
       "We are not an official store. We operate as a personal buyer service — purchasing original items in Italy on behalf of our clients.",
     copyright: "Buyer Italia. All rights reserved.",
     developedBy: "Website by",
+    techPartner: "Technical partner",
   },
   stickyBar: {
     telegram: "Telegram",
