@@ -14,6 +14,7 @@ import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
 import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { Button } from "@/components/ui/button";
+import { ItalinoLink } from "@/components/italino-link";
 
 export async function generateMetadata({
   params,
@@ -140,6 +141,16 @@ export default async function DeliveryFromItalyPage({
                 : "You get tracking and monitor delivery."}
             </li>
           </ol>
+          <p className="mt-5 max-w-3xl text-sm leading-6 text-muted-foreground">
+            {isUk
+              ? "Не хочете чекати закупівлю? У нашому магазині Italino речі вже лежать на складі в Мілані, а відправлення в Україну — щотижня:"
+              : "Prefer not to wait for a purchase run? Italino, our own in-stock shop, keeps goods in the Milan warehouse and ships to Ukraine weekly (the shop is in Ukrainian):"}{" "}
+            <ItalinoLink
+              placement="delivery_page"
+              label="italino.shop"
+              className="font-medium text-italy-green hover:underline"
+            />
+          </p>
         </section>
 
         <section className="mt-10 grid gap-4 sm:grid-cols-3" aria-labelledby="delivery-details-title">

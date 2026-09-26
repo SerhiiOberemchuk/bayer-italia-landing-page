@@ -3,6 +3,7 @@ import { Send, MessageCircle } from "lucide-react";
 import { BuyerItaliaLogo } from "@/components/buyer-italia-logo";
 import { AnimateIn } from "@/components/animate-in";
 import { ObriymCrmLink } from "@/components/obriym-crm-link";
+import { ItalinoLink } from "@/components/italino-link";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
@@ -105,11 +106,23 @@ export function Footer({ dict, locale }: FooterProps) {
               </ul>
             </nav>
 
-            <div className="mt-8 flex flex-col items-center gap-2">
-              <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-                {dict.techPartner}
-              </p>
-              <ObriymCrmLink locale={locale} placement="footer" />
+            <div className="mt-8 grid w-full max-w-lg gap-6 sm:grid-cols-2 sm:divide-x sm:divide-border">
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                  {dict.readyStock}
+                </p>
+                <ItalinoLink
+                  placement="footer"
+                  label="Italino"
+                  className="text-[15px] font-semibold tracking-[-0.01em] text-foreground transition-opacity duration-300 hover:opacity-70"
+                />
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+                  {dict.techPartner}
+                </p>
+                <ObriymCrmLink locale={locale} placement="footer" />
+              </div>
             </div>
 
             <div className="mt-8 w-full border-t pt-8">

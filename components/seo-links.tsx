@@ -3,6 +3,7 @@ import { ArrowRight } from "lucide-react";
 import type { Locale } from "@/lib/i18n/config";
 import { withLocalePath } from "@/lib/i18n/routing";
 import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
+import { ItalinoLink } from "@/components/italino-link";
 
 interface SeoLinksProps {
   locale: Locale;
@@ -23,14 +24,14 @@ export function SeoLinks({ locale }: SeoLinksProps) {
             {isUk
               ? isCatalogEnabled
                 ? "Деталі про бренди, доставку та каталог товарів сервісу."
-                : "Деталі про бренди та доставку сервісу."
+                : "Деталі про бренди й доставку сервісу, а також наш магазин готових речей."
               : isCatalogEnabled
                 ? "Details about brands, delivery, and the product catalog."
-                : "Details about brands and delivery."}
+                : "Details about brands and delivery, plus our in-stock shop."}
           </p>
         </div>
 
-        <nav aria-label="Internal service links">
+        <nav aria-label="Service links">
           <ul className="divide-y divide-border border-y border-border">
             <li className="list-none">
               <Link
@@ -61,6 +62,13 @@ export function SeoLinks({ locale }: SeoLinksProps) {
                 </Link>
               </li>
             ) : null}
+            <li className="list-none">
+              <ItalinoLink
+                placement="home_links"
+                label={isUk ? "Готові речі в наявності — Italino" : "Ready to ship — Italino"}
+                className="flex w-full justify-between py-5 text-xs font-medium uppercase tracking-[0.14em] transition-opacity duration-300 hover:opacity-70"
+              />
+            </li>
           </ul>
         </nav>
       </div>
