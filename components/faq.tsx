@@ -1,4 +1,5 @@
 import { AnimateIn } from "@/components/animate-in";
+import { ItalinoLink } from "@/components/italino-link";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 
 interface FAQProps {
@@ -58,7 +59,14 @@ export function FAQ({ dict }: FAQProps) {
                     </summary>
                     <div className="faq-answer" aria-live="polite">
                       <div className="faq-answer-inner max-w-2xl pr-12 text-sm leading-7 text-muted-foreground md:text-[15px]">
-                        {faq.answer}
+                        <p>{faq.answer}</p>
+                        {"italinoLinkLabel" in faq ? (
+                          <ItalinoLink
+                            placement="home_faq"
+                            label={faq.italinoLinkLabel}
+                            className="mt-4 text-xs font-medium uppercase tracking-[0.14em] text-foreground transition-opacity duration-300 hover:opacity-70"
+                          />
+                        ) : null}
                       </div>
                     </div>
                   </details>

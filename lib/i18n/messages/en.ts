@@ -209,6 +209,12 @@ const en: Dictionary = {
           "Delivery to Ukraine takes 7-10 days, to Europe — 10-14 days from the moment of purchase. We provide a tracking number to track the parcel.",
       },
       {
+        question: "Do you have anything in stock, without waiting for a purchase?",
+        answer:
+          "Yes — in Italino (italino.shop), our own shop. It carries bags, backpacks, clothing, accessories and homeware that are already in the Milan warehouse. You order right on the site, and parcels ship to Ukraine via Nova Poshta every week. The shop is in Ukrainian.",
+        italinoLinkLabel: "Visit Italino",
+      },
+      {
         question: "Is return or exchange possible?",
         answer:
           "Since we work as a buyer service, standard returns are not possible. But we carefully check the item before shipping and help you choose the right size.",
