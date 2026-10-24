@@ -119,8 +119,8 @@ export default async function BrandsFromItalyPage({
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {isUk
-                ? "Якщо потрібного бренду немає в списку, можна надіслати посилання або фото для перевірки."
-                : "If your brand is not listed, you can send a link or photo for sourcing review."}
+                ? "Якщо потрібного бренду немає в списку, надішліть посилання на товар для перевірки."
+                : "If your brand is not listed, send a product link for sourcing review."}
             </p>
           </article>
         </section>
@@ -164,8 +164,8 @@ export default async function BrandsFromItalyPage({
           <ol className="mt-4 list-decimal space-y-2 pl-6 text-foreground/90">
             <li>
               {isUk
-                ? "Надішліть посилання на товар або фото моделі, яка вас цікавить."
-                : "Send a product link or a photo of the item you want."}
+                ? "Надішліть посилання на товар, який вас цікавить."
+                : "Send a link to the item you want."}
             </li>
             <li>
               {isUk

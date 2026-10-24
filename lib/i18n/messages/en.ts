@@ -191,7 +191,7 @@ const en: Dictionary = {
       {
         question: "Can I order a custom item?",
         answer:
-          "Yes, we can find and purchase a specific item on your order. Send a link or photo of the desired product, and we will check availability in Italian stores.",
+          "Yes, we can find and purchase a specific item on your order. Send a link to the desired product, and we will check availability in Italian stores.",
       },
       {
         question: "How much does delivery cost?",

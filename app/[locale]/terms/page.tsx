@@ -82,7 +82,7 @@ export default async function TermsPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">3. Процес замовлення</h2>
               <ol className="list-decimal pl-6 space-y-2">
-                <li>Надішліть посилання або фото бажаного товару через Telegram</li>
+                <li>Надішліть посилання на бажаний товар через Telegram</li>
                 <li>Ми перевіримо наявність та повідомимо фінальну вартість</li>
                 <li>Після підтвердження здійсніть оплату</li>
                 <li>Ми закупимо товар та надішлемо фотозвіт</li>
@@ -179,7 +179,7 @@ export default async function TermsPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">3. Ordering Process</h2>
               <ol className="list-decimal pl-6 space-y-2">
-                <li>Send a link or photo of the desired item via Telegram</li>
+                <li>Send a link to the desired item via Telegram</li>
                 <li>We will check availability and provide the final price</li>
                 <li>After confirmation, make the payment</li>
                 <li>We will purchase the item and send a photo report</li>
