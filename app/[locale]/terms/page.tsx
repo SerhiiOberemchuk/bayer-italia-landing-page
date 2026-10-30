@@ -1,9 +1,10 @@
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { isValidLocale, siteUrl } from "@/lib/i18n/config"
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
+import { isValidLocale } from "@/lib/i18n/config"
+import { withLocalePath } from "@/lib/i18n/routing"
 import { ensureLocale } from "@/lib/i18n/server"
 
 export async function generateMetadata({
@@ -18,17 +19,10 @@ export async function generateMetadata({
   const title = locale === "uk" ? "Умови використання" : "Terms of Use"
   const description =
     locale === "uk"
-      ? "Умови використання сервісу Buyer Italia."
-      : "Terms of use of Buyer Italia service."
+      ? "Як оформити викуп через Buyer Italia: погодження ціни, передоплата, доставка, повернення та окремі умови послуги адреси в Італії."
+      : "Ordering with Buyer Italia: agreed prices, prepayment, delivery, returns and separate conditions for the Address in Italy service."
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
-      languages: buildLocalizedAlternates(pathname, siteUrl),
-    },
-  }
+  return buildPageMetadata({ locale, pathname, title, description })
 }
 
 export default async function TermsPage({
@@ -39,7 +33,7 @@ export default async function TermsPage({
   const locale = ensureLocale((await params).locale)
 
   const isUk = locale === "uk"
-  const lastUpdated = isUk ? "05.03.2026" : "March 5, 2026"
+  const lastUpdated = isUk ? "30.10.2026" : "October 30, 2026"
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8">
@@ -64,23 +58,29 @@ export default async function TermsPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">1. Загальні положення</h2>
               <p>
-                Buyer Italia — це баєр-сервіс, який надає послуги з закупівлі оригінальних товарів
+                Buyer Italia — це баєр-сервіс, який надає послуги із закупівлі оригінальних товарів
                 в офіційних магазинах Італії та їх доставки клієнтам. Використовуючи наші послуги,
                 ви погоджуєтесь з цими умовами.
               </p>
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">2. Послуги</h2>
-              <p className="mb-3">Ми надаємо наступні послуги:</p>
+              <p className="mb-3">Ми надаємо такі послуги:</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Закупівля товарів у офіційних магазинах Італії (ZARA, Mango, COS, Massimo Dutti, Puma та інші)</li>
+                <li>Закупівля товарів в офіційних магазинах Італії (ZARA, Mango, COS, Massimo Dutti, Puma та інші)</li>
                 <li>Фотозвіт закупленого товару</li>
                 <li>Надання чеків та підтвердження оригінальності</li>
                 <li>Доставка в Україну та країни Європи</li>
               </ul>
+              <p className="mt-3">
+                Для самостійних покупок є окрема послуга{" "}
+                <Link href={withLocalePath(locale, "/adresa-v-italii")} className="text-italy-green hover:underline">«Адреса в Італії»</Link>.
+                На її сторінці описані тарифи, зберігання й умови пересилки. Звертайтеся до{" "}
+                <a href="https://t.me/SerhiiOberemchuk" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@SerhiiOberemchuk</a>.
+              </p>
             </section>
             <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">3. Процес замовлення</h2>
+              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">3. Замовлення через баєра</h2>
               <ol className="list-decimal pl-6 space-y-2">
                 <li>Надішліть посилання на бажаний товар через Telegram</li>
                 <li>Ми перевіримо наявність та повідомимо фінальну вартість</li>
@@ -102,7 +102,7 @@ export default async function TermsPage({
               </p>
             </section>
             <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">5. Оплата</h2>
+              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">5. Оплата викупу</h2>
               <p className="mb-3">Ми працюємо за системою 100% передоплати. Доступні способи оплати:</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Банківська картка (Україна)</li>
@@ -110,10 +110,10 @@ export default async function TermsPage({
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">6. Доставка</h2>
-              <p className="mb-3">Терміни доставки:</p>
+              <p className="mb-3">Орієнтовні строки для замовлень через баєра:</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Україна (Нова пошта):</strong> 7-10 робочих днів</li>
-                <li><strong>Європа:</strong> 10-14 робочих днів</li>
+                <li><strong>Україна (Нова пошта):</strong> орієнтовно 7–10 днів після викупу</li>
+                <li><strong>Європа:</strong> орієнтовно 10–14 днів після викупу</li>
               </ul>
               <p className="mt-3">
                 Після відправлення ви отримаєте трекінг-номер для відстеження посилки.
@@ -122,37 +122,37 @@ export default async function TermsPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">7. Повернення та обмін</h2>
               <p className="mb-3">
-                Оскільки ми працюємо як баєр-сервіс, стандартне повернення товару неможливе.
-                Однак ми гарантуємо:
+                Умови повернення та обміну залежать від продавця, способу покупки й застосовного
+                законодавства. До викупу уточнюємо порядок і строки для вашого замовлення.
+                Якщо виникла проблема, зверніться до нас. Ми надаємо:
               </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Ретельну перевірку товару перед відправкою</li>
                 <li>Фотозвіт з усіма деталями</li>
                 <li>Допомогу у виборі правильного розміру</li>
-                <li>Повернення коштів у разі неможливості закупки товару</li>
+                <li>Повернення коштів, сплачених за товар, який неможливо придбати</li>
               </ul>
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">8. Гарантія оригінальності</h2>
               <p>
-                Ми гарантуємо 100% оригінальність усіх товарів, оскільки закуповуємо їх виключно
-                в офіційних магазинах Італії. Кожне замовлення супроводжується фото з магазину
-                та оригінальним чеком.
+                Товари, які викуповуємо для вас через баєра, купуємо у брендів та перевірених
+                магазинів Італії. Надсилаємо фото речі та чек або інше підтвердження покупки.
+                Для самостійних покупок на нашу адресу продавця обираєте ви; огляд посилки
+                не є експертизою оригінальності.
               </p>
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">9. Відповідальність</h2>
               <p>
-                Ми не несемо відповідальності за затримки доставки, спричинені митними органами
-                або службами доставки. У разі пошкодження товару під час транспортування,
-                будь ласка, зверніться до нас негайно з фотодоказами.
+                Фактичні строки можуть змінюватися через роботу перевізника або митне оформлення. Якщо доставка затримується або товар пошкоджено, напишіть нам і додайте дані відправлення та фото — перевіримо обставини й допоможемо з подальшими діями.
               </p>
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">10. Контакти</h2>
               <p>
-                З усіх питань звертайтесь через Telegram: <a href="https://t.me/raisa_orb" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@raisa_orb</a>
-                {" "}або в наш канал: <a href="https://t.me/buyer_italia_shop" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@buyer_italia_shop</a>
+                Щодо викупу звертайтеся в Telegram: <a href="https://t.me/raisa_orb" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@raisa_orb</a>
+                {" "}Пропозиції публікуємо в каналі: <a href="https://t.me/buyer_italia_shop" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@buyer_italia_shop</a>
               </p>
             </section>
           </div>
@@ -175,9 +175,15 @@ export default async function TermsPage({
                 <li>Providing receipts and authenticity confirmation</li>
                 <li>Delivery to Ukraine and European countries</li>
               </ul>
+              <p className="mt-3">
+                For purchases you make yourself, use our separate{" "}
+                <Link href={withLocalePath(locale, "/adresa-v-italii")} className="text-italy-green hover:underline">Address in Italy service</Link>.
+                Its page explains rates, storage and forwarding conditions. Contact{" "}
+                <a href="https://t.me/SerhiiOberemchuk" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@SerhiiOberemchuk</a>.
+              </p>
             </section>
             <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">3. Ordering Process</h2>
+              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">3. Ordering through our personal shopper</h2>
               <ol className="list-decimal pl-6 space-y-2">
                 <li>Send a link to the desired item via Telegram</li>
                 <li>We will check availability and provide the final price</li>
@@ -199,7 +205,7 @@ export default async function TermsPage({
               </p>
             </section>
             <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">5. Payment</h2>
+              <h2 className="font-serif text-xl font-semibold text-foreground mb-4">5. Payment for personal shopping</h2>
               <p className="mb-3">We work with a 100% prepayment system. Available payment methods:</p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Bank card (Ukraine)</li>
@@ -207,10 +213,10 @@ export default async function TermsPage({
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">6. Delivery</h2>
-              <p className="mb-3">Delivery timeframes:</p>
+              <p className="mb-3">Estimated timing for personal shopping orders:</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li><strong>Ukraine (Nova Poshta):</strong> 7-10 business days</li>
-                <li><strong>Europe:</strong> 10-14 business days</li>
+                <li><strong>Ukraine (Nova Poshta):</strong> around 7–10 days after purchase</li>
+                <li><strong>Europe:</strong> around 10–14 days after purchase</li>
               </ul>
               <p className="mt-3">
                 After shipping, you will receive a tracking number to track your parcel.
@@ -219,8 +225,9 @@ export default async function TermsPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">7. Returns and Exchanges</h2>
               <p className="mb-3">
-                Since we operate as a buyer service, standard product returns are not possible.
-                However, we guarantee:
+                Return and exchange conditions depend on the seller, how the purchase is made
+                and applicable law. We clarify the process and deadlines before purchase.
+                Contact us if there is a problem. We provide:
               </p>
               <ul className="list-disc pl-6 space-y-2">
                 <li>Careful inspection of the item before shipping</li>
@@ -232,24 +239,23 @@ export default async function TermsPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">8. Authenticity Guarantee</h2>
               <p>
-                We guarantee 100% authenticity of all items, as we purchase them exclusively
-                from official Italian stores. Each order is accompanied by photos from the store
-                and an original receipt.
+                For personal shopping orders, we buy from brands and trusted stores in Italy.
+                We send item photos and a receipt or other proof of purchase. With our address
+                service, you choose the seller yourself. Parcel inspection is not an
+                authentication service.
               </p>
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">9. Liability</h2>
               <p>
-                We are not responsible for delivery delays caused by customs authorities
-                or delivery services. In case of item damage during transportation,
-                please contact us immediately with photo evidence.
+                Actual delivery times may change due to the carrier or customs clearance. If delivery is delayed or an item is damaged, contact us with the shipment details and photos. We will review the situation and help with the next steps.
               </p>
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">10. Contact</h2>
               <p>
-                For all inquiries, contact us via Telegram: <a href="https://t.me/raisa_orb" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@raisa_orb</a>
-                {" "}or our channel: <a href="https://t.me/buyer_italia_shop" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@buyer_italia_shop</a>
+                For personal shopping, contact us on Telegram: <a href="https://t.me/raisa_orb" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@raisa_orb</a>
+                {" "}Browse offers on our channel: <a href="https://t.me/buyer_italia_shop" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@buyer_italia_shop</a>
               </p>
             </section>
           </div>

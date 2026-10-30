@@ -1,9 +1,10 @@
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { isValidLocale, siteUrl } from "@/lib/i18n/config";
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { isValidLocale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
 
 export async function generateMetadata({
@@ -18,17 +19,10 @@ export async function generateMetadata({
   const title = locale === "uk" ? "Повернення та відшкодування" : "Returns and refunds";
   const description =
     locale === "uk"
-      ? "Умови повернення, обміну та відшкодування Buyer Italia."
-      : "Buyer Italia returns, exchanges, and refunds policy.";
+      ? "Повернення покупок через баєра та на адресу в Італії: правила продавця, допомога зі зворотною відправкою й дії при пошкодженні товару."
+      : "Returns for personal shopping and purchases sent to our Italian address: seller rules, return shipping help and what to do if an item is damaged.";
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
-      languages: buildLocalizedAlternates(pathname, siteUrl),
-    },
-  };
+  return buildPageMetadata({ locale, pathname, title, description });
 }
 
 export default async function ReturnsPage({
@@ -53,19 +47,21 @@ export default async function ReturnsPage({
           {isUk ? "Повернення та відшкодування" : "Returns and refunds"}
         </h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          {isUk ? "Останнє оновлення: 30.08.2026" : "Last updated: August 30, 2026"}
+          {isUk ? "Останнє оновлення: 30.10.2026" : "Last updated: October 30, 2026"}
         </p>
 
         {isUk ? (
           <div className="mt-8 space-y-8 leading-relaxed text-foreground/90">
             <section>
               <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">
-                Стандартні повернення та обміни
+                Повернення та обмін покупок через баєра
               </h2>
               <p>
-                Buyer Italia працює як баєр-сервіс: ми купуємо обраний клієнтом товар в
-                офіційному магазині Італії після підтвердження замовлення. Тому стандартне
-                повернення або обмін придбаного на замовлення товару не передбачені.
+                До викупу уточнюємо правила продавця, строки й спосіб повернення для
+                конкретного замовлення. Умови залежать від магазину, способу покупки та
+                застосовного законодавства. Якщо річ не підійшла або має дефект, напишіть
+                нам — перевіримо доступні варіанти. Покупка через баєра сама по собі не
+                скасовує прав, передбачених законом.
               </p>
             </section>
             <section>
@@ -89,6 +85,17 @@ export default async function ReturnsPage({
               </p>
             </section>
             <section>
+              <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">
+                Самостійні покупки на адресу в Італії
+              </h2>
+              <p>
+                Якщо ви купували самостійно, повернення оформлюється за правилами обраного
+                магазину або продавця. Поки товар в Італії, можна погодити допомогу зі
+                зворотною відправкою як додаткову послугу. Звертайтеся до{" "}
+                <a href="https://t.me/SerhiiOberemchuk" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@SerhiiOberemchuk</a>.
+              </p>
+            </section>
+            <section>
               <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">Контакт</h2>
               <p>
                 Зверніться до нас у Telegram:{" "}
@@ -108,12 +115,14 @@ export default async function ReturnsPage({
           <div className="mt-8 space-y-8 leading-relaxed text-foreground/90">
             <section>
               <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">
-                Standard returns and exchanges
+                Returns and exchanges for personal shopping
               </h2>
               <p>
-                Buyer Italia is a buyer service: after order confirmation, we purchase the item
-                selected by the customer from an official Italian store. Standard returns or
-                exchanges of made-to-order purchases are therefore not offered.
+                Before buying, we clarify the seller's return rules, deadlines and process for
+                your order. Conditions depend on the store, how the purchase is made and
+                applicable law. If an item does not fit or has a defect, contact us to review
+                the options. Using a personal shopping service does not in itself remove
+                statutory rights.
               </p>
             </section>
             <section>
@@ -133,6 +142,17 @@ export default async function ReturnsPage({
                 If a parcel is damaged in transit or you receive the wrong item, contact us as
                 soon as you receive it and include photos of the item, packaging, and shipping
                 label. We will review the case and help resolve it with the carrier or store.
+              </p>
+            </section>
+            <section>
+              <h2 className="mb-4 font-serif text-xl font-semibold text-foreground">
+                Purchases sent to our address in Italy
+              </h2>
+              <p>
+                For purchases you make yourself, returns follow the chosen store's or seller's
+                rules. While the item is still in Italy, you can arrange help with return
+                shipping as an additional service. Contact{" "}
+                <a href="https://t.me/SerhiiOberemchuk" className="text-italy-green hover:underline" target="_blank" rel="noopener noreferrer">@SerhiiOberemchuk</a>.
               </p>
             </section>
             <section>

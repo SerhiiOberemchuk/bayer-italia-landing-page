@@ -1,12 +1,17 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { AnimateIn } from "@/components/animate-in";
 import { ItalinoLink } from "@/components/italino-link";
 import type { Dictionary } from "@/lib/i18n/dictionary";
+import type { Locale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
 
 interface FAQProps {
   dict: Dictionary["faq"];
+  locale: Locale;
 }
 
-export function FAQ({ dict }: FAQProps) {
+export function FAQ({ dict, locale }: FAQProps) {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -66,6 +71,24 @@ export function FAQ({ dict }: FAQProps) {
                             label={faq.italinoLinkLabel}
                             className="mt-4 text-xs font-medium uppercase tracking-[0.14em] text-foreground transition-opacity duration-300 hover:opacity-70"
                           />
+                        ) : null}
+                        {"addressLinkLabel" in faq ? (
+                          <Link
+                            href={withLocalePath(locale, "/adresa-v-italii")}
+                            className="mt-4 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-foreground transition-opacity duration-300 hover:opacity-70"
+                          >
+                            {faq.addressLinkLabel}
+                            <ArrowRight className="size-4 shrink-0" strokeWidth={1.5} aria-hidden="true" />
+                          </Link>
+                        ) : null}
+                        {"returnsLinkLabel" in faq ? (
+                          <Link
+                            href={withLocalePath(locale, "/returns")}
+                            className="mt-4 inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.14em] text-foreground transition-opacity duration-300 hover:opacity-70"
+                          >
+                            {faq.returnsLinkLabel}
+                            <ArrowRight className="size-4" aria-hidden="true" />
+                          </Link>
                         ) : null}
                       </div>
                     </div>

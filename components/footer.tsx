@@ -51,9 +51,20 @@ export function Footer({ dict, locale }: FooterProps) {
                   {dict.personalContact}
                 </a>
               </li>
+              <li className="list-none">
+                <a
+                  href="https://t.me/SerhiiOberemchuk"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-sm text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                >
+                  <MessageCircle className="size-4" aria-hidden="true" />
+                  {locale === "uk" ? "Запитання про адресу" : "Address service enquiries"}
+                </a>
+              </li>
             </ul>
 
-            <nav className="mt-6" aria-label="Footer links">
+            <nav className="mt-6" aria-label={locale === "uk" ? "Сторінки сервісу та умови" : "Service pages and policies"}>
               <ul className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs">
                 <li className="list-none">
                   <Link
@@ -69,6 +80,14 @@ export function Footer({ dict, locale }: FooterProps) {
                     className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
                   >
                     {locale === "uk" ? "Бренди з Італії" : "Brands from Italy"}
+                  </Link>
+                </li>
+                <li className="list-none">
+                  <Link
+                    href={withLocalePath(locale, "/adresa-v-italii")}
+                    className="text-muted-foreground transition-colors duration-300 hover:text-foreground"
+                  >
+                    {locale === "uk" ? "Адреса в Італії" : "Address in Italy"}
                   </Link>
                 </li>
                 <li className="list-none">
@@ -131,14 +150,13 @@ export function Footer({ dict, locale }: FooterProps) {
                 <p>{dict.copyright}</p>
                 <span className="hidden text-border sm:inline" aria-hidden="true">/</span>
                 <p>
-                  {dict.developedBy}{" "}
                   <a
                     href="https://oberemchuk.pro/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="font-medium uppercase tracking-[0.08em] text-foreground transition-colors hover:text-italy-green"
                   >
-                    Oberemchuk
+                    {dict.developedBy}
                   </a>
                 </p>
               </div>

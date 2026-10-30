@@ -1,7 +1,9 @@
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowLeft,
+  ArrowRight,
   Package,
   Truck,
   ShieldCheck,
@@ -9,8 +11,8 @@ import {
   MessagesSquare,
   MapPinned,
 } from "lucide-react";
-import { isValidLocale, siteUrl } from "@/lib/i18n/config";
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { isValidLocale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
 import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { Button } from "@/components/ui/button";
@@ -31,17 +33,10 @@ export async function generateMetadata({
       : "Delivery from Italy to Ukraine & Europe";
   const description =
     locale === "uk"
-      ? "Терміни, вартість і процес доставки оригінального одягу з Італії. Buyer Italia: прозорі умови, фото перед відправкою, підтримка в Telegram."
-      : "Delivery terms, costs and process for original clothing from Italy. Buyer Italia: transparent terms, photo report before shipping, Telegram support.";
+      ? "Доставка покупок з Італії в Україну та Європу: зазвичай близько €10 за посилку. Строки після викупу, фото товару й точний розрахунок до оплати."
+      : "Delivery of purchases from Italy to Ukraine and Europe, usually around €10 per parcel. Estimated timing, item photos and an exact quote before payment.";
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
-      languages: buildLocalizedAlternates(pathname, siteUrl),
-    },
-  };
+  return buildPageMetadata({ locale, pathname, title, description });
 }
 
 export default async function DeliveryFromItalyPage({
@@ -64,13 +59,13 @@ export default async function DeliveryFromItalyPage({
 
         <h1 className="max-w-[18ch] font-serif text-4xl font-normal leading-[1.05] tracking-[-0.04em] text-foreground md:text-6xl">
           {isUk
-            ? "Доставка одягу з Італії в Україну та Європу"
+            ? "Доставка покупок з Італії в Україну та Європу"
             : "Delivery from Italy to Ukraine and Europe"}
         </h1>
         <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground md:text-lg">
           {isUk
-            ? "Buyer Italia допомагає купувати оригінальні речі в італійських магазинах і безпечно доставляти їх в Україну та країни Європи."
-            : "Buyer Italia helps you buy original items in Italian stores and safely deliver them to Ukraine and European countries."}
+            ? "Ви обираєте річ — ми викуповуємо її в магазині Італії, надсилаємо фото й організовуємо доставку. Ця сторінка описує замовлення через баєра; для самостійних покупок є окрема послуга адреси в Італії."
+            : "You choose the item. We buy it from a store in Italy, send photos and arrange delivery. This page covers personal shopping orders; purchases you make yourself have a separate Italian address service."}
         </p>
 
         <section
@@ -98,8 +93,8 @@ export default async function DeliveryFromItalyPage({
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {isUk
-                ? "Орієнтовно 7-10 днів в Україну, 10-14 днів в Європу."
-                : "Typically 7-10 days to Ukraine, 10-14 days to Europe."}
+                ? "Після викупу: орієнтовно 7–10 днів до України, 10–14 — до інших країн Європи."
+                : "After purchase: around 7–10 days to Ukraine or 10–14 days elsewhere in Europe."}
             </p>
           </article>
           <article className="border-t border-border pt-5">
@@ -143,8 +138,8 @@ export default async function DeliveryFromItalyPage({
           </ol>
           <p className="mt-5 max-w-3xl text-sm leading-6 text-muted-foreground">
             {isUk
-              ? "Не хочете чекати закупівлю? У нашому магазині Italino речі вже лежать на складі в Мілані, а відправлення в Україну — щотижня:"
-              : "Prefer not to wait for a purchase run? Italino, our own in-stock shop, keeps goods in the Milan warehouse and ships to Ukraine weekly (the shop is in Ukrainian):"}{" "}
+              ? "Не хочете чекати викупу? У нашому магазині Italino можна обрати речі з наявності в Італії. Замовлення оформлюєте на окремому сайті, відправлення в Україну — щотижня:"
+              : "Prefer to shop from stock? Browse items held in Italy at our separate shop Italino. Order on its website, with weekly dispatches to Ukraine (the shop is in Ukrainian):"}{" "}
             <ItalinoLink
               placement="delivery_page"
               label="italino.shop"
@@ -164,8 +159,8 @@ export default async function DeliveryFromItalyPage({
             </h3>
             <p className="mt-2 text-sm text-muted-foreground">
               {isUk
-                ? "Ціна магазину, сервіс баєра та доставка. Остаточну калькуляцію погоджуємо до оплати."
-                : "Store price, buyer service, and shipping. We confirm the final breakdown before payment."}
+                ? "Ціна товару, послуга баєра та доставка — зазвичай близько €10 за посилку. Точна вартість доставки залежить від ваги, розміру й напрямку; розрахунок погоджуємо до оплати."
+                : "The item price, our shopping service and delivery, usually around €10 per parcel. The exact delivery cost depends on weight, size and destination. We agree the breakdown before payment."}
             </p>
           </article>
           <article className="border-t border-border pt-5">
@@ -194,7 +189,7 @@ export default async function DeliveryFromItalyPage({
 
         <section className="mt-14 border-t border-border pt-8">
           <h2 className="font-serif text-3xl font-normal tracking-[-0.03em] text-foreground">
-            {isUk ? "Кому підходить доставка з Італії" : "Who this delivery model fits"}
+            {isUk ? "Кому підходить викуп із доставкою" : "Who our shopping and delivery service is for"}
           </h2>
           <ul className="mt-4 space-y-3 text-foreground/90">
             <li>
@@ -204,8 +199,8 @@ export default async function DeliveryFromItalyPage({
             </li>
             <li>
               {isUk
-                ? "Клієнтам, яким важливо отримати підтвердження оригінальності та фото до відправки."
-                : "Clients who want authenticity confirmation and photos before shipment."}
+                ? "Клієнтам, яким важливі підтвердження покупки та фото саме їхнього товару до відправки."
+                : "Shoppers who want proof of purchase and photos of their actual item before dispatch."}
             </li>
             <li>
               {isUk
@@ -213,6 +208,35 @@ export default async function DeliveryFromItalyPage({
                 : "Shoppers who want access to Italian sale items without handling logistics themselves."}
             </li>
           </ul>
+        </section>
+
+        <section
+          className="mt-14 grid gap-6 border border-border bg-secondary/30 p-6 md:grid-cols-[1fr_auto] md:items-end md:p-8"
+          aria-labelledby="address-in-italy-title"
+        >
+          <div>
+            <p className="premium-eyebrow text-muted-foreground">
+              {isUk ? "Купуєте самі?" : "Shopping yourself?"}
+            </p>
+            <h2
+              id="address-in-italy-title"
+              className="mt-4 font-serif text-3xl font-normal tracking-[-0.03em] text-foreground"
+            >
+              {isUk ? "Адреса в Італії для ваших покупок" : "An Italian address for your own purchases"}
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+              {isUk
+                ? "Купуйте в магазинах і на маркетплейсах, які доставляють до Італії, зокрема з інших країн. Ми приймемо покупки на нашу адресу, сфотографуємо вміст і перешлемо в Україну. Прийом — €5 за посилку, відправка щонеділі."
+                : "Shop at stores and marketplaces that deliver to Italy, including from other countries. We receive your purchases at our address, photograph the contents and forward them to Ukraine. Reception is €5 per parcel, with dispatch every Sunday."}
+            </p>
+          </div>
+          <Link
+            href={withLocalePath(locale, "/adresa-v-italii")}
+            className="inline-flex items-center justify-center gap-3 border border-foreground px-5 py-3 text-[11px] font-medium uppercase tracking-[0.12em] transition-colors hover:bg-foreground hover:text-background"
+          >
+            {isUk ? "Про адресу в Італії" : "About the address"}
+            <ArrowRight className="size-4" strokeWidth={1.5} aria-hidden="true" />
+          </Link>
         </section>
 
         <section className="mt-14 border-t border-border pt-8">

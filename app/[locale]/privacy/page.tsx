@@ -1,9 +1,10 @@
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { isValidLocale, siteUrl } from "@/lib/i18n/config"
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
+import { isValidLocale } from "@/lib/i18n/config"
+import { withLocalePath } from "@/lib/i18n/routing"
 import { ensureLocale } from "@/lib/i18n/server"
 import { getObriymCrmHref } from "@/components/obriym-crm-link"
 
@@ -20,17 +21,10 @@ export async function generateMetadata({
     locale === "uk" ? "Політика конфіденційності" : "Privacy Policy"
   const description =
     locale === "uk"
-      ? "Політика конфіденційності Buyer Italia."
-      : "Privacy Policy of Buyer Italia."
+      ? "Як Buyer Italia використовує контактні дані, інформацію про замовлення й аналітику сайту. Зберігання даних, ваші права та контакти."
+      : "How Buyer Italia uses contact details, order information and website analytics. Data storage, your rights and how to contact us."
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
-      languages: buildLocalizedAlternates(pathname, siteUrl),
-    },
-  }
+  return buildPageMetadata({ locale, pathname, title, description })
 }
 
 export default async function PrivacyPolicyPage({
@@ -41,7 +35,7 @@ export default async function PrivacyPolicyPage({
   const locale = ensureLocale((await params).locale)
 
   const isUk = locale === "uk"
-  const lastUpdated = isUk ? "21.09.2026" : "September 21, 2026"
+  const lastUpdated = isUk ? "30.10.2026" : "October 30, 2026"
   const obriymCrmHref = getObriymCrmHref(locale, "privacy")
 
   return (
@@ -74,9 +68,9 @@ export default async function PrivacyPolicyPage({
             </section>
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">2. Інформація, яку ми збираємо</h2>
-              <p className="mb-3">Ми можемо збирати наступну інформацію:</p>
+              <p className="mb-3">Ми можемо збирати таку інформацію:</p>
               <ul className="list-disc pl-6 space-y-2">
-                <li>Контактні дані (ім&#39;я, номер телефону, email, Telegram username)</li>
+                <li>Контактні дані (ім&#39;я, номер телефону, електронна пошта, ім’я користувача в Telegram)</li>
                 <li>Адреса доставки</li>
                 <li>Інформація про замовлення (товари, розміри, кольори)</li>
                 <li>Історія комунікації з нами</li>
@@ -99,14 +93,20 @@ export default async function PrivacyPolicyPage({
               <p>
                 Ми вживаємо відповідних технічних та організаційних заходів для захисту вашої особистої
                 інформації від несанкціонованого доступу, зміни, розкриття або знищення. Ми не продаємо
-                та не передаємо вашу особисту інформацію третім особам, окрім випадків, необхідних для
-                виконання замовлення (наприклад, служби доставки).
+                ваші персональні дані. Для виконання замовлень використовуємо служби доставки
+                та систему обліку, а для аналізу роботи сайту — сервіси аналітики.
               </p>
               <p className="mt-3">
                 Замовлення, оплати та відправлення ми ведемо в{" "}
                 <a href={obriymCrmHref} className="text-italy-green hover:underline" target="_blank" rel="noopener">Obriym CRM</a>{" "}
                 — нашому технічному партнері з організації роботи. Дані, потрібні для виконання замовлення,
                 зберігаються в цій системі й використовуються лише для цілей, описаних у цій політиці.
+              </p>
+            <p className="mt-3">
+                Для статистики відвідувань підключено Vercel Web Analytics, а для аналізу
+                взаємодії зі сторінками — Microsoft Clarity, зокрема записи взаємодії та
+                теплові карти. Детальніше про ці сервіси й cookies — у{" "}
+                <Link href={withLocalePath(locale, "/cookies")} className="text-italy-green hover:underline">політиці cookies</Link>.
               </p>
             </section>
             <section>
@@ -170,15 +170,21 @@ export default async function PrivacyPolicyPage({
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">4. Information Protection</h2>
               <p>
                 We take appropriate technical and organizational measures to protect your personal
-                information from unauthorized access, alteration, disclosure or destruction. We do not sell
-                or share your personal information with third parties, except as necessary to
-                fulfill orders (e.g., delivery services).
+                information from unauthorized access, alteration, disclosure or destruction. We do not
+                sell your personal data. We use delivery providers and an order management system
+                to fulfil orders, and analytics services to understand website use.
               </p>
               <p className="mt-3">
                 We manage orders, payments and shipments in{" "}
                 <a href={obriymCrmHref} className="text-italy-green hover:underline" target="_blank" rel="noopener">Obriym CRM</a>
                 , our technical partner for organising our work. The data needed to fulfill your order is
                 stored in this system and used only for the purposes described in this policy.
+              </p>
+            <p className="mt-3">
+                Vercel Web Analytics provides visit statistics. Microsoft Clarity helps us
+                understand page interactions through session recordings and heatmaps. Read
+                about these services and their cookies in our{" "}
+                <Link href={withLocalePath(locale, "/cookies")} className="text-italy-green hover:underline">cookie policy</Link>.
               </p>
             </section>
             <section>

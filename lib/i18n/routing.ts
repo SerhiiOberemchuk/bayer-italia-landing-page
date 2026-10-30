@@ -11,6 +11,7 @@ export const localizedPublicPaths = [
   "/checkout",
   "/delivery-from-italy",
   "/brands-from-italy",
+  "/adresa-v-italii",
   "/privacy",
   "/cookies",
   "/terms",

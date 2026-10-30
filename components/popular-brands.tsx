@@ -87,7 +87,7 @@ export function PopularBrands({ dict }: PopularBrandsProps) {
                 href="https://t.me/raisa_orb"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Write to Raisa on Telegram about a brand request"
+                aria-label="Message our shopper on Telegram about a brand request"
               >
                 <Send className="size-4" aria-hidden="true" />
                 {dict.cta}

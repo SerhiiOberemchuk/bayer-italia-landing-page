@@ -6,7 +6,6 @@ import { locales, isValidLocale, siteUrl } from "@/lib/i18n/config";
 import type { Locale } from "@/lib/i18n/config";
 import { getDictionary } from "@/lib/i18n/dictionary";
 import { ensureLocale } from "@/lib/i18n/server";
-import { withLocalePath } from "@/lib/i18n/routing";
 import { PremiumSiteHeader } from "@/components/premium-site-header";
 import { Footer } from "@/components/footer";
 import { CartProvider } from "@/components/cart/cart-provider";
@@ -107,46 +106,30 @@ function getOrganizationJsonLd(locale: Locale) {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
+    "@id": `${siteUrl}/#organization`,
     name: "Buyer Italia",
     description:
       locale === "uk"
-        ? "Баєр-сервіс з прямими закупками оригінальних речей з Італії"
-        : "Buyer service with direct purchases of original items from Italy",
+        ? "Баєр-сервіс з Італії та приймання самостійних покупок для пересилки в Україну"
+        : "Personal shopping in Italy and parcel reception for forwarding to Ukraine",
     url: siteUrl,
-    logo: `${siteUrl}/images/og-image.jpg`,
-    contactPoint: {
-      "@type": "ContactPoint",
-      contactType: "customer service",
-      availableLanguage: ["Ukrainian", "English", "Italian"],
-    },
+    logo: `${siteUrl}/images/buyer-italia-logo.jpg`,
+    contactPoint: [
+      {
+        "@type": "ContactPoint",
+        contactType: "personal shopping",
+        url: "https://t.me/raisa_orb",
+        availableLanguage: ["Ukrainian", "English"],
+      },
+      {
+        "@type": "ContactPoint",
+        contactType: "parcel forwarding",
+        url: "https://t.me/SerhiiOberemchuk",
+        availableLanguage: ["Ukrainian", "English"],
+      },
+    ],
     sameAs: ["https://t.me/buyer_italia_shop"],
-    hasMerchantReturnPolicy: {
-      "@type": "MerchantReturnPolicy",
-      applicableCountry: ["UA", "PL", "DE", "CZ", "IT"],
-      returnPolicyCategory: "https://schema.org/MerchantReturnNotPermitted",
-      merchantReturnLink: `${siteUrl}${withLocalePath(locale, "/returns")}`,
-    },
-  };
-}
 
-function getServiceJsonLd(locale: Locale) {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Service",
-    name:
-      locale === "uk"
-        ? "Buyer Italia - Закупки з Італії"
-        : "Buyer Italia - Shopping from Italy",
-    description:
-      locale === "uk"
-        ? "Професійний баєр-сервіс для закупки оригінальних речей з Італії. ZARA, Massimo Dutti, Mango, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Liu Jo, Furla та інші бренди."
-        : "Professional buyer service for purchasing original items from Italy. ZARA, Massimo Dutti, Mango, COS, Puma, Nike, Adidas, Calvin Klein, Tommy Hilfiger, Pinko, Liu Jo, Furla and other brands.",
-    provider: {
-      "@type": "Organization",
-      name: "Buyer Italia",
-    },
-    areaServed: ["UA", "PL", "DE", "CZ", "IT"],
-    serviceType: "Personal Shopping Service",
   };
 }
 
@@ -169,7 +152,6 @@ export default async function LocaleLayout({
     locale === "uk" ? "Перейти до основного вмісту" : "Skip to main content";
 
   const organizationJsonLd = getOrganizationJsonLd(locale);
-  const serviceJsonLd = getServiceJsonLd(locale);
 
   return (
     <html lang={locale}>
@@ -179,10 +161,6 @@ export default async function LocaleLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(organizationJsonLd),
           }}
-        />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
         />
       </head>
       <body

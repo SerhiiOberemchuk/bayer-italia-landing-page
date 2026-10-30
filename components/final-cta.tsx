@@ -30,28 +30,28 @@ export function FinalCTA({ dict }: FinalCTAProps) {
         <AnimateIn variant="fade-up" delay={200}>
           <div className="grid gap-3">
             <a
-              href="https://t.me/buyer_italia_shop"
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Buyer Italia Telegram channel"
-              className="inline-flex h-14 items-center justify-between border border-background bg-background px-6 text-[11px] font-medium uppercase tracking-[0.15em] text-foreground transition-colors hover:bg-transparent hover:text-background"
-            >
-              <span className="inline-flex items-center gap-3">
-                <Send className="size-4" strokeWidth={1.5} aria-hidden="true" />
-                {dict.ctaTelegram}
-              </span>
-              <span aria-hidden="true">↗</span>
-            </a>
-            <a
               href="https://t.me/raisa_orb"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Write to Raisa on Telegram"
-              className="inline-flex h-14 items-center justify-between border border-background/35 px-6 text-[11px] font-medium uppercase tracking-[0.15em] text-background transition-colors hover:border-background hover:bg-background hover:text-foreground"
+              aria-label={dict.ctaPersonal}
+              className="inline-flex h-14 items-center justify-between border border-background bg-background px-6 text-[11px] font-medium uppercase tracking-[0.15em] text-foreground transition-colors hover:bg-transparent hover:text-background"
             >
               <span className="inline-flex items-center gap-3">
                 <MessageCircle className="size-4" strokeWidth={1.5} aria-hidden="true" />
                 {dict.ctaPersonal}
+              </span>
+              <span aria-hidden="true">↗</span>
+            </a>
+            <a
+              href="https://t.me/buyer_italia_shop"
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={dict.ctaTelegram}
+              className="inline-flex h-14 items-center justify-between border border-background/35 px-6 text-[11px] font-medium uppercase tracking-[0.15em] text-background transition-colors hover:border-background hover:bg-background hover:text-foreground"
+            >
+              <span className="inline-flex items-center gap-3">
+                <Send className="size-4" strokeWidth={1.5} aria-hidden="true" />
+                {dict.ctaTelegram}
               </span>
               <span aria-hidden="true">↗</span>
             </a>

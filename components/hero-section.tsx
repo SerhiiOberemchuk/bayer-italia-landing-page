@@ -90,7 +90,7 @@ export function HeroSection({ dict }: HeroSectionProps) {
                       href="https://t.me/raisa_orb"
                       target="_blank"
                       rel="noopener noreferrer"
-                      aria-label="Write to Raisa on Telegram"
+                      aria-label="Message our shopper on Telegram"
                     >
                       <MessageCircle className="size-5" aria-hidden="true" />
                       {dict.ctaPersonal}

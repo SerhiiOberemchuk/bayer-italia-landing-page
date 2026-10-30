@@ -14,6 +14,7 @@ const indexableStaticPages = [
   ...(isCatalogEnabled ? catalogPages : []),
   "/delivery-from-italy",
   "/brands-from-italy",
+  "/adresa-v-italii",
   "/privacy",
   "/cookies",
   "/terms",
@@ -53,6 +54,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   for (const locale of locales) {
     for (const page of indexableStaticPages) {
+      const isServicePage =
+        page === "/delivery-from-italy" ||
+        page === "/brands-from-italy" ||
+        page === "/adresa-v-italii";
+
       entries.push({
         url: `${siteUrl}${withLocalePath(locale, page)}`,
         alternates: {
@@ -64,7 +70,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         changeFrequency:
           page === "/" || page === "/catalog"
             ? "weekly"
-            : page === "/delivery-from-italy" || page === "/brands-from-italy"
+            : isServicePage
               ? "monthly"
               : "yearly",
         priority:
@@ -72,7 +78,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             ? 1
             : page === "/catalog"
               ? 0.9
-              : page === "/delivery-from-italy" || page === "/brands-from-italy"
+              : isServicePage
                 ? 0.8
                 : 0.3,
       });

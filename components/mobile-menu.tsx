@@ -119,13 +119,18 @@ export function MobileMenu({ locale }: { locale: Locale }) {
                   </Link>
                 </li>
                 <li>
+                  <Link className="mobile-menu-link" href={withLocalePath(locale, "/adresa-v-italii")} onClick={() => setIsOpen(false)}>
+                    {isUk ? "Адреса в Італії" : "Address in Italy"}
+                  </Link>
+                </li>
+                <li>
                   <Link className="mobile-menu-link" href={withLocalePath(locale, "/brands-from-italy")} onClick={() => setIsOpen(false)}>
                     {isUk ? "Бренди з Італії" : "Brands from Italy"}
                   </Link>
                 </li>
                 <li>
                   <a className="mobile-menu-link group" href="https://t.me/raisa_orb" target="_blank" rel="noopener noreferrer">
-                    {isUk ? "Під замовлення" : "Personal order"}
+                    {isUk ? "Написати баєру" : "Message our shopper"}
                     <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.5} aria-hidden="true" />
                   </a>
                 </li>

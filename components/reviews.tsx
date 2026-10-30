@@ -34,14 +34,14 @@ export function Reviews({ dict }: ReviewsProps) {
             <li key={index} className="list-none lg:border-l lg:border-border lg:first:border-l-0">
               <AnimateIn variant="fade-up" delay={200 + index * 120} className="h-full">
                 <article className="h-full border-b border-border px-1 py-8 sm:px-6 lg:px-8 lg:py-10">
-                    <div className="mb-7 flex gap-1" aria-label={`${review.rating} out of 5 stars`}>
+                    <div className="mb-7 flex gap-1" role="img" aria-label={`${dict.ratingLabel}: ${review.rating}/5`}>
                       {Array.from({ length: review.rating }).map((_, i) => (
                         <Star key={i} className="size-3.5 fill-foreground text-foreground" aria-hidden="true" />
                       ))}
                     </div>
                     <p className="font-serif text-xl leading-8 text-foreground">&ldquo;{review.text}&rdquo;</p>
                     <div className="mt-8 border-t border-border pt-4">
-                      <p className="text-sm font-medium text-foreground">{review.name}</p>
+                      <p className="text-sm font-medium text-foreground">{dict.customerLabel}</p>
                       <p className="mt-1 text-xs uppercase tracking-[0.12em] text-muted-foreground">{review.location}</p>
                     </div>
                 </article>

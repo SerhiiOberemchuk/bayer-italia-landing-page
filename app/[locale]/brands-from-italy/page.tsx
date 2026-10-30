@@ -1,8 +1,9 @@
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowLeft, Tag, CheckCircle2, Layers3, Send, SearchCheck } from "lucide-react";
-import { isValidLocale, siteUrl } from "@/lib/i18n/config";
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing";
+import { isValidLocale } from "@/lib/i18n/config";
+import { withLocalePath } from "@/lib/i18n/routing";
 import { ensureLocale } from "@/lib/i18n/server";
 import { isCatalogEnabled } from "@/lib/storefront/catalog-visibility";
 import { Button } from "@/components/ui/button";
@@ -31,21 +32,14 @@ export async function generateMetadata({
   const pathname = "/brands-from-italy";
   const title =
     locale === "uk"
-      ? "Бренди з Італії: ZARA, Mango, COS, Nike"
-      : "Italian brands: ZARA, Mango, COS, Nike";
+      ? "Бренди в магазинах Італії: ZARA, Mango, COS, Nike"
+      : "Brands in Italian stores: ZARA, Mango, COS, Nike";
   const description =
     locale === "uk"
-      ? "Огляд брендів, які замовляє Buyer Italia, та як ми перевіряємо оригінальність товарів перед доставкою."
-      : "Overview of brands sourced by Buyer Italia and how we verify authenticity before shipping.";
+      ? "Викуп ZARA, Mango, COS, Nike та інших брендів у магазинах Італії. Надішліть посилання, розмір і колір — перевіримо наявність та погодимо ціну."
+      : "Shop ZARA, Mango, COS, Nike and other brands through Buyer Italia. Send a product link, size and colour for an availability check and a quote.";
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
-      languages: buildLocalizedAlternates(pathname, siteUrl),
-    },
-  };
+  return buildPageMetadata({ locale, pathname, title, description });
 }
 
 export default async function BrandsFromItalyPage({
@@ -68,13 +62,13 @@ export default async function BrandsFromItalyPage({
 
         <h1 className="max-w-[18ch] font-serif text-4xl font-normal leading-[1.05] tracking-[-0.04em] text-foreground md:text-6xl">
           {isUk
-            ? "Бренди з Італії: що можна замовити через Buyer Italia"
-            : "Brands from Italy: what you can order with Buyer Italia"}
+            ? "Які бренди можна замовити з магазинів Італії"
+            : "Brands you can order from stores in Italy"}
         </h1>
         <p className="mt-6 max-w-3xl text-base leading-7 text-muted-foreground md:text-lg">
           {isUk
-            ? "Працюємо з мас-маркет і premium-брендами, купуємо товари в офіційних магазинах та надсилаємо фото перед відправкою."
-            : "We work with mass-market and premium brands, purchase in official stores and send photo reports before shipping."}
+            ? "Викуповуємо одяг, взуття й аксесуари у брендів та перевірених магазинів Італії. Це місце покупки, а не обов’язково країна походження бренду чи виробництва речі."
+            : "We buy clothing, shoes and accessories from brands and trusted stores in Italy. Italy is the place of purchase, not necessarily where the brand originates or the item is made."}
         </p>
 
         <section className="mt-14 border-y border-border py-8">
@@ -100,14 +94,14 @@ export default async function BrandsFromItalyPage({
           </h2>
           <article className="border-t border-border pt-5">
             <Layers3 className="size-5 text-italy-green" aria-hidden="true" />
-            <h3 className="mt-3 font-medium text-foreground">Mass market</h3>
+            <h3 className="mt-3 font-medium text-foreground">{isUk ? "Масмаркет" : "High street"}</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               ZARA, Mango, Bershka, Pull & Bear, Stradivarius, H&M.
             </p>
           </article>
           <article className="border-t border-border pt-5">
             <Tag className="size-5 text-italy-green" aria-hidden="true" />
-            <h3 className="mt-3 font-medium text-foreground">Premium</h3>
+            <h3 className="mt-3 font-medium text-foreground">{isUk ? "Преміум" : "Premium"}</h3>
             <p className="mt-2 text-sm text-muted-foreground">
               Massimo Dutti, Calvin Klein, Tommy Hilfiger, Pinko, Liu Jo, MAX&Co.
             </p>
@@ -127,7 +121,7 @@ export default async function BrandsFromItalyPage({
 
         <section className="mt-14 border-t border-border pt-8">
           <h2 className="font-serif text-3xl font-normal tracking-[-0.03em] text-foreground">
-            {isUk ? "Як ми перевіряємо оригінальність" : "How we verify authenticity"}
+            {isUk ? "Де купуємо та що показуємо перед відправкою" : "Where we buy and what you see before dispatch"}
           </h2>
           <ul className="mt-4 space-y-2 text-foreground/90">
             <li className="flex gap-2">
@@ -186,7 +180,7 @@ export default async function BrandsFromItalyPage({
               className="inline-flex h-13 items-center gap-3 bg-foreground px-7 text-[11px] font-medium uppercase tracking-[0.15em] text-background transition-colors hover:bg-[#34322f]"
             >
               <Send className="size-4" aria-hidden="true" />
-              {isUk ? "Запитати про свій бренд" : "Ask about your brand"}
+              {isUk ? "Надіслати посилання на товар" : "Send a product link"}
             </a>
           </div>
         </section>

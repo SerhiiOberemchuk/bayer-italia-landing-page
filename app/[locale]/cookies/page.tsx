@@ -1,9 +1,10 @@
+import { buildPageMetadata } from "@/lib/seo/page-metadata";
 import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { isValidLocale, siteUrl } from "@/lib/i18n/config"
-import { buildLocalizedAlternates, withLocalePath } from "@/lib/i18n/routing"
+import { isValidLocale } from "@/lib/i18n/config"
+import { withLocalePath } from "@/lib/i18n/routing"
 import { ensureLocale } from "@/lib/i18n/server"
 
 export async function generateMetadata({
@@ -18,17 +19,10 @@ export async function generateMetadata({
   const title = locale === "uk" ? "Політика cookies" : "Cookie Policy"
   const description =
     locale === "uk"
-      ? "Політика використання cookies на сайті Buyer Italia."
-      : "Cookie usage policy on the Buyer Italia website."
+      ? "Cookies для вибору мови, Vercel Web Analytics і Microsoft Clarity на сайті Buyer Italia: що вони роблять та як керувати ними в браузері."
+      : "Language preferences, Vercel Web Analytics and Microsoft Clarity on Buyer Italia: what they do and how to manage cookies in your browser."
 
-  return {
-    title,
-    description,
-    alternates: {
-      canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
-      languages: buildLocalizedAlternates(pathname, siteUrl),
-    },
-  }
+  return buildPageMetadata({ locale, pathname, title, description })
 }
 
 export default async function CookiesPolicyPage({
@@ -39,7 +33,7 @@ export default async function CookiesPolicyPage({
   const locale = ensureLocale((await params).locale)
 
   const isUk = locale === "uk"
-  const lastUpdated = isUk ? "08.09.2026" : "September 8, 2026"
+  const lastUpdated = isUk ? "30.10.2026" : "October 30, 2026"
 
   return (
     <main id="main-content" className="px-4 py-12 md:px-8">
@@ -73,14 +67,15 @@ export default async function CookiesPolicyPage({
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">2. Які cookies ми використовуємо</h2>
               <h3 className="font-medium text-foreground mt-4 mb-2">Необхідні cookies</h3>
               <p className="mb-4">
-                Ці cookies необхідні для функціонування веб-сайту. Вони забезпечують базові функції,
-                такі як навігація по сторінках та доступ до захищених областей сайту.
+                Сайт використовує cookies для запам’ятовування мовних налаштувань.
+                Якщо ви обираєте українську або англійську версію, сайт зберігає цей вибір
+                для наступних переходів.
               </p>
-              <h3 className="font-medium text-foreground mt-4 mb-2">Аналітичні cookies</h3>
+              <h3 className="font-medium text-foreground mt-4 mb-2">Аналітика відвідувань</h3>
               <p className="mb-4">
-                Ми використовуємо Vercel Analytics для збору анонімної статистики відвідувань.
-                Це допомагає нам зрозуміти, як відвідувачі взаємодіють з нашим сайтом, щоб
-                покращувати його.
+                Vercel Web Analytics збирає зведену статистику відвідувань: перегляди сторінок,
+                джерела переходів і типи пристроїв. Цей сервіс не використовує сторонні cookies
+                для відстеження відвідувачів між сайтами.
               </p>
               <p className="mb-4">
                 Ми також використовуємо Microsoft Clarity, щоб бачити, як відвідувачі
@@ -123,7 +118,7 @@ export default async function CookiesPolicyPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">4. Cookies третіх сторін</h2>
               <p>
-                Наш сайт може містити посилання на зовнішні сервіси (Telegram, Instagram).
+                Наш сайт може містити посилання на зовнішні сервіси (Telegram, Italino, Obriym CRM).
                 Ці сервіси можуть встановлювати власні cookies. Ми не контролюємо cookies
                 третіх сторін і рекомендуємо ознайомитися з їхніми політиками конфіденційності.
               </p>
@@ -156,13 +151,14 @@ export default async function CookiesPolicyPage({
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">2. Cookies we use</h2>
               <h3 className="font-medium text-foreground mt-4 mb-2">Essential cookies</h3>
               <p className="mb-4">
-                These cookies are necessary for the website to function. They provide basic features
-                such as page navigation and access to secure areas of the site.
+                The website uses cookies to remember your language preference. When you choose
+                Ukrainian or English, the site saves that choice for subsequent visits.
               </p>
-              <h3 className="font-medium text-foreground mt-4 mb-2">Analytics cookies</h3>
+              <h3 className="font-medium text-foreground mt-4 mb-2">Visit analytics</h3>
               <p className="mb-4">
-                We use Vercel Analytics to collect anonymous visit statistics.
-                This helps us understand how visitors interact with our site to improve it.
+                Vercel Web Analytics collects aggregate visit statistics, such as page views,
+                referral sources and device types. It does not use third-party cookies
+                to track visitors across websites.
               </p>
               <p className="mb-4">
                 We also use Microsoft Clarity to see how visitors use the site: it records
@@ -204,7 +200,7 @@ export default async function CookiesPolicyPage({
             <section>
               <h2 className="font-serif text-xl font-semibold text-foreground mb-4">4. Third-party cookies</h2>
               <p>
-                Our site may contain links to external services (Telegram, Instagram).
+                Our site may contain links to external services (Telegram, Italino, Obriym CRM).
                 These services may set their own cookies. We do not control third-party cookies
                 and recommend reviewing their privacy policies.
               </p>

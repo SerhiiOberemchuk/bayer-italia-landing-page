@@ -31,6 +31,21 @@ export async function generateMetadata({
       canonical: `${siteUrl}${withLocalePath(locale, pathname)}`,
       languages: buildLocalizedAlternates(pathname, siteUrl),
     },
+    openGraph: {
+      title: dict.meta.ogTitle,
+      description: dict.meta.ogDescription,
+      type: "website",
+      url: `${siteUrl}${withLocalePath(locale)}`,
+      locale: locale === "uk" ? "uk_UA" : "en_US",
+      siteName: "Buyer Italia",
+      images: [{ url: "/images/og-image.jpg", width: 1200, height: 630, alt: "Buyer Italia" }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.ogTitle,
+      description: dict.meta.ogDescription,
+      images: ["/images/og-image.jpg"],
+    },
   };
 }
 
@@ -41,9 +56,22 @@ export default async function Home({
 }) {
   const locale = ensureLocale((await params).locale);
   const dict = await getDictionary(locale);
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    name: "Buyer Italia",
+    url: siteUrl,
+    inLanguage: ["uk", "en"],
+    publisher: { "@id": `${siteUrl}/#organization` },
+  };
 
   return (
     <main id="main-content" className="min-h-screen bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       <PremiumHero dict={dict.hero} locale={locale} />
       <InStockShowcase dict={dict.inStock} locale={locale} />
       <ProofSection locale={locale} />
@@ -51,7 +79,7 @@ export default async function Home({
       <DeliveryPayment dict={dict.delivery} />
       <Reviews dict={dict.reviews} />
       <SeoLinks locale={locale} />
-      <FAQ dict={dict.faq} />
+      <FAQ dict={dict.faq} locale={locale} />
       <FinalCTA dict={dict.finalCta} />
     </main>
   );

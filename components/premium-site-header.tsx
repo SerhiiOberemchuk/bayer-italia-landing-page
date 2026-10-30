@@ -21,7 +21,7 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md">
       <div className="bg-foreground px-4 py-2 text-center text-[10px] font-medium uppercase tracking-[0.2em] text-background sm:text-[11px]">
-        <span className="sm:hidden">{isUk ? "100% оригінал · Італія" : "100% authentic · Italy"}</span>
+        <span className="sm:hidden">{isUk ? "Баєр і адреса в Італії" : "Personal shopper & address in Italy"}</span>
         <span className="hidden sm:inline">{topBar.directPurchases} · {topBar.original}</span>
       </div>
       <div className="border-b border-border/80 px-4 md:px-8">
@@ -53,7 +53,7 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
         </div>
 
         <div className="mx-auto hidden h-[72px] max-w-[1480px] grid-cols-[1fr_auto_1fr] items-center lg:grid">
-          <nav className="flex items-center gap-7" aria-label={isUk ? "Основна навігація" : "Primary navigation"}>
+          <nav className="flex items-center gap-4 xl:gap-7" aria-label={isUk ? "Основна навігація" : "Primary navigation"}>
             {isCatalogEnabled ? (
               <Link className="premium-nav-link" href={withLocalePath(locale, "/catalog")}>
                 {isUk ? "Магазин" : "Shop"}
@@ -65,14 +65,12 @@ export function PremiumSiteHeader({ locale, topBar }: SiteHeaderProps) {
             >
               {isUk ? "Доставка" : "Delivery"}
             </Link>
-            <a
+            <Link
               className="premium-nav-link"
-              href="https://t.me/raisa_orb"
-              target="_blank"
-              rel="noopener noreferrer"
+              href={withLocalePath(locale, "/adresa-v-italii")}
             >
-              {isUk ? "Під замовлення" : "Personal order"}
-            </a>
+              {isUk ? "Адреса в Італії" : "Address in Italy"}
+            </Link>
           </nav>
 
           <Link
